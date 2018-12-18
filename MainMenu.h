@@ -22,6 +22,7 @@ public:
 private:
 	int BtnNUM = 9;
 	wstring BtnPath[6];
+	T_Graph BtnBkg[6];
 	T_Graph menuBkg;
 	MENU_BTNWH_INFO BtnDIBWHInfo[9];		//²Ëµ¥Êý×é
 };

@@ -19,44 +19,44 @@ void MainMenu::InitBtn()
 
 		if (i < 6) {
 			BtnPath[i] = rootpath + temp + fileType;
-			BtnDIB.LoadImageFile(BtnPath[i]);
+			BtnBkg[i].LoadImageFile(BtnPath[i]);
 		}
 		switch(i) {
 		case 0:	//冒险模式
 			mbi.pos.x = WIN_WIDTH / 2+20;				//菜单X坐标
 			mbi.pos.y = WIN_HEIGHT / 7;					//菜单Y坐标
-			mbi.width = BtnDIB.GetImageWidth();
-			mbi.height = BtnDIB.GetImageHeight() / 2;
+			mbi.width = BtnBkg[i].GetImageWidth();
+			mbi.height = BtnBkg[i].GetImageHeight() / 2;
 			break;
 		case 1://迷你游戏
 			mbi.pos.x = BtnDIBWHInfo[0].pos.x;
 			mbi.pos.y = BtnDIBWHInfo[0].pos.y + BtnEdge + BtnDIBWHInfo[0].height;
-			mbi.width = BtnDIB.GetImageWidth();
-			mbi.height = BtnDIB.GetImageHeight() / 2;
+			mbi.width = BtnBkg[i].GetImageWidth();
+			mbi.height = BtnBkg[i].GetImageHeight() / 2;
 			break;
 		case 2://益智模式
 			mbi.pos.x = BtnDIBWHInfo[0].pos.x;
 			mbi.pos.y = BtnDIBWHInfo[1].pos.y + BtnEdge + BtnDIBWHInfo[1].height;
-			mbi.width = BtnDIB.GetImageWidth();
-			mbi.height = BtnDIB.GetImageHeight() / 2;
+			mbi.width = BtnBkg[i].GetImageWidth();
+			mbi.height = BtnBkg[i].GetImageHeight() / 2;
 			break;
 		case 3://图鉴
 			mbi.pos.x = WIN_WIDTH / 9*4;
 			mbi.pos.y = WIN_HEIGHT /4*3-20;
-			mbi.width = BtnDIB.GetImageWidth();
-			mbi.height = BtnDIB.GetImageHeight() / 2;
+			mbi.width = BtnBkg[i].GetImageWidth();
+			mbi.height = BtnBkg[i].GetImageHeight() / 2;
 			break;
 		case 4://数据中心
 			mbi.pos.x = WIN_WIDTH/20;
-			mbi.pos.y = WIN_HEIGHT / 20 * 19 - BtnDIB.GetImageHeight()/2;
-			mbi.width = BtnDIB.GetImageWidth();
-			mbi.height = BtnDIB.GetImageHeight()/2;
+			mbi.pos.y = WIN_HEIGHT / 20 * 19 - BtnBkg[i].GetImageHeight()/2;
+			mbi.width = BtnBkg[i].GetImageWidth();
+			mbi.height = BtnBkg[i].GetImageHeight()/2;
 			break;
 		case 5://更改用户(显示用户信息)
 			mbi.pos.x = 30;
 			mbi.pos.y = WIN_HEIGHT / 4-10;
-			mbi.width = BtnDIB.GetImageWidth();
-			mbi.height = BtnDIB.GetImageHeight() / 2;
+			mbi.width = BtnBkg[i].GetImageWidth();
+			mbi.height = BtnBkg[i].GetImageHeight() / 2;
 			break;
 		case 6://选项
 			mbi.pos.x = 620 * WIN_WIDTH /900;
@@ -79,7 +79,7 @@ void MainMenu::InitBtn()
 		}
 		BtnDIBWHInfo[i] = mbi;
 	}
-	BtnDIB.Destroy();
+	//BtnBkg[i].Destroy();
 }
 void MainMenu::SetMenuBkg(LPCTSTR img_path, LPCTSTR img_path1, int alphaLevel, COLORREF backColor)
 {
@@ -129,10 +129,10 @@ void MainMenu::DrawMenu(HDC hdc, int bkgX, int bkgY, BYTE btnTrans, bool startSt
 	if (isItemFocused == FALSE)
 	{
 		for (int i = 0; i < BtnNUM-3; i++) {
-			BtnDIB.LoadImageFile(BtnPath[i]);
-			if (&BtnDIB != NULL)
+			//BtnBkg[i].LoadImageFile(BtnPath[i]);
+			if (&BtnBkg[i] != NULL)
 			{
-				BtnDIB.PaintRegion(BtnDIB.GetBmpHandle(),hdc, BtnDIBWHInfo[i].pos.x, BtnDIBWHInfo[i].pos.y,0,0, BtnDIBWHInfo[i].width, BtnDIBWHInfo[i].height,1);
+				BtnBkg[i].PaintRegion(BtnBkg[i].GetBmpHandle(),hdc, BtnDIBWHInfo[i].pos.x, BtnDIBWHInfo[i].pos.y,0,0, BtnDIBWHInfo[i].width, BtnDIBWHInfo[i].height,1);
 			}
 		}
 	}
@@ -141,26 +141,26 @@ void MainMenu::DrawMenu(HDC hdc, int bkgX, int bkgY, BYTE btnTrans, bool startSt
 	{
 		int mIndex = 0;
 		for (int i = 0; i < BtnNUM-3; i++) {
-			BtnDIB.LoadImageFile(BtnPath[i]);
+			//BtnBkg[i].LoadImageFile(BtnPath[i]);
 			if (mIndex != m_index)
 			{
-				if (&BtnDIB != NULL)
+				if (&BtnBkg[i] != NULL)
 				{
-					BtnDIB.PaintRegion(BtnDIB.GetBmpHandle(), hdc, BtnDIBWHInfo[i].pos.x, BtnDIBWHInfo[i].pos.y, 0, 0, BtnDIBWHInfo[i].width, BtnDIBWHInfo[i].height, 1, 0, btnTrans);
+					BtnBkg[i].PaintRegion(BtnBkg[i].GetBmpHandle(), hdc, BtnDIBWHInfo[i].pos.x, BtnDIBWHInfo[i].pos.y, 0, 0, BtnDIBWHInfo[i].width, BtnDIBWHInfo[i].height, 1, 0, btnTrans);
 				}	
 			}
 			if (mIndex == m_index)
 			{
-				if (&BtnDIB != NULL)
+				if (&BtnBkg[i] != NULL)
 				{
-					BtnDIB.PaintRegion(BtnDIB.GetBmpHandle(), hdc, BtnDIBWHInfo[i].pos.x, BtnDIBWHInfo[i].pos.y, 0, BtnDIBWHInfo[i].height, BtnDIBWHInfo[i].width, BtnDIBWHInfo[i].height, 1, 0, btnTrans);
+					BtnBkg[i].PaintRegion(BtnBkg[i].GetBmpHandle(), hdc, BtnDIBWHInfo[i].pos.x, BtnDIBWHInfo[i].pos.y, 0, BtnDIBWHInfo[i].height, BtnDIBWHInfo[i].width, BtnDIBWHInfo[i].height, 1, 0, btnTrans);
 				}
 			}
 
 			mIndex = mIndex + 1;
 		}
 	}
-	BtnDIB.Destroy();
+	//BtnDIB.Destroy();
 }
 
 int MainMenu::GetMenuIndex(int x, int y)
