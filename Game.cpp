@@ -87,7 +87,7 @@ void PVZ_Game::GameMouseAction(int x, int y, int Action)
 void PVZ_Game::MenuInit()
 {
 	int x = 0, y = 0;
-	mainMenu.SetMenuBkg(L"res\\images\\interface\\Surface.png", L"res\\images\\interface\\SelectorScreen_WoodSign1_32.png");
+	mainMenu.SetMenuBkg(L"res\\images\\interface\\Surface.png");
 	MENU_INFO menuInfo;
 	menuInfo.align = 1;                      //对齐方式
 	menuInfo.space = MENU_SPACE;               //菜单项之间的间隔距离

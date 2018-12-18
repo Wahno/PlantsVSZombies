@@ -79,32 +79,32 @@ void MainMenu::InitBtn()
 		}
 		BtnDIBWHInfo[i] = mbi;
 	}
-	//BtnBkg[i].Destroy();
 }
-void MainMenu::SetMenuBkg(LPCTSTR img_path, LPCTSTR img_path1, int alphaLevel, COLORREF backColor)
+
+void MainMenu::SetMenuBkg(wstring img_path, int alphaLevel, COLORREF backColor)
 {
-	if (wcslen(img_path) > 0)
+	if (img_path.length() > 0)
 	{
 		gm_menuBkg.LoadImageFile(img_path);
 		bkColor = backColor;
 		bkImageAlpha = alphaLevel;
 	}
-	if (wcslen(img_path1) > 0)
-	{
-		menuBkg.LoadImageFile(img_path1);
-		bkColor = backColor;
-	}
+	menuBkg[0].LoadImageFile(L"res\\images\\interface\\SelectorScreen_WoodSign1_32.png");
+	menuBkg[1].LoadImageFile(L"res\\images\\interface\\SelectorScreen_WoodSign3_32.png");
+
 }
 
 void MainMenu::DrawMenu(HDC hdc, int bkgX, int bkgY, BYTE btnTrans, bool startState)
 {
-	if (&gm_menuBkg != NULL && &menuBkg != NULL && startState == true)
+	
+	if (&gm_menuBkg != NULL && &menuBkg[0] != NULL && &menuBkg[1] != NULL && startState == true)
 	{
 		HBITMAP tBmp = T_Graph::CreateBlankBitmap(WIN_WIDTH, WIN_HEIGHT, bkColor);
 		SelectObject(hdc, tBmp);
-		
+		//±³¾°Í¼²ã
 		gm_menuBkg.PaintImage(hdc, bkgX, bkgY, WIN_WIDTH, WIN_HEIGHT, bkImageAlpha);
-		menuBkg.PaintImage(hdc, bkgX + 30, bkgY, WIN_WIDTH / 3, WIN_HEIGHT / 4, bkImageAlpha);
+		menuBkg[0].PaintImage(hdc, bkgX + 30, bkgY, WIN_WIDTH / 3, WIN_HEIGHT / 4, bkImageAlpha);
+		
 		DeleteObject(tBmp);
 		tBmp = NULL;
 	}
@@ -118,30 +118,34 @@ void MainMenu::DrawMenu(HDC hdc, int bkgX, int bkgY, BYTE btnTrans, bool startSt
 				hdc, bkgX, bkgY, gm_menuBkg.GetImageWidth(), gm_menuBkg.GetImageHeight(), bkImageAlpha
 			);
 		}
-		if (&menuBkg != NULL)
+		if (&menuBkg[0] != NULL)
 		{
-			menuBkg.PaintImage(
-				hdc, bkgX, bkgY, menuBkg.GetImageWidth(), menuBkg.GetImageHeight(), bkImageAlpha
+			menuBkg[0].PaintImage(
+				hdc, bkgX, bkgY, menuBkg[0].GetImageWidth(), menuBkg[0].GetImageHeight(), bkImageAlpha
+			);
+		}
+		if (&menuBkg[1] != NULL)
+		{
+			menuBkg[1].PaintImage(
+				hdc, bkgX, bkgY, menuBkg[1].GetImageWidth(), menuBkg[1].GetImageHeight(), bkImageAlpha
 			);
 		}
 	}
 
+	//»­²Ëµ¥
 	if (isItemFocused == FALSE)
 	{
 		for (int i = 0; i < BtnNUM-3; i++) {
-			//BtnBkg[i].LoadImageFile(BtnPath[i]);
 			if (&BtnBkg[i] != NULL)
 			{
 				BtnBkg[i].PaintRegion(BtnBkg[i].GetBmpHandle(),hdc, BtnDIBWHInfo[i].pos.x, BtnDIBWHInfo[i].pos.y,0,0, BtnDIBWHInfo[i].width, BtnDIBWHInfo[i].height,1);
 			}
 		}
 	}
-
 	if (isItemFocused == TRUE)
 	{
 		int mIndex = 0;
 		for (int i = 0; i < BtnNUM-3; i++) {
-			//BtnBkg[i].LoadImageFile(BtnPath[i]);
 			if (mIndex != m_index)
 			{
 				if (&BtnBkg[i] != NULL)
@@ -160,7 +164,8 @@ void MainMenu::DrawMenu(HDC hdc, int bkgX, int bkgY, BYTE btnTrans, bool startSt
 			mIndex = mIndex + 1;
 		}
 	}
-	//BtnDIB.Destroy();
+	//ÕÚ¸ÇÍ¼²ã
+	menuBkg[1].PaintImage(hdc, bkgX + 30, bkgY + WIN_HEIGHT / 3-5, 90, 30, bkImageAlpha);
 }
 
 int MainMenu::GetMenuIndex(int x, int y)
