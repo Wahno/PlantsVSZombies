@@ -28,7 +28,7 @@ void PVZ_Game::GameLogic()
 		if (mainMenu.FrameCount > mainMenu.MaxFrameCount) 
 		{
 
-			GameState = GAME_RUN;
+			//GameState = GAME_RUN;
 			mainMenu.flickerFlag = false;
 			mainMenu.FrameCount = 0;
 		}
@@ -75,15 +75,15 @@ void PVZ_Game::GameMouseAction(int x, int y, int Action)
 				case 2:
 					break;
 				case 3:
-					GameState = GAME_HANDBOOK;
+					//GameState = GAME_HANDBOOK;
 					break;
 				case 4:
 					break;
 				case 5:
-					GameState = GAME_ABOUT;
+					//GameState = GAME_ABOUT;
 					break;
 				case 6:
-					GameState = GAME_SETTING;
+					//GameState = GAME_SETTING;
 					break;
 				case 7:
 					GameState = GAME_HELP;
@@ -113,6 +113,6 @@ void PVZ_Game::MenuInit()
 void PVZ_Game::AudioInit()
 {
 	if (!ds.CreateDS(m_hWnd))return;
-	mainMenu.MenuAudioInit(ds);
+	mainMenu.AudioInit(ds);
 	helpMenu.AudioInit(ds);
 }

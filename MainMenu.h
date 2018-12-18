@@ -24,7 +24,8 @@ public:
 	void MenuMouseMove(int x, int y);
 	int MenuMouseClick(int x, int y);
 
-	void MenuAudioInit(AudioDX &ds);
+	void AudioInit(AudioDX &ds);
+	void PlayAudio();
 	int MaxFrameCount = 100;	//帧率50，延时2秒
 	int FrameCount = 0;			//帧计数
 	bool flickerFlag = false;	//闪动开关
@@ -37,6 +38,7 @@ private:
 	T_Graph menuBkg[2];
 	T_Graph flickerImg[3];
 
+	AudioDXBuffer first_sound;
 	AudioDXBuffer mainmenu_backmusic_buffer;
 	AudioDXBuffer mousedown_buffer;
 	AudioDXBuffer mousemove_buffer;

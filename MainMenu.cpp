@@ -182,7 +182,7 @@ void MainMenu::DrawMenu(HDC hdc, int bkgX, int bkgY, BYTE btnTrans, bool startSt
 	//ÉÁ¶¯
 	if (flickerFlag == true) {
 		if (m_index >= 0 && m_index < 3 && FrameCount%8>4) {
-			flickerImg[m_index].PaintRegion(flickerImg[m_index].GetBmpHandle(), hdc, BtnDIBWHInfo[m_index].pos.x, BtnDIBWHInfo[m_index].pos.y-5, 0, 0, BtnDIBWHInfo[m_index].width, BtnDIBWHInfo[m_index].height, 1, 0);
+			flickerImg[m_index].PaintRegion(flickerImg[m_index].GetBmpHandle(), hdc, BtnDIBWHInfo[m_index].pos.x, BtnDIBWHInfo[m_index].pos.y, 0, 0, BtnDIBWHInfo[m_index].width, BtnDIBWHInfo[m_index].height, 1, 0);
 		}
 		FrameCount++;
 	}
@@ -258,7 +258,7 @@ int MainMenu::MenuMouseClick(int x, int y)
 	return m_index;
 }
 
-void MainMenu::MenuAudioInit(AudioDX &ds)
+void MainMenu::AudioInit(AudioDX &ds)
 {
 	SetClickSound(&mousedown_buffer);
 	SetMoveSound(&mousemove_buffer);
@@ -266,5 +266,12 @@ void MainMenu::MenuAudioInit(AudioDX &ds)
 	mousedown_buffer.LoadWave(ds, L"res\\audio\\evillaugh.wav");
 	mousemove_buffer.LoadWave(ds, L"res\\audio\\bleep.wav");
 	nomain_mousedown_buffer.LoadWave(ds, L"res\\audio\\buttonclick.wav");
+	first_sound.LoadWave(ds, L"res\\audio\\groan2.wav");
+	PlayAudio();
+}
+
+void MainMenu::PlayAudio()
+{
+	first_sound.Play(false);
 	mainmenu_backmusic_buffer.Play(true);
 }
