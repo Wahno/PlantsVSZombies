@@ -15,7 +15,10 @@ PVZ_Game::~PVZ_Game()
 
 void PVZ_Game::GameInit()
 {
+
 	MenuInit();
+	GameState = GAME_START;
+	AudioInit();
 }
 
 void PVZ_Game::GameLogic()
@@ -86,16 +89,12 @@ void PVZ_Game::GameMouseAction(int x, int y, int Action)
 
 void PVZ_Game::MenuInit()
 {
-	int x = 0, y = 0;
-	mainMenu.SetMenuBkg(L"res\\images\\interface\\Surface.png");
-	MENU_INFO menuInfo;
-	menuInfo.align = 1;                      //对齐方式
-	menuInfo.space = MENU_SPACE;               //菜单项之间的间隔距离
-	menuInfo.fontName = L"黑体";
-	menuInfo.isBold = true;
-
-	mainMenu.SetMenuInfo(menuInfo);
+	mainMenu.Init();
 	
-	mainMenu.InitBtn();
-	GameState = GAME_START;
+}
+
+void PVZ_Game::AudioInit()
+{
+	if (!ds.CreateDS(m_hWnd))return;
+	mainMenu.MenuAudioInit(ds);
 }

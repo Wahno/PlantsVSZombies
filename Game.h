@@ -22,6 +22,10 @@ public:
 private:
 	int wnd_width, wnd_height;
 
+	AudioDX ds;
+
 	MainMenu mainMenu;
+
 	void MenuInit();
+	void AudioInit();
 };

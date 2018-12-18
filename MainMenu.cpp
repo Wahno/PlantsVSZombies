@@ -7,8 +7,17 @@ MainMenu::MainMenu()
 MainMenu::~MainMenu()
 {
 }
-void MainMenu::InitBtn()
+void MainMenu::Init()
 {
+	SetMenuBkg(L"res\\images\\interface\\Surface.png");
+	MENU_INFO menuInfo;
+	menuInfo.align = 1;                      //对齐方式
+	menuInfo.space = MENU_SPACE;               //菜单项之间的间隔距离
+	menuInfo.fontName = L"黑体";
+	menuInfo.isBold = true;
+
+	SetMenuInfo(menuInfo);
+
 	wstring rootpath = L"res\\images\\interface\\menu\\mainmenu\\";
 	wstring fileType = L".png";
 	int BtnEdge = - 25;					//菜单边距
@@ -218,14 +227,25 @@ void MainMenu::MenuMouseMove(int x, int y)
 int MainMenu::MenuMouseClick(int x, int y)
 {
 	m_index = GetMenuIndex(x, y);
-	if (m_index >= 0)
+	//进入游戏，播放音乐
+	if (m_index >= 0&&m_index<3)
 	{
 		if (m_MoveSound && m_ClickSound)
 		{
 			m_MoveSound->Restore();
 			m_ClickSound->Restore();
 			m_ClickSound->Play(false);
-		}
+		}	
 	}
 	return m_index;
+}
+
+void MainMenu::MenuAudioInit(AudioDX &ds)
+{
+	SetClickSound(&mousedown_buffer);
+	SetMoveSound(&mousemove_buffer);
+	mainmenu_backmusic_buffer.LoadWave(ds, L"res\\audio\\faster.wav");
+	mousedown_buffer.LoadWave(ds, L"res\\audio\\evillaugh.wav");
+	mousemove_buffer.LoadWave(ds, L"res\\audio\\bleep.wav");
+	mainmenu_backmusic_buffer.Play(true);
 }
