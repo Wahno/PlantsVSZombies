@@ -40,6 +40,7 @@ private:
 	AudioDXBuffer mainmenu_backmusic_buffer;
 	AudioDXBuffer mousedown_buffer;
 	AudioDXBuffer mousemove_buffer;
+	AudioDXBuffer nomain_mousedown_buffer;
 
 	MENU_BTNWH_INFO BtnDIBWHInfo[9];		//²Ëµ¥Êý×é
 };

@@ -239,16 +239,21 @@ int MainMenu::MenuMouseClick(int x, int y)
 {
 	m_index = GetMenuIndex(x, y);
 	//进入游戏，播放音乐
-	if (m_index >= 0&&m_index<3)
+	if (m_index >= 0&& m_index < 3)
 	{
 		if (m_MoveSound && m_ClickSound)
 		{
 			m_MoveSound->Restore();
 			m_ClickSound->Restore();
-			mainmenu_backmusic_buffer.Stop();
 			m_ClickSound->Play(false);
+			mainmenu_backmusic_buffer.Stop();
 			flickerFlag = true;
 		}
+	}
+	if (m_index >= 3) 
+	{
+		nomain_mousedown_buffer.Restore();
+		nomain_mousedown_buffer.Play(false);
 	}
 	return m_index;
 }
@@ -260,5 +265,6 @@ void MainMenu::MenuAudioInit(AudioDX &ds)
 	mainmenu_backmusic_buffer.LoadWave(ds, L"res\\audio\\faster.wav");
 	mousedown_buffer.LoadWave(ds, L"res\\audio\\evillaugh.wav");
 	mousemove_buffer.LoadWave(ds, L"res\\audio\\bleep.wav");
+	nomain_mousedown_buffer.LoadWave(ds, L"res\\audio\\buttonclick.wav");
 	mainmenu_backmusic_buffer.Play(true);
 }

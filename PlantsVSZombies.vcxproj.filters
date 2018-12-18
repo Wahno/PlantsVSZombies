@@ -63,6 +63,9 @@
     <ClCompile Include="MainMenu.cpp">
       <Filter>源文件\Menu</Filter>
     </ClCompile>
+    <ClCompile Include="HelpMenu.cpp">
+      <Filter>源文件\Menu</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TinyEngine\T_AI.h">
@@ -108,6 +111,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="MainMenu.h">
+      <Filter>头文件\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="HelpMenu.h">
       <Filter>头文件\Menu</Filter>
     </ClInclude>
   </ItemGroup>

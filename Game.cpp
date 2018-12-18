@@ -15,10 +15,10 @@ PVZ_Game::~PVZ_Game()
 
 void PVZ_Game::GameInit()
 {
-
+	AudioInit();
 	MenuInit();
 	GameState = GAME_START;
-	AudioInit();
+	
 }
 
 void PVZ_Game::GameLogic()
@@ -44,6 +44,10 @@ void PVZ_Game::GamePaint(HDC hdc)
 	if (GameState == GAME_START) 
 	{
 		mainMenu.DrawMenu(hdc);
+	}
+	if (GameState == GAME_HELP)
+	{
+		helpMenu.DrawMenu(hdc,wnd_width/6,wnd_height/6);
 	}
 }
 
@@ -91,16 +95,24 @@ void PVZ_Game::GameMouseAction(int x, int y, int Action)
 			}
 		}
 	}
+	 else if (GameState == GAME_HELP) {
+		if (Action == MOUSE_LCLICK)
+		{
+			helpMenu.MenuMouseClick();
+			GameState = GAME_START;		
+		}
+	}
 }
 
 void PVZ_Game::MenuInit()
 {
 	mainMenu.Init();
-	
+	helpMenu.Init();
 }
 
 void PVZ_Game::AudioInit()
 {
 	if (!ds.CreateDS(m_hWnd))return;
 	mainMenu.MenuAudioInit(ds);
+	helpMenu.AudioInit(ds);
 }

@@ -4,7 +4,7 @@
 #include "TinyEngine\\T_Sprite.h"
 #include "TinyEngine\\T_AI.h"
 #include "MainMenu.h"
-
+#include "HelpMenu.h"
 class PVZ_Game: public T_Engine 
 {
 public:
@@ -25,6 +25,7 @@ private:
 	AudioDX ds;
 
 	MainMenu mainMenu;
+	HelpMenu helpMenu;
 
 	void MenuInit();
 	void AudioInit();
