@@ -18,6 +18,10 @@ void MainMenu::Init()
 
 	SetMenuInfo(menuInfo);
 
+	flickerImg[0].LoadImageFile(L"res\\images\\interface\\menu\\mainmenu\\SelectorScreen_Shadow_Adventure.png");
+	flickerImg[1].LoadImageFile(L"res\\images\\interface\\menu\\mainmenu\\SelectorScreen_Shadow_Survival.png");
+	flickerImg[2].LoadImageFile(L"res\\images\\interface\\menu\\mainmenu\\SelectorScreen_Shadow_Challenge.png");
+
 	wstring rootpath = L"res\\images\\interface\\menu\\mainmenu\\";
 	wstring fileType = L".png";
 	int BtnEdge = - 25;					//²Ëµ¥±ß¾à
@@ -175,6 +179,13 @@ void MainMenu::DrawMenu(HDC hdc, int bkgX, int bkgY, BYTE btnTrans, bool startSt
 	}
 	//ÕÚ¸ÇÍ¼²ã
 	menuBkg[1].PaintImage(hdc, bkgX + 30, bkgY + WIN_HEIGHT / 3-5, 90, 30, bkImageAlpha);
+	//ÉÁ¶¯
+	if (flickerFlag == true) {
+		if (m_index >= 0 && m_index < 3 && FrameCount%8>4) {
+			flickerImg[m_index].PaintRegion(flickerImg[m_index].GetBmpHandle(), hdc, BtnDIBWHInfo[m_index].pos.x, BtnDIBWHInfo[m_index].pos.y-5, 0, 0, BtnDIBWHInfo[m_index].width, BtnDIBWHInfo[m_index].height, 1, 0);
+		}
+		FrameCount++;
+	}
 }
 
 int MainMenu::GetMenuIndex(int x, int y)
@@ -234,8 +245,10 @@ int MainMenu::MenuMouseClick(int x, int y)
 		{
 			m_MoveSound->Restore();
 			m_ClickSound->Restore();
+			mainmenu_backmusic_buffer.Stop();
 			m_ClickSound->Play(false);
-		}	
+			flickerFlag = true;
+		}
 	}
 	return m_index;
 }

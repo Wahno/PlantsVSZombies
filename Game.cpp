@@ -23,6 +23,16 @@ void PVZ_Game::GameInit()
 
 void PVZ_Game::GameLogic()
 {
+	if (GameState == GAME_START)
+	{
+		if (mainMenu.FrameCount > mainMenu.MaxFrameCount) 
+		{
+
+			GameState = GAME_RUN;
+			mainMenu.flickerFlag = false;
+			mainMenu.FrameCount = 0;
+		}
+	}
 }
 
 void PVZ_Game::GameEnd()
@@ -51,36 +61,32 @@ void PVZ_Game::GameMouseAction(int x, int y, int Action)
 		}
 		if (Action == MOUSE_LCLICK)
 		{
-			if (GameState == GAME_START)
+			int index = mainMenu.MenuMouseClick(x, y);
+			if (index >= 0)
 			{
-				int index = mainMenu.MenuMouseClick(x, y);
-				if (index >= 0)
+				switch (index)
 				{
-					switch (index)
-					{
-					case 0:
-					case 1:
-					case 2:
-						GameState = GAME_RUN;
-						break;
-					case 3:
-						GameState = GAME_HANDBOOK;
-						break;
-					case 4:
-						break;
-					case 5:
-						GameState = GAME_ABOUT;
-						break;
-					case 6:
-						GameState = GAME_SETTING;
-						break;
-					case 7:
-						GameState = GAME_HELP;
-						break;
-					case 8:
-						SendMessage(m_hWnd, WM_SYSCOMMAND, SC_CLOSE, 0);
-						break;
-					}
+				case 0:
+				case 1:
+				case 2:
+					break;
+				case 3:
+					GameState = GAME_HANDBOOK;
+					break;
+				case 4:
+					break;
+				case 5:
+					GameState = GAME_ABOUT;
+					break;
+				case 6:
+					GameState = GAME_SETTING;
+					break;
+				case 7:
+					GameState = GAME_HELP;
+					break;
+				case 8:
+					SendMessage(m_hWnd, WM_SYSCOMMAND, SC_CLOSE, 0);
+					break;
 				}
 			}
 		}
