@@ -29,10 +29,7 @@ private:
 	HelpMenu helpMenu;
 	ChoiceMenu choiceMenu;
 	ChoiceMenu returnMenu;
-	void ChoiceMenuInit(); /*选项菜单初始化*/
 
-
-	void ReturnMenuInit();
 	void MenuInit();
 	void AudioInit();
 };

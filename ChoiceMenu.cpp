@@ -11,6 +11,78 @@ ChoiceMenu::~ChoiceMenu()
 {
 }
 
+void ChoiceMenu::Init()
+{
+	SetMenuBkg(L"res\\images\\interface\\menu\\choicemenu\\OptionsMenuback8.png");
+	int x = 0, y = 0;
+	int btn_width = 0, btn_height = 0;
+	Color normalClr, focusClr;
+	wstring menuItems[] = { L"游戏选关",L"游戏调速",L"查看图鉴",L"重新开始",L"返回菜单" };
+	btn_width = 360;
+	btn_height = 100;
+	normalClr = Color::Yellow;
+	focusClr = Color::White;
+	SetBtnBmp(L"res\\images\\interface\\menu\\choicemenu\\OptionsBackButton8.png", btn_width, btn_height);
+
+	//设置菜单信息
+	MENU_INFO menuInfo;
+	menuInfo.align = 1;   //对齐方式居中
+	menuInfo.space = MENU_SPACE; //菜单项之间的间隔距离
+	menuInfo.width = btn_width; //菜单项宽
+	menuInfo.height = btn_height; //菜单项高
+	menuInfo.fontName = L"黑体"; //菜单项字体
+	menuInfo.isBold = true; //是否粗体
+	menuInfo.normalTextColor = normalClr; //正常状态文字
+	menuInfo.focusTextColor = focusClr;  //选中状态文字
+	SetMenuInfo(menuInfo);
+	for (int i = 0; i < 5; i++)
+	{
+		//垂直居中布局坐标
+		x = 290;
+		//y =  10 + i * (btn_height + MENU_SPACE) + (wnd_height - 6* btn_height - 5* MENU_SPACE) / 6;
+		y = 220 + i * 50;
+		MENUITEM mItem;
+		mItem.pos.x = x;
+		mItem.pos.y = y;
+		mItem.ItemName = menuItems[i];   //当前菜单项文字
+		AddMenuItem(mItem);
+	}
+}
+
+void ChoiceMenu::returnMenuInit()
+{
+	int x = 0, y = 0;
+	int btn_width = 0, btn_height = 0;
+	Color normalClr, focusClr;
+	wstring menuItems = { L"返回游戏" };
+	btn_width = 360;
+	btn_height = 100;
+	normalClr = Color::Yellow;
+	focusClr = Color::White;
+	SetBtnBmp(L"res\\images\\interface\\menu\\choicemenu\\OptionsBackButton8.png", btn_width, btn_height);
+	//设置菜单信息
+	MENU_INFO menuInfo;
+	menuInfo.align = 1;   //对齐方式居中
+	menuInfo.space = MENU_SPACE; //菜单项之间的间隔距离
+	menuInfo.width = btn_width; //菜单项宽
+	menuInfo.height = btn_height; //菜单项高
+	menuInfo.fontName = L"黑体"; //菜单项字体
+	menuInfo.isBold = true; //是否粗体
+	menuInfo.normalTextColor = normalClr; //正常状态文字
+	menuInfo.focusTextColor = focusClr;  //选中状态文字
+	SetMenuInfo(menuInfo);
+
+	//垂直居中布局坐标
+	x = 200;
+	//y =  10 + i * (btn_height + MENU_SPACE) + (wnd_height - 6* btn_height - 5* MENU_SPACE) / 6;
+	y = 476;
+	MENUITEM mItem;
+	mItem.pos.x = x;
+	mItem.pos.y = y;
+	mItem.ItemName = menuItems;   //当前菜单项文字
+	AddMenuItem(mItem);
+}
+
 void ChoiceMenu::DrawMenu(HDC hdc, BYTE btnTrans, bool startState,float ratio)
 {
 	if (&gm_menuBkg != NULL && startState == true)
