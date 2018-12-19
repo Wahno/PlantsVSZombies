@@ -5,6 +5,7 @@
 #include "TinyEngine\\T_AI.h"
 #include "MainMenu.h"
 #include "HelpMenu.h"
+#include"ChoiceMenu.h"
 class PVZ_Game: public T_Engine 
 {
 public:
@@ -26,7 +27,12 @@ private:
 
 	MainMenu mainMenu;
 	HelpMenu helpMenu;
+	ChoiceMenu choiceMenu;
+	ChoiceMenu returnMenu;
+	void ChoiceMenuInit(); /*选项菜单初始化*/
 
+
+	void ReturnMenuInit();
 	void MenuInit();
 	void AudioInit();
 };
