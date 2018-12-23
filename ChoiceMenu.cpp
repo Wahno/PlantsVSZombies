@@ -27,7 +27,7 @@ void ChoiceMenu::Init()
 	//设置菜单信息
 	MENU_INFO menuInfo;
 	menuInfo.align = 1;   //对齐方式居中
-	menuInfo.space = MENU_SPACE; //菜单项之间的间隔距离
+	menuInfo.space = 5; //菜单项之间的间隔距离
 	menuInfo.width = btn_width; //菜单项宽
 	menuInfo.height = btn_height; //菜单项高
 	menuInfo.fontName = L"黑体"; //菜单项字体
@@ -38,9 +38,9 @@ void ChoiceMenu::Init()
 	for (int i = 0; i < 5; i++)
 	{
 		//垂直居中布局坐标
-		x = 290;
+		x = (WIN_WIDTH - 412) / 2 + (412 - btn_width * 0.5) / 2;
 		//y =  10 + i * (btn_height + MENU_SPACE) + (wnd_height - 6* btn_height - 5* MENU_SPACE) / 6;
-		y = 220 + i * 50;
+		y =  (WIN_HEIGHT - 483)/2 + 104 + i * (btn_height * 0.5 + 5);
 		MENUITEM mItem;
 		mItem.pos.x = x;
 		mItem.pos.y = y;
@@ -73,9 +73,9 @@ void ChoiceMenu::returnMenuInit()
 	SetMenuInfo(menuInfo);
 
 	//垂直居中布局坐标
-	x = 200;
+	x =(WIN_WIDTH - 412) / 2+ (412 - btn_width)/2 ;
 	//y =  10 + i * (btn_height + MENU_SPACE) + (wnd_height - 6* btn_height - 5* MENU_SPACE) / 6;
-	y = 476;
+	y = (WIN_HEIGHT - 483) / 2 + 483 - btn_height ;
 	MENUITEM mItem;
 	mItem.pos.x = x;
 	mItem.pos.y = y;
@@ -87,7 +87,7 @@ void ChoiceMenu::DrawMenu(HDC hdc, BYTE btnTrans, bool startState,float ratio)
 {
 	if (&gm_menuBkg != NULL && startState == true)
 	{
-		gm_menuBkg.PaintImage(hdc, 170, 100,gm_menuBkg.GetImageWidth(),gm_menuBkg.GetImageHeight(), bkImageAlpha);
+		gm_menuBkg.PaintImage(hdc, (WIN_WIDTH - gm_menuBkg.GetImageWidth()) / 2, (WIN_HEIGHT - gm_menuBkg.GetImageHeight()) / 2,gm_menuBkg.GetImageWidth(),gm_menuBkg.GetImageHeight(), bkImageAlpha);
 	}
 	
 	int w = menu_info.width;

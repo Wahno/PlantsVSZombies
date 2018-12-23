@@ -1,5 +1,6 @@
 #pragma once
 #include"TinyEngine\T_Menu.h"
+#include "TinyEngine\T_Config.h"
 class ChoiceMenu : public T_Menu
 {
 public:
