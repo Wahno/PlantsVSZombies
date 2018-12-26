@@ -246,6 +246,7 @@ int MainMenu::MenuMouseClick(int x, int y)
 			m_MoveSound->Restore();
 			m_ClickSound->Restore();
 			m_ClickSound->Play(false);
+			mousedown_buffer_one.Play(false);
 			mainmenu_backmusic_buffer.Stop();
 			flickerFlag = true;
 		}
@@ -267,6 +268,7 @@ void MainMenu::AudioInit(AudioDX &ds)
 	mousemove_buffer.LoadWave(ds, L"res\\audio\\bleep.wav");
 	nomain_mousedown_buffer.LoadWave(ds, L"res\\audio\\buttonclick.wav");
 	first_sound.LoadWave(ds, L"res\\audio\\groan2.wav");
+	mousedown_buffer_one.LoadWave(ds, L"res\\audio\\losemusic.wav");
 	PlayAudio();
 }
 

@@ -144,6 +144,7 @@
   <ItemGroup>
     <ClCompile Include="ChoiceMenu.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameLevel.cpp" />
     <ClCompile Include="HelpMenu.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenu.cpp" />
@@ -161,6 +162,7 @@
   <ItemGroup>
     <ClInclude Include="ChoiceMenu.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameLevel.h" />
     <ClInclude Include="HelpMenu.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="resource.h" />

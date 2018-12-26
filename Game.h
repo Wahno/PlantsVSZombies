@@ -5,7 +5,9 @@
 #include "TinyEngine\\T_AI.h"
 #include "MainMenu.h"
 #include "HelpMenu.h"
-#include"ChoiceMenu.h"
+#include "ChoiceMenu.h"
+#include "GameLevel.h"
+
 class PVZ_Game: public T_Engine 
 {
 public:
@@ -29,6 +31,8 @@ private:
 	HelpMenu helpMenu;
 	ChoiceMenu choiceMenu;
 	ChoiceMenu returnMenu;
+
+	GameLevel gameLevel;
 
 	void MenuInit();
 	void AudioInit();

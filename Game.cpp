@@ -28,9 +28,10 @@ void PVZ_Game::GameLogic()
 		if (mainMenu.FrameCount > mainMenu.MaxFrameCount) 
 		{
 
-			//GameState = GAME_RUN;
+			GameState = GAME_RUN;
 			mainMenu.flickerFlag = false;
 			mainMenu.FrameCount = 0;
+			gameLevel.Init();
 		}
 	}
 }
@@ -52,6 +53,10 @@ void PVZ_Game::GamePaint(HDC hdc)
 	if (GameState == GAME_HELP)
 	{
 		helpMenu.DrawMenu(hdc,wnd_width/6,wnd_height/6);
+	}
+	if (GameState == GAME_RUN) 
+	{
+		gameLevel.Draw(hdc);
 	}
 }
 
@@ -158,6 +163,7 @@ void PVZ_Game::AudioInit()
 	if (!ds.CreateDS(m_hWnd))return;
 	mainMenu.AudioInit(ds);
 	helpMenu.AudioInit(ds);
+	gameLevel.AudioInit(ds);
 }
 
 
