@@ -142,9 +142,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BookMenu.cpp" />
     <ClCompile Include="ChoiceMenu.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameLevel.cpp" />
+    <ClCompile Include="HandBook.cpp" />
     <ClCompile Include="HelpMenu.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenu.cpp" />
@@ -160,9 +162,11 @@
     <ClCompile Include="TinyEngine\T_Util.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BookMenu.h" />
     <ClInclude Include="ChoiceMenu.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameLevel.h" />
+    <ClInclude Include="HandBook.h" />
     <ClInclude Include="HelpMenu.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="resource.h" />

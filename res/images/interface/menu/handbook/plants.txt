@@ -1,0 +1,229 @@
+﻿count=35
+width=100
+height=60
+smallpath=res\images\interface\menu\handbook\Card\Plants\
+bigpath=res\images\interface\menu\handbook\Card\Plants\
+<layer id=GraveBuster.png>
+	<name>墓地苔</name>
+	<tip>墓地苔用来吃掉墓</tip>
+	<sunNum>75</sunNum>
+	<coolTime>7.5秒</coolTime>
+	<description>尽管墓地苔的外表十分吓人，但他想要所有人都知道，其实他喜欢小猫咪，而且利用业余时间，在一家僵尸康复中心做志愿者。“我只是在做正确的事情，”他说。</description>
+</layer>
+<layer id=Starfruit.png>
+	<name>杨桃</name>
+	<tip>杨桃可以向五个方向发射小杨</tip>
+	<sunNum>125</sunNum>
+	<coolTime>7.5秒</coolTime>
+	<description>杨桃：“嘿，哥们，有一天我去看牙医，他说我有四个牙洞。我一数，我就只有一颗牙齿！一颗牙齿长了四个牙洞？怎么会这样啊？”</description>
+</layer>
+<layer id=Peashooter.png>
+	<name>豌豆射手</name>
+	<tip>豌豆射手，你的第一道防线。它们通过发射豌豆来攻击僵</tip>
+	<sunNum>100</sunNum>
+	<coolTime>7.5秒</coolTime>
+	<description>一棵植物，怎么能如此快地生长，并发射如此多的豌豆呢？豌豆射手：“努力工作，奉献自己，再加上一份阳光，高纤维和氧化碳均衡搭配，这种健康早餐让一切成为可能。”</description>
+</layer>
+<layer id=SnowPea.png>
+	<name>寒冰射手</name>
+	<tip>寒冰射手会发射寒冰豌豆来攻击敌人，并具有减速效</tip>
+	<sunNum>175</sunNum>
+	<coolTime>7.5秒</coolTime>
+	<description>人们经常告诉寒冰射手他是多么“冷酷”，或者告诫他要“冷静”。他们叫他要“保持镇静”。寒冰射手只是转转他的眼睛。其实他都听见了。</description>
+</layer>
+<layer id=Repeater.png>
+	<name>双发射手</name>
+	<tip>双发射手可以一次发射两颗</tip>
+	<sunNum>200</sunNum>
+	<coolTime>7.5秒</coolTime>
+	<description>双发射手很凶悍，他是在街头混大的。他不在乎任何人的看法，无论是植物还是僵尸，他打出豌豆，是为了让别人离他远点。其实呢，双发射手一直暗暗地渴望着爱情。</description>
+</layer>
+<layer id=Threepeater.png>
+	<name>三线射手</name>
+	<tip>三线射手可以在三条线上同时射出豌</tip>
+	<sunNum>325</sunNum>
+	<coolTime>7.5秒</coolTime>
+	<description>三线射手喜欢读书，下棋和在公园里呆坐。他也喜欢演出，特别是现代爵士乐。“我正在寻找我生命中的另一半，”他说。三线射手最爱的数字是5。</description>
+</layer>
+<layer id=GatlingPea.png>
+	<name>加特林</name>
+	<tip>加特林可以一次发射四颗</tip>
+	<sunNum>250</sunNum>
+	<coolTime>7.5秒</coolTime>
+	<description>当加特林宣布他要参军的时候，他的父母很为他担心，他们异口同声地对他说：“亲爱的，但这太危险了。”加特林拒绝让步，“生活本就危险，”他这样回答着，此时他的眼睛里，正闪烁着钢铁般的信念。</description>
+</layer>
+<layer id=SunFlower.png>
+	<name>向日葵</name>
+	<tip>向日葵，为你生产额外阳光的经济作物。尝试尽可能多种植</tip>
+	<sunNum>50</sunNum>
+	<coolTime>7.5秒</coolTime>
+	<description>向日葵情不自禁地和着节拍起舞。是什么节拍呢？嗨，是大地自己用来提神的爵士节拍，这种频率的节拍，只有向日葵才能听到。</description>
+</layer>
+<layer id=TwinSunflower.png>
+	<name>双子向日葵</name>
+	<tip>双子向日葵的阳光产量是普通向日葵的两</tip>
+	<sunNum>150</sunNum>
+	<coolTime>7.5秒</coolTime>
+	<description>这是一个疯狂的夜晚，禁忌的科学技术，让双子向日葵来到了这个世界。电闪雷鸣，狂风怒吼，都在表示着这个世界对他的拒绝。但是一切都无济于事，双子向日葵他却仍然活</description>
+</layer>
+<layer id=FlowerPot.png>
+	<name>花盆</name>
+	<tip>花盆可以让你在屋顶上种植植</tip>
+	<sunNum>25</sunNum>
+	<coolTime>7.5秒</coolTime>
+	<description>“我是一个让植物栽种的花盆，但我也是一棵植物。是不是很意外？</description>
+</layer>
+<layer id=LilyPad.png>
+	<name>睡莲</name>
+	<tip>睡莲可以让你种植非水生植物在它上</tip>
+	<sunNum>25</sunNum>
+	<coolTime>7.5秒</coolTime>
+	<description>睡莲从不抱怨，它也从来不想知道发生了什么事。在它身上种植物，它也不会说什么。难道，它有什么惊奇想法或者可怕的秘密？没人知道。睡莲把这些都埋藏在心底。</description>
+</layer>
+<layer id=PotatoMine.png>
+	<name>土豆雷</name>
+	<tip>土豆雷具有强大的威力，但是他们需要点时间来武装自己。你应把他们种在僵尸前进的路上，当他们一被接触就会发生爆</tip>
+	<sunNum>25</sunNum>
+	<coolTime>7.5秒</coolTime>
+	<description>一些人说土豆雷很懒，因为他总是把所有事情留到最后。土豆雷才没空理他们，他正忙着考虑他的投资战略呢。</description>
+</layer>
+<layer id=Torchwood.png>
+	<name>火炬树桩</name>
+	<tip>火炬树桩可以把穿过他的豌豆变成火球，可以造成两倍伤</tip>
+	<sunNum>175</sunNum>
+	<coolTime>7.5秒</coolTime>
+	<description>每个人都喜欢并敬重火炬树桩。他们喜欢他的诚实和坚贞的友谊，以及增强豌豆伤害的能力。但他也有自己的秘密：他不识字！</description>
+</layer>
+<layer id=WallNut.png>
+	<name>坚果墙</name>
+	<tip>坚果墙拥有足以让你用来保护其它植物的坚硬外</tip>
+	<sunNum>50</sunNum>
+	<coolTime>7.5秒</coolTime>
+	<description>坚果墙：“人们想知道，经常被僵尸啃的感觉怎样？他们不知道，我有限的感官，只能让我感到一种麻麻的感觉，像是，令人放松的背部按摩。”</description>
+</layer>
+<layer id=TallNut.png>
+	<name>高坚果</name>
+	<tip>高坚果是重型壁垒植物，而且不会被跨</tip>
+	<sunNum>125</sunNum>
+	<coolTime>7.5秒</coolTime>
+	<description>人们想知道，坚果墙和高坚果是否在竞争。高坚果以男中音的声调大声笑了。“我们之间怎么会存在竞争关系？我们是哥们儿。你知道坚果墙为我做了什么吗……”高坚果的声音越来越小，他狡黠地笑着。”</description>
+</layer>
+<layer id=Jalapeno.png>
+	<name>火爆辣椒</name>
+	<tip>火爆辣椒可以摧毁一整条线上的敌</tip>
+	<sunNum>150</sunNum>
+	<coolTime>7.5秒</coolTime>
+	<description>“嘎嘎嘎嘎嘎嘎嘎！！！”火爆辣椒说。他现在不会爆炸，还不到时候，不过快了，喔~，快了快了，快来了。他知道，他感受到了，他一生都是在等待这个时刻！</description>
+</layer>
+<layer id=Spikeweed.png>
+	<name>地刺</name>
+	<tip>地刺可以扎破轮胎，并对踩到他的僵尸造成</tip>
+	<sunNum>100</sunNum>
+	<coolTime>7.5秒</coolTime>
+	<description>地刺痴迷冰球，他买了包厢的季票。他一直关注着他喜欢的球员，他也始终如一的在赛后清理冰球场。但只有一个问题：他害怕冰球。</description>
+</layer>
+<layer id=Spikerock.png>
+	<name>地刺王</name>
+	<tip>地刺王可以扎破多个轮胎，并对踩到他的僵尸造成伤</tip>
+	<sunNum>125</sunNum>
+	<coolTime>7.5秒</coolTime>
+	<description>地刺王刚刚从欧洲旅行回来。他玩的很高兴，也认识了很多有趣的人。这些都真的拓展了他的视野——他从来不知道，他们建造了这么大的博物馆，有这么多的画作。这对他来说太惊奇了。</description>
+</layer>
+<layer id=Spikeweed.png>
+	<name>大蒜</name>
+	<tip>大蒜可以让僵尸改变前进的路</tip>
+	<sunNum>50</sunNum>
+	<coolTime>7.5秒</coolTime>
+	<description>路线转向，这不仅仅是大蒜的专业，更是他的热情所在。他在布鲁塞尔大学里，获得了转向学的博士学位。他能把路线向量和反击阵列，讲上一整天。他甚至会把家里的东西，推到街上去。不知道为啥，他老婆还可以忍受这些。</description>
+</layer>
+<layer id=Garlic.png>
+	<name>窝瓜</name>
+	<tip>窝瓜会压扁第一个接近它的僵</tip>
+	<sunNum>50</sunNum>
+	<coolTime>7.5秒</coolTime>
+	<description>“我准备好了！”窝瓜大吼道，“干吧！！算我一份！没人比我厉害！我就是你要的人！来啊！等啥啊？要的就是这个！”</description>
+</layer>
+<layer id=Chomper.png>
+	<name>大嘴花</name>
+	<tip>大嘴花可以一口吞掉一整只僵尸，但是他们消化僵尸的时候很脆</tip>
+	<sunNum>150</sunNum>
+	<coolTime>7.5秒</coolTime>
+	<description>大嘴花几乎可以去“恐怖小店”，来表演它的绝技了，不过他的经纪人压榨了他太多的钱，所以他没去成。尽管如此，大嘴花没有怨言，只说了句这只是交易的一部分。</description>
+</layer>
+<layer id=FumeShroom.png>
+	<name>大喷菇</name>
+	<tip>大喷菇喷出的臭气可以穿透铁丝网</tip>
+	<sunNum>75</sunNum>
+	<coolTime>7.5秒</coolTime>
+	<description>“我以前那份没前途的工作，是为一个面包房生产酵母孢，”大喷菇说。“然后小喷菇，上帝保佑它，告诉了我这个喷杀僵尸的机会。现在我真觉得自己完全不同了。”</description>
+</layer>
+<layer id=CoffeeBean.png>
+	<name>咖啡豆</name>
+	<tip>咖啡豆，可以唤醒睡眠中的蘑菇</tip>
+	<sunNum>75</sunNum>
+	<coolTime>7.5秒</coolTime>
+	<description>咖啡豆：“嘿，伙计们！嘿，怎么回事？是谁？嘿！你瞧见那个东西没？什么东西？哇！是狮子！”嗯，咖啡豆确定，这样可以让自己很兴奋。</description>
+</layer>
+<layer id=GloomShroom.png>
+	<name>曾哥</name>
+	<tip>伪娘终结者，喜欢围绕自身释放大量绵</tip>
+	<sunNum>150</sunNum>
+	<coolTime>7.5秒</coolTime>
+	<description>起初人们一直非议他，后来曾哥用自己独特的绵羊音横扫了宇宙拆迁办，全世界都拜倒在他的脚下。“听说有个节目叫‘快男’？”曾哥说，“没有我在他们真应该感到羞愧。”他于是决定明年去看看。</description>
+</layer>
+<layer id=FumeShroom.png>
+	<name>小喷菇</name>
+	<tip>小喷菇是免费的，不过射程很</tip>
+	<sunNum>0</sunNum>
+	<coolTime>7.5秒</coolTime>
+	<description>小喷菇：“我也是最近才知道僵尸的存在，和很多蘑菇一样，我只是把他们想象成童话和电影里的怪物。不过这次的经历已经让我大开眼界了。</description>
+</layer>
+<layer id=ScaredyShroom.png>
+	<name>胆小菇</name>
+	<tip>胆小菇是一种远程射手，敌人接近后会躲起</tip>
+	<sunNum>25</sunNum>
+	<coolTime>7.5秒</coolTime>
+	<description>“谁在那？”胆小菇低声说，声音细微难辨。“走开！我不想见任何人。除非……除非你是马戏团的人。”</description>
+</layer>
+<layer id=HypnoShroom.png>
+	<name>魅惑菇</name>
+	<tip>当僵尸吃下魅惑菇后，他将会掉转方向为你作</tip>
+	<sunNum>75</sunNum>
+	<coolTime>7.5秒</coolTime>
+	<description>魅惑菇声称：“僵尸们是我们的朋友，他们被严重误解了，僵尸们在我们的生态环境里扮演着重要角色。我们可以也应当更努力地让他们学会用我们的方式来思考。”</description>
+</layer>
+<layer id=IceShroom.png>
+	<name>寒冰菇</name>
+	<tip>寒冰菇，能短暂的冻结屏幕上所有僵</tip>
+	<sunNum>75</sunNum>
+	<coolTime>7.5秒</coolTime>
+	<description>寒冰菇皱着眉头，倒不是因为它不高兴或不满意，只是因为，它儿时因受创伤而遗留下了面瘫。</description>
+</layer>
+<layer id=SunShroom.png>
+	<name>阳光菇</name>
+	<tip>阳光菇开始提供少量阳光，稍后提供正常数量阳</tip>
+	<sunNum>25</sunNum>
+	<coolTime>7.5秒</coolTime>
+	<description>阳光菇讨厌阳光。恨到当它内部产生点阳光时，就尽可能快的吐出来。它就是不能忍受这个。对它来说，阳光令人厌恶。</description>
+</layer>
+<layer id=DoomShroom.png>
+	<name>毁灭菇</name>
+	<tip>毁灭菇可以摧毁大范围的僵尸，并留下一个不能种植物的大弹</tip>
+	<sunNum>125</sunNum>
+	<coolTime>7.5秒</coolTime>
+	<description>“你很幸运，我是和你一伙的，”毁灭菇说，“我能摧毁任何你所珍视的东西，小菜一碟。”</description>
+</layer>
+<layer id=TangleKlep.png>
+	<name>缠绕海草</name>
+	<tip>缠绕水草是一种可以把接近他的僵尸拉进水中的水生植</tip>
+	<sunNum>25</sunNum>
+	<coolTime>7.5秒</coolTime>
+	<description>“我是完全隐形的，”缠绕水草自己想，“我就藏在水面下，没人会看到我。”他的朋友告诉他，他们可以清楚地看到他。不过，缠绕水草似乎不想改变自己的看法。</description>
+</layer>
+<layer id=SeaShroom.png>
+	<name>海蘑菇</name>
+	<tip>海蘑菇，能够发射短程孢子的水生植</tip>
+	<sunNum>0</sunNum>
+	<coolTime>7.5秒</coolTime>
+	<description>海蘑菇从来没看到过大海，大海就在他的名字里，他总听到关于大海的事。他只是没找到合适的时间，总有一天……是的，他会见到海的。</description>
+</layer>

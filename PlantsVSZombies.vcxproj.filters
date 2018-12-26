@@ -22,6 +22,12 @@
     <Filter Include="源文件\Menu">
       <UniqueIdentifier>{9ad9bdf9-7de0-4f5f-9cc3-1255fdfbdae0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\Menu\HandBook">
+      <UniqueIdentifier>{838f734c-26d2-4caa-b247-9c604f8f05ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Menu\HandBook">
+      <UniqueIdentifier>{12b0aa79-24e2-423c-be3c-ae59f8431f10}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TinyEngine\T_AI.cpp">
@@ -71,6 +77,12 @@
     </ClCompile>
     <ClCompile Include="GameLevel.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="HandBook.cpp">
+      <Filter>源文件\Menu\HandBook</Filter>
+    </ClCompile>
+    <ClCompile Include="BookMenu.cpp">
+      <Filter>源文件\Menu\HandBook</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -127,6 +139,12 @@
     </ClInclude>
     <ClInclude Include="GameLevel.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BookMenu.h">
+      <Filter>头文件\Menu\HandBook</Filter>
+    </ClInclude>
+    <ClInclude Include="HandBook.h">
+      <Filter>头文件\Menu\HandBook</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

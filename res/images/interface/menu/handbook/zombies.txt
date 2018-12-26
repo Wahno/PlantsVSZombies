@@ -1,0 +1,65 @@
+﻿count=17
+width=100
+height=60
+smallpath=res\images\interface\menu\handbook\Card\Zombies\
+bigpath=res\images\interface\menu\handbook\Card\Zombies\
+<layer id=BackupDancer.png>
+	<name>伴舞僵尸</name>
+	<tip>当舞王僵尸摇摆时，这种僵尸四个结伙出现。</tip>
+	<description>伴舞僵尸曾在位于僵尸纽约城的“咀利牙”表演艺术学院钻研过六年的舞技。</description>
+</layer>
+<layer id=DancingZombie.png>
+	<name>舞王僵尸</name>
+	<tip>舞王僵尸和人类(在世或者死去的)如有雷同，纯属巧合。</tip>
+	<description>舞王僵尸的最新唱片“抓住脑子啃啊啃”在僵尸界的人气正急速飙升。</description>
+</layer>
+<layer id=Zombie.png>
+	<name>领带僵尸</name>
+	<tip>none。</tip>
+	<description>这种僵尸喜爱脑髓，贪婪而不知足。脑髓，脑髓，脑髓，夜以继日地追求着。老而臭的脑髓？腐烂的脑髓？都没关系。僵尸需要它们。</description>
+</layer>
+<layer id=ConeheadZombie.png>
+	<name>路障僵尸</name>
+	<tip>他的路障头盔，使他两倍坚韧于普通僵尸。</tip>
+	<description>和其他僵尸一样，路障头僵尸盲目地向前。但某些事物却使他停下脚步，捡起一个交通路障，并固实在自己的脑袋上。是的，他很喜欢参加聚会。</description>
+</layer>
+<layer id=BucketheadZombie.png>
+	<name>铁桶僵尸</name>
+	<tip>他的铁桶头盔，能极大程度的承受伤害。</tip>
+	<description>铁桶头僵尸经常戴着水桶，在冷漠的世界里显得独一无二。但事实上，他只是忘记了，那铁桶还在他头上而已。</description>
+</layer>
+<layer id=FootballZombie.png>
+	<name>橄榄球僵尸</name>
+	<tip>橄榄球僵尸的表演秀。</tip>
+	<description>在球场上，橄榄球僵尸表现出110%的激情，他进攻防守样样在行。虽然他完全不知道橄榄球是什么。</description>
+</layer>
+<layer id=PoleVaultingZombie.png>
+	<name>撑杆僵尸</name>
+	<tip>撑杆僵尸运用标杆高高地跃过障碍物。</tip>
+	<description>一些僵尸渴望走得更远、得到更多，这也促使他们由普通成为非凡。那就是撑杆僵尸。</description>
+</layer>
+<layer id=ScreenDoorZombie.png>
+	<name>铁栅门僵尸</name>
+	<tip>他的铁栅门是有效的盾牌。</tip>
+	<description>门板僵尸上次拜访过的房主防守并不专业，在吃掉房主的脑子后拿走了他家的铁栅门。</description>
+</layer>
+<layer id=DuckyTubeZombie1.png>
+	<name>鸭子救生圈僵尸</name>
+	<tip>鸭子救生圈能让僵尸能浮在水面上。</tip>
+	<description>只有特定的僵尸才能成为救生圈僵尸。并不是每个僵尸都能胜任的。有些救生圈有点漏气，但他们没能注意到，所以他们离开并放弃了对脑子的渴求。</description>
+</layer>
+<layer id=DolphinRiderZombie.png>
+	<name>海豚骑士僵尸</name>
+	<tip>海豚骑士僵尸善于利用你水池防御的弱点。</tip>
+	<description>那海豚其实也是个僵尸。</description>
+</layer>
+<layer id=Brains.png>
+	<name>小鬼僵尸</name>
+	<tip>小淘气们是一群小型僵尸，他们被伽刚特尔用来投掷进你的防御体系。</tip>
+	<description>小淘气虽然瘦小，却很结实。他精通僵尸柔道，僵尸空手道和僵尸关节技。另外，他还会吹口琴。</description>
+</layer>
+<layer id=JackinTheBoxZombie.png>
+	<name>小丑僵尸</name>
+	<tip>这种僵尸带着个会爆炸的潘多拉盒子。</tip>
+	<description>这种僵尸令人不寒而栗，不是因为他的冰冷身躯而是因为他的疯狂。</description>
+</layer>

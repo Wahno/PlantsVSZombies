@@ -85,8 +85,10 @@ enum GAME_STATE
 	GAME_OVER,					// 结束
 	GAME_HELP,					// 帮助状态
 	GAME_ABOUT,					// 关于状态
-	GAME_SETTING				// 设置状态
-};
+	GAME_SETTING,				// 设置状态
+	GAME_SUN,
+	GAME_ZOM
+}; //0-11
  
 // 按键行为常量
 enum KM_ACTION

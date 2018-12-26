@@ -58,6 +58,23 @@ void PVZ_Game::GamePaint(HDC hdc)
 	{
 		gameLevel.Draw(hdc);
 	}
+	if (GameState == GAME_HANDBOOK) {
+		handMenu.Draw(hdc);
+	}
+	if (GameState == GAME_SUN) {
+		handMenu.DrawSunInfo(hdc);
+		handMenu.DrawPlants(hdc);
+	}
+	if (GameState >= 12 && GameState <= 46) {
+		handMenu.DrawPlantFrameInfo(hdc, GameState - 12);
+	}
+	if (GameState == GAME_ZOM) {
+		handMenu.DrawZomInfo(hdc);
+		handMenu.DrawZombies(hdc);
+	}
+	if (GameState >= 47 && GameState <= 64) {
+		handMenu.DrawZomFrameInfo(hdc,GameState - 47);
+	}
 }
 
 void PVZ_Game::GameKeyAction(int ActionType)
@@ -84,12 +101,11 @@ void PVZ_Game::GameMouseAction(int x, int y, int Action)
 				case 2:
 					break;
 				case 3:
-					//GameState = GAME_HANDBOOK;
+					GameState = GAME_HANDBOOK;
 					break;
 				case 4:
 					break;
 				case 5:
-					//GameState = GAME_ABOUT;
 					break;
 				case 6:
 					GameState = GAME_SETTING;
@@ -135,6 +151,7 @@ void PVZ_Game::GameMouseAction(int x, int y, int Action)
 				switch (index)
 				{
 				case 0:
+					GameState = GAME_START;
 					break;
 				}
 			}
@@ -148,6 +165,73 @@ void PVZ_Game::GameMouseAction(int x, int y, int Action)
 			GameState = GAME_START;
 		}
 	}
+	else if (GameState == GAME_HANDBOOK) {
+		if (Action == MOUSE_MOVE)
+		{
+			handMenu.MenuMouseMove(x, y);
+		}
+		if (Action == MOUSE_LCLICK) {
+			int  index = handMenu.MenuMouseClick(x, y);
+			switch (index)
+			{
+			case 0:
+				GameState = GAME_START;
+				break;
+			case 1:
+				GameState = GAME_ZOM;
+				break;
+			case 2:
+				GameState = GAME_SUN; //²é¿´Ö²Îï
+				break;
+			}
+		}
+	}
+	else if (GameState == GAME_SUN)
+	{
+		if (Action == MOUSE_MOVE) {
+			handMenu.PZMouseMove(x, y);
+		}
+		if (Action == MOUSE_LCLICK) {
+			int index = handMenu.PZMouseClick(x, y);
+			switch (index)
+			{
+			case 101:
+				GameState = GAME_HANDBOOK;
+				break;
+			case 102:
+				GameState = GAME_START;
+				break;
+			case 404:
+				break;
+			default:
+				GameState = index + 12;
+				break;
+			}
+		}
+	}
+	else if (GameState == GAME_ZOM)
+	{
+		if (Action == MOUSE_MOVE) {
+			handMenu.PZMouseMove(x, y);
+		}
+		if (Action == MOUSE_LCLICK) {
+			int index = handMenu.PZMouseClick(x, y);
+			switch (index)
+			{
+			case 101:
+				GameState = GAME_HANDBOOK;
+				break;
+			case 102:
+				GameState = GAME_START;
+				break;
+			case 404:
+				break;
+			default:
+				GameState = index + 47;
+				break;
+			}
+		}
+	}
 }
 
 void PVZ_Game::MenuInit()
@@ -156,6 +240,7 @@ void PVZ_Game::MenuInit()
 	helpMenu.Init();
 	choiceMenu.Init();
 	returnMenu.returnMenuInit();
+	handMenu.Init();
 }
 
 void PVZ_Game::AudioInit()
