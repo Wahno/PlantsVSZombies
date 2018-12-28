@@ -146,6 +146,7 @@
     <ClCompile Include="ChoiceMenu.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameLevel.cpp" />
+    <ClCompile Include="GraphPlus.cpp" />
     <ClCompile Include="HandBook.cpp" />
     <ClCompile Include="HelpMenu.cpp" />
     <ClCompile Include="main.cpp" />
@@ -166,6 +167,7 @@
     <ClInclude Include="ChoiceMenu.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameLevel.h" />
+    <ClInclude Include="GraphPlus.h" />
     <ClInclude Include="HandBook.h" />
     <ClInclude Include="HelpMenu.h" />
     <ClInclude Include="MainMenu.h" />
