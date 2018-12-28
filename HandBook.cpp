@@ -430,7 +430,7 @@ void HandBook::DrawPlantFrameInfo(HDC hdc,int index)
 	nameRect.Y =(WIN_HEIGHT) / 5 + 140;	
 	T_Graph::PaintText(hdc,nameRect,name,20,L"微软雅黑",Color::Color(255, 203, 105),FontStyle::FontStyleRegular,StringAlignmentCenter);
 	RectF Rect;
-	int  n = 13; //每行显示的字数
+	int  n = 16; //每行显示的字数
 	Rect.Width = n * 25;
 	Rect.Height = 20;
 	Rect.X = WIN_WIDTH * 3 / 5 - 25 + 20;
@@ -505,7 +505,7 @@ void HandBook::DrawZomFrameInfo(HDC hdc, int index)
 	nameRect.Y = (WIN_HEIGHT) / 5 + 140;
 	T_Graph::PaintText(hdc, nameRect, name, 20, L"微软雅黑", Color::Color(255, 203, 105), FontStyle::FontStyleRegular, StringAlignmentCenter);
 	RectF Rect;
-	int  n = 13; //每行显示的字数
+	int  n = 16; //每行显示的字数
 	Rect.Width = n * 25;
 	Rect.Height = 20;
 	Rect.X = WIN_WIDTH * 3 / 5 - 25 + 20;
