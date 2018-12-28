@@ -64,6 +64,7 @@ void PVZ_Game::GamePaint(HDC hdc)
 	if (GameState == GAME_SUN) {
 		handMenu.DrawSunInfo(hdc);
 		handMenu.DrawPlants(hdc);
+		GameState = 12;
 	}
 	if (GameState >= 12 && GameState <= 46) {
 		handMenu.DrawPlantFrameInfo(hdc, GameState - 12);
@@ -71,6 +72,7 @@ void PVZ_Game::GamePaint(HDC hdc)
 	if (GameState == GAME_ZOM) {
 		handMenu.DrawZomInfo(hdc);
 		handMenu.DrawZombies(hdc);
+		GameState = 47;
 	}
 	if (GameState >= 47 && GameState <= 64) {
 		handMenu.DrawZomFrameInfo(hdc,GameState - 47);
