@@ -178,15 +178,15 @@ void PVZ_Game::GameMouseAction(int x, int y, int Action)
 				GameState = GAME_START;
 				break;
 			case 1:
-				GameState = GAME_ZOM;
+				GameState = GAME_SUN; //查看植物
 				break;
 			case 2:
-				GameState = GAME_SUN; //查看植物
+				GameState = GAME_ZOM; 
 				break;
 			}
 		}
 	}
-	else if (GameState == GAME_SUN)
+	else if (GameState == GAME_SUN || (GameState >= 12 && GameState <= 46))
 	{
 		if (Action == MOUSE_MOVE) {
 			handMenu.PZMouseMove(x, y);
@@ -202,6 +202,7 @@ void PVZ_Game::GameMouseAction(int x, int y, int Action)
 				GameState = GAME_START;
 				break;
 			case 404:
+				//GameState = GAME_SUN;
 				break;
 			default:
 				GameState = index + 12;
@@ -209,7 +210,7 @@ void PVZ_Game::GameMouseAction(int x, int y, int Action)
 			}
 		}
 	}
-	else if (GameState == GAME_ZOM)
+	else if (GameState == GAME_ZOM || (GameState >= 47 && GameState <= 64))
 	{
 		if (Action == MOUSE_MOVE) {
 			handMenu.PZMouseMove(x, y);
@@ -225,6 +226,7 @@ void PVZ_Game::GameMouseAction(int x, int y, int Action)
 				GameState = GAME_START;
 				break;
 			case 404:
+				//GameState = GAME_ZOM;
 				break;
 			default:
 				GameState = index + 47;
@@ -232,11 +234,14 @@ void PVZ_Game::GameMouseAction(int x, int y, int Action)
 			}
 		}
 	}
+	
 }
 
 void PVZ_Game::MenuInit()
 {
 	mainMenu.Init();
+
+
 	helpMenu.Init();
 	choiceMenu.Init();
 	returnMenu.returnMenuInit();

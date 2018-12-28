@@ -18,7 +18,7 @@ void HandBook::Init()
 	zombie = new T_Graph(L"res\\images\\interface\\menu\\handbook\\2.gif"); //¼ÓÔØ½©Ê¬Í¼Æ¬
 	sunflower = new T_Graph(L"res\\images\\interface\\menu\\handbook\\0.gif"); //¼ÓÔØÏòÈÕ¿ûÍ¼Æ¬
 	info_frame = new T_Graph(L"res\\images\\interface\\menu\\handbook\\Almanac_PlantCard.png");
-	
+	grass = new T_Graph(L"res\\images\\interface\\menu\\handbook\\sod3row.png");
 		
 	zom.InitZom(); 
 	sun.InitSun();
@@ -34,7 +34,7 @@ int HandBook::GetMenuIndex(int x, int y)
 	if (r_button.GetMenuIndex(x, y) >= 0) {
 		return 0; //·µ»Ø°´Å¥
 	}
-	else if (sun.GetMenuIndex(x, y))
+	else if (sun.GetMenuIndex(x, y) >= 0)
 	{
 		return 1;  //ÏòÈÕ¿û°´Å¥
 	}
@@ -128,7 +128,7 @@ void HandBook::DrawSunInfo(HDC hdc)
 	text.X = (WIN_WIDTH - text.Width) / 2;
 	text.Y = 20;
 	T_Graph::PaintText(hdc, text, info, 20, L"Î¢ÈíÑÅºÚ", Color::Color(255, 203, 105), FontStyleBold, StringAlignmentCenter);
-	grass = new T_Graph(L"res\\images\\interface\\menu\\handbook\\sod3row.png");
+	//grass = new T_Graph(L"res\\images\\interface\\menu\\handbook\\sod3row.png");
 	HBITMAP hbitmp = grass->GetBmpHandle();
 	grass->PaintRegion(hbitmp,hdc,WIN_WIDTH * 3 /5 + 27,(WIN_HEIGHT)/5 - 16,20,20,200,145,1);
 }
@@ -148,7 +148,7 @@ void HandBook::DrawZomInfo(HDC hdc)
 	text.X = (WIN_WIDTH - text.Width) / 2;
 	text.Y = 20;
 	T_Graph::PaintText(hdc, text, info, 20, L"Î¢ÈíÑÅºÚ", Color::Color(16, 237, 22), FontStyleBold, StringAlignmentCenter);
-	grass = new T_Graph(L"res\\images\\interface\\menu\\handbook\\sod3row.png");
+	//grass = new T_Graph(L"res\\images\\interface\\menu\\handbook\\sod3row.png");
 	HBITMAP hbitmp = grass->GetBmpHandle();
 	grass->PaintRegion(hbitmp, hdc, WIN_WIDTH * 3 / 5 + 27, (WIN_HEIGHT) / 5 - 16, 20, 20, 200, 145, 1);
 }
@@ -309,18 +309,24 @@ bool HandBook::LoadTxt(const char * filepath,vector<PZ> &pzs)
 
 int  HandBook::GetPZindex(int x, int y) {
 	int index = 0;
-	int rows = (y - 100) / (height  * ratio);
-	
-	int cols = (x - 70)/ (int)(width * ratio);
-	index = rows * 5 + cols;
-	if (index > count) {
+	if (y > (31 / 5 + 1)*height * ratio + 100 || x > 5 * width * ratio + 70) {
+		
 		index = 404;
+	}
+	else
+	{
+		int rows = (y - 100) / (height  * ratio);
+		int cols = (x - 70) / (int)(width * ratio);
+		index = rows * 5 + cols;
+		if (index > count) {
+			index = 404;
+		}
 	}
 	if (p_return.GetMenuIndex(x, y) >= 0) {
 		index = 101;
 	}
 	if (shut.GetMenuIndex(x, y) >= 0) {
-		index = 102;
+		index =  102;
 	}
 	return index;
 }
@@ -361,7 +367,6 @@ int HandBook::PZMouseClick(int x, int y)
 		}
 	}
 	return m_index;
-	//DrawFrameInfo
 }
 
 void HandBook::DrawPlantFrameInfo(HDC hdc,int index)
@@ -391,6 +396,10 @@ void HandBook::DrawPlantFrameInfo(HDC hdc,int index)
 	if (bigPath == L"") {
 		return;
 	}
+	info_frame->PaintImage(hdc, WIN_WIDTH * 3 / 5 - 25, (WIN_HEIGHT - info_frame->GetImageHeight()) / 2 + 20,
+		info_frame->GetImageWidth(), info_frame->GetImageHeight());
+	HBITMAP hbitmp = grass->GetBmpHandle();
+	grass->PaintRegion(hbitmp, hdc, WIN_WIDTH * 3 / 5 + 27, (WIN_HEIGHT) / 5 - 16, 20, 20, 200, 145, 1);
 	T_Graph* bigPlant = new T_Graph(bigPath);
 	bigPlant->PaintImage(hdc,WIN_WIDTH * 3 / 5 + 27 + 50,(WIN_HEIGHT) / 5 + 30);
 	RectF nameRect;
@@ -427,6 +436,10 @@ void HandBook::DrawZomFrameInfo(HDC hdc, int index)
 	if (bigPath == L"") {
 		return;
 	}
+	info_frame->PaintImage(hdc, WIN_WIDTH * 3 / 5 - 25, (WIN_HEIGHT - info_frame->GetImageHeight()) / 2 + 20,
+		info_frame->GetImageWidth(), info_frame->GetImageHeight());
+	HBITMAP hbitmp = grass->GetBmpHandle();
+	grass->PaintRegion(hbitmp, hdc, WIN_WIDTH * 3 / 5 + 27, (WIN_HEIGHT) / 5 - 16, 20, 20, 200, 145, 1);
 	T_Graph* bigZom = new T_Graph(bigPath);
 	bigZom->PaintImage(hdc, WIN_WIDTH * 3 / 5 + 27 + 50, (WIN_HEIGHT) / 5 + 30);
 	RectF nameRect;

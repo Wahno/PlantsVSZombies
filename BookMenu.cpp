@@ -15,7 +15,7 @@ BookMenu::~BookMenu()
 void BookMenu::InitZom()
 {
 	int btn_width = 113;
-	int btn_height = 41;
+	int btn_height = 40;
 	SetBtnBmp(L"res\\images\\interface\\menu\\handbook\\Button.png", btn_width, btn_height);
 	MENU_INFO menuInfo;
 	menuInfo.align = 1;
@@ -36,7 +36,7 @@ void BookMenu::InitZom()
 }
 void BookMenu::InitSun()
 {
-	int btn_width = 113;
+	int btn_width = 110;
 	int btn_height = 41;
 	SetBtnBmp(L"res\\images\\interface\\menu\\handbook\\Button.png", btn_width, btn_height);
 	MENU_INFO menuInfo;
