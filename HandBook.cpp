@@ -403,10 +403,11 @@ void HandBook::DrawPlantFrameInfo(HDC hdc,int index)
 	T_Graph* bigPlant = new T_Graph(bigPath);
 	bigPlant->PaintImage(hdc,WIN_WIDTH * 3 / 5 + 27 + 50,(WIN_HEIGHT) / 5 + 30);
 	RectF nameRect;
-	nameRect.X = WIN_WIDTH * 3 / 5 + 27 + 50;
-	nameRect.Y =(WIN_HEIGHT) / 5 + 140;
 	nameRect.Width = name.size() * 40;
 	nameRect.Height = 40;
+	nameRect.X = WIN_WIDTH * 3 / 5 - 25 +(info_frame->GetImageWidth() - nameRect.Width) / 2;
+	nameRect.Y =(WIN_HEIGHT) / 5 + 140;
+	
 	T_Graph::PaintText(hdc,nameRect,name,20,L"Î¢ÈíÑÅºÚ",Color::Color(255, 203, 105),FontStyle::FontStyleRegular,StringAlignmentCenter);
 }
 
