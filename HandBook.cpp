@@ -312,8 +312,8 @@ bool HandBook::LoadTxt(const char * filepath,vector<PZ> &pzs)
 		if (!pz.name.empty() && !pz.tip.empty() 
 			&& !pz.info.empty()) {
 			//if(pz == plants)
-			pz.smallPath = smallPath + currentZomId;
-			pz.bigPath = bigPath + currentZomId;
+			pz.smallPath = smallPath + currentZomId + L".png";
+			pz.bigPath = bigPath + currentZomId + L".gif";
 			pz.count = i;
 			i++;
 			pzs.push_back(pz);
@@ -422,7 +422,8 @@ void HandBook::DrawPlantFrameInfo(HDC hdc,int index)
 	HBITMAP hbitmp = grass->GetBmpHandle();
 	grass->PaintRegion(hbitmp, hdc, WIN_WIDTH * 3 / 5 + 27, (WIN_HEIGHT) / 5 - 16, 20, 20, 200, 145, 1);
 	T_Graph* bigPlant = new T_Graph(bigPath);
-	bigPlant->PaintImage(hdc,WIN_WIDTH * 3 / 5 + 27 + 50,(WIN_HEIGHT) / 5 + 30);
+	bigPlant->PaintImage(hdc,WIN_WIDTH * 3 / 5 + 27 + (200 - bigPlant->GetImageWidth()) / 2,(WIN_HEIGHT) / 5 - 16+ (145-bigPlant->GetImageHeight())/2,
+		bigPlant->GetImageWidth(),bigPlant->GetImageHeight(),255);
 	RectF nameRect;
 	nameRect.Width = name.size() * 40;
 	nameRect.Height = 40;
@@ -482,8 +483,6 @@ void HandBook::DrawZomFrameInfo(HDC hdc, int index)
 			info = iter->info;
 			name = iter->name;
 			tip = iter->tip;
-			/*sunNum = iter->sunNum;
-			coolTime = iter->coolTime;*/
 			bigPath = iter->bigPath;
 			break;
 		}
@@ -497,7 +496,8 @@ void HandBook::DrawZomFrameInfo(HDC hdc, int index)
 	HBITMAP hbitmp = grass->GetBmpHandle();
 	grass->PaintRegion(hbitmp, hdc, WIN_WIDTH * 3 / 5 + 27, (WIN_HEIGHT) / 5 - 16, 20, 20, 200, 145, 1);
 	T_Graph* bigZom = new T_Graph(bigPath);
-	bigZom->PaintImage(hdc, WIN_WIDTH * 3 / 5 + 27 + 50, (WIN_HEIGHT) / 5 + 30);
+	bigZom->PaintImage(hdc, WIN_WIDTH * 3 / 5 + 27 + (200 - bigZom->GetImageWidth()) / 2, (WIN_HEIGHT) / 5 - 20 + (145 - bigZom->GetImageHeight()) / 2,
+		bigZom->GetImageWidth(), bigZom->GetImageHeight(), 255);
 	RectF nameRect;
 	nameRect.Width = name.size() * 40;
 	nameRect.Height = 40;
@@ -531,12 +531,4 @@ void HandBook::DrawZomFrameInfo(HDC hdc, int index)
 	Rect.Y = Rect.Y + 15;
 	GraphPlus::PaintText(hdc, Rect, info, 10, L"Œ¢»Ì—≈∫⁄",
 		Color::Black, FontStyle::FontStyleRegular, StringAlignmentNear, n);
-	/*Rect.X = Rect.X - 30;
-	Rect.Y = WIN_HEIGHT - 70;
-	GraphPlus::PaintText(hdc, Rect, L"ª®∑—: " + sunNum, 12, L"Œ¢»Ì—≈∫⁄",
-		Color::Black, FontStyle::FontStyleBold, StringAlignmentNear);
-	Rect.X = Rect.X + 150;
-	Rect.Y = Rect.Y;
-	GraphPlus::PaintText(hdc, Rect, L"¿‰»¥: " + coolTime, 12, L"Œ¢»Ì—≈∫⁄",
-		Color::Black, FontStyle::FontStyleBold, StringAlignmentNear);*/
 }

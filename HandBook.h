@@ -15,6 +15,10 @@ typedef struct {
 	wstring bigPath; //大图像的地址
 	wstring smallPath; //小图像地址
 }PZ;
+enum HANDBOOK {
+	BOOK_ZOM,  //僵尸图鉴
+	BOOK_SUN,  //植物图鉴
+};  //0 -1
 class HandBook : public BookMenu
 {
 public:
@@ -42,6 +46,8 @@ private:
 	int height;
 	wstring smallPath;
 	wstring bigPath;
+public:
+	int HandBookState;  //图鉴内部状态变化
 	
 public:
 	void Init(); //初始化资源
