@@ -248,6 +248,18 @@ void PVZ_Game::GameMouseAction(int x, int y, int Action)
 			}
 		}
 	}
+	else if (GameState == GAME_RUN)
+	{
+		if (Action == MOUSE_MOVE)
+		{
+			gameLevel.MouseMove(x,y);
+		}
+		else if (Action == MOUSE_LCLICK)
+		{
+			gameLevel.MouseClick(x,y);
+		}
+
+	}
 	
 }
 

@@ -3,16 +3,54 @@
 void GameLevel::Init()
 {
 	levelName = L"关卡 1 - 1";
-	bg_img.LoadImageFile(L"res\\images\\interface\\background1unsodded_1.jpg");
+	bg_img.LoadImageFile(L"res\\images\\interface\\background1.jpg");
+	shadow_img.LoadImageFile(L"res\\images\\interface\\plantshadow32.png");
 
 	InitScene(0,0, bg_img.GetImageWidth(), bg_img.GetImageHeight(),WIN_WIDTH, WIN_HEIGHT);
 
+	sunlight = 100;	//初始阳光值
+	PlantInit();
+	//过场动画
+	CutsceneInit();
+	//植物卡
+	CardInit();
+	//小推车
+	CarInit();
+	//进度条
+	ProgressBarInit();
+	
+}
+
+void GameLevel::CutsceneInit()
+{
 	cutsceneZombies_img[0].LoadImageFile(L"res\\images\\Zombies\\Zombie\\cutscene0_11.png");
 	cutsceneZombies_img[1].LoadImageFile(L"res\\images\\Zombies\\Zombie\\cutscene1_11.png");
 
 	moveLength = (bg_img.GetImageWidth() - WIN_WIDTH) / (cutsceneFrame / 5);
 	cutsceneFlag = true;
+	cutscene_buffer.Play(false);
+}
 
+void GameLevel::PlantInit()
+{
+	plant[0] = new T_Graph(L"res\\images\\Plants\\SunFlower.png");
+	spritePlant[0] = new T_Graph(L"res\\images\\Plants\\SunFlower_18.png");
+	plant[1] = new T_Graph(L"res\\images\\Plants\\Peashooter.png");
+	spritePlant[1] = new T_Graph(L"res\\images\\Plants\\Peashooter_13.png");
+}
+
+void GameLevel::ProgressBarInit()
+{
+	progress_bar[0].LoadImageFile(L"res\\images\\interface\\gamelevel\\FlagMeterEmpty.png");
+	progress_bar[1].LoadImageFile(L"res\\images\\interface\\gamelevel\\FlagMeterFull.png");
+	progress_bar[2].LoadImageFile(L"res\\images\\interface\\gamelevel\\FlagMeterLevelProgress.png");
+	progress_bar[3].LoadImageFile(L"res\\images\\interface\\gamelevel\\FlagMeterParts1.png");
+	progress_bar[4].LoadImageFile(L"res\\images\\interface\\gamelevel\\FlagMeterParts2.png");
+	progress_bar_length = (progress_bar[0].GetImageWidth() - progress_bar[3].GetImageWidth()) / (double)MaxFrameCount;
+}
+
+void GameLevel::CardInit()
+{
 	int border = 10;	//边距
 	int cardHeight;
 	plantCard[0].card = new T_Graph(L"res\\images\\interface\\menu\\handbook\\Card\\Plants\\SunFlower.png");
@@ -28,7 +66,7 @@ void GameLevel::Init()
 	plantCard[0].info = info;
 	//豌豆射手
 	info.time = 500;
-	info.y = border *2+ cardHeight;
+	info.y = border * 2 + cardHeight;
 	info.sunlight = 100;
 	plantCard[1].info = info;
 
@@ -36,15 +74,18 @@ void GameLevel::Init()
 	plantCard[1].nowTime = 0;
 	plantCard[0].state = false;
 	plantCard[1].state = false;
-	sunlight = 100;					//初始阳光值
+}
 
-	progress_bar[0].LoadImageFile(L"res\\images\\interface\\gamelevel\\FlagMeterEmpty.png");
-	progress_bar[1].LoadImageFile(L"res\\images\\interface\\gamelevel\\FlagMeterFull.png"); 
-	progress_bar[2].LoadImageFile(L"res\\images\\interface\\gamelevel\\FlagMeterLevelProgress.png");
-	progress_bar[3].LoadImageFile(L"res\\images\\interface\\gamelevel\\FlagMeterParts1.png");
-	progress_bar[4].LoadImageFile(L"res\\images\\interface\\gamelevel\\FlagMeterParts2.png");
-	progress_bar_length = (progress_bar[0].GetImageWidth() - progress_bar[3].GetImageWidth()) / (double)MaxFrameCount;
-	cutscene_buffer.Play(false);
+void GameLevel::CarInit()
+{
+	wstring carImagePath = L"res\\images\\interface\\LawnCleaner.png";
+	int index = 2;//第一个推车在第几行
+	for (int i = 0; i < MAXCARNUM; i++)
+	{
+		car[i].car = new T_Graph(carImagePath);
+		car[i].row = index+i;
+		car[i].state = true;
+	}
 }
 
 void GameLevel::AudioInit(AudioDX &ds)
@@ -157,8 +198,30 @@ void GameLevel::DrawCard(HDC hdc)
 		{
 			info.regionHeight = plantCard[i].card->GetImageHeight() / 2;
 			plantCard[i].card->PaintRegion(plantCard[i].card->GetBmpHandle(), hdc, info.destX, info.destY, info.srcX, info.srcY, info.regionWidth, info.regionHeight, 0.8);
-		}		
+		}
+		RectF infoRec;
+		infoRec.X = (float)plantCard[i].info.x;
+		infoRec.Y = (float)plantCard[i].info.y+30;
+		infoRec.Width = plantCard[i].card->GetImageWidth()-20;
+		infoRec.Height = 20;
+		T_Graph::PaintText(hdc, infoRec, T_Util::int_to_wstring(plantCard[i].info.sunlight), 10, L"黑体", Color::Black, FontStyleBold,StringAlignmentFar);
 	}
+}
+
+void GameLevel::DrawCar(HDC hdc)
+{
+	for (int i = 0; i < MAXCARNUM; i++) 
+	{
+		if (car[i].state == true)
+		{
+			car[i].car->PaintImage(hdc, CarXSpace, car[i].row*PlantHeight + YSpace+20, car[i].car->GetImageWidth(), car[i].car->GetImageHeight(),255);
+		}	
+	}
+}
+
+void GameLevel::DrawClickPlant(HDC hdc, int x, int y)
+{
+	plant[pointPlant]->PaintImage(hdc, x-30, y-40, plant[pointPlant]->GetImageWidth(), plant[pointPlant]->GetImageHeight(),255);
 }
 
 void GameLevel::Draw(HDC hdc)
@@ -175,12 +238,17 @@ void GameLevel::Draw(HDC hdc)
 	{
 		//画背景
 		bg_img.PaintRegion(bg_img.GetBmpHandle(), hdc, 0, 0, 120, 0, WinWidth, WinHeight, 1);
+		DrawCar(hdc);
 		//画植物卡
 		DrawCard(hdc);
-
+		if (pointState)
+		{
+			DrawClickPlant(hdc, mousex, mousey);
+		}
 		//画进度条
 		DrawProgressBar(hdc);
 	}
+	TestDraw(hdc);
 }
 
 void GameLevel::Logic()
@@ -201,5 +269,72 @@ void GameLevel::CardLogic()
 		{
 			plantCard[i].state = false;
 		}
+	}
+}
+
+void GameLevel::MouseClick(int x, int y)
+{
+	if(!pointState)
+	{
+		int card = CardMouseClick(x, y);
+		if (card != -1)
+		{
+			pointState = true;
+			pointPlant = card;
+		}
+	}
+	else 
+	{
+		PlantMouseClick(x, y);
+	}
+	
+}
+
+int GameLevel::CardMouseClick(int x, int y)
+{
+	POINT pt;
+	pt.x = x;
+	pt.y = y;
+	RECT rec;
+	for (int i = 0; i < MAXPLANTNUM; i++)
+	{
+		rec.left = plantCard[i].info.x;
+		rec.top = plantCard[i].info.y;
+		rec.right = rec.left + plantCard[i].card->GetImageWidth()*0.8;
+		rec.bottom = rec.top + plantCard[i].card->GetImageHeight()*0.8;
+		if (PtInRect(&rec, pt))
+		{
+			return i;
+		}
+	}
+	return -1;
+}
+
+void GameLevel::PlantMouseClick(int x, int y)
+{
+	PLANT_INFO tempPlant;
+	x = x - CarXSpace - CarWidth;
+	y = y - YSpace;
+	tempPlant.position.X = x / PlantWidth;
+	tempPlant.position.Y = y / PlantHeight;
+	tempPlant.sprite->SetImage(spritePlant[pointPlant]);
+}
+
+void GameLevel::MouseMove(int x, int y)
+{
+	mousex = x;
+	mousey = y;
+}
+
+void GameLevel::TestDraw(HDC hdc)
+{
+	T_Graph::PaintBlank(hdc, 50, 0, 1, WinHeight, Color::Black, 255);//推车X坐标50
+	for (int i = 0; i < 10; i++) 
+	{
+		T_Graph::PaintBlank(hdc, 125+i*81, 0, 1, WinHeight, Color::Black, 255);//第一列125，间距81
+	}
+	for (int i = 0; i < 6; i++) 
+	{
+		T_Graph::PaintBlank(hdc, 0, 80+100*i, WinWidth, 1, Color::Black, 255);//第一行Y80,行间距100
 	}
 }
