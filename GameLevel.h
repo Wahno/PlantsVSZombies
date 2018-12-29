@@ -39,6 +39,7 @@ public:
 	void Draw(HDC hdc);				//场景绘制
 
 	void Logic();
+	void CardLogic();
 private:
 	wstring levelName;				//关卡名
 	T_Graph bg_img;					//背景图片
