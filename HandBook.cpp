@@ -18,7 +18,7 @@ void HandBook::Init()
 	zombie = new T_Graph(L"res\\images\\interface\\menu\\handbook\\2.gif"); //º”‘ÿΩ© ¨Õº∆¨
 	sunflower = new T_Graph(L"res\\images\\interface\\menu\\handbook\\0.gif"); //º”‘ÿœÚ»’ø˚Õº∆¨
 	info_frame = new T_Graph(L"res\\images\\interface\\menu\\handbook\\Almanac_PlantCard.png");
-	
+	grass = new T_Graph(L"res\\images\\interface\\menu\\handbook\\sod3row.png");
 		
 	zom.InitZom(); 
 	sun.InitSun();
@@ -34,7 +34,7 @@ int HandBook::GetMenuIndex(int x, int y)
 	if (r_button.GetMenuIndex(x, y) >= 0) {
 		return 0; //∑µªÿ∞¥≈•
 	}
-	else if (sun.GetMenuIndex(x, y))
+	else if (sun.GetMenuIndex(x, y) >= 0)
 	{
 		return 1;  //œÚ»’ø˚∞¥≈•
 	}
@@ -128,7 +128,7 @@ void HandBook::DrawSunInfo(HDC hdc)
 	text.X = (WIN_WIDTH - text.Width) / 2;
 	text.Y = 20;
 	T_Graph::PaintText(hdc, text, info, 20, L"Œ¢»Ì—≈∫⁄", Color::Color(255, 203, 105), FontStyleBold, StringAlignmentCenter);
-	grass = new T_Graph(L"res\\images\\interface\\menu\\handbook\\sod3row.png");
+	//grass = new T_Graph(L"res\\images\\interface\\menu\\handbook\\sod3row.png");
 	HBITMAP hbitmp = grass->GetBmpHandle();
 	grass->PaintRegion(hbitmp,hdc,WIN_WIDTH * 3 /5 + 27,(WIN_HEIGHT)/5 - 16,20,20,200,145,1);
 }
@@ -148,7 +148,7 @@ void HandBook::DrawZomInfo(HDC hdc)
 	text.X = (WIN_WIDTH - text.Width) / 2;
 	text.Y = 20;
 	T_Graph::PaintText(hdc, text, info, 20, L"Œ¢»Ì—≈∫⁄", Color::Color(16, 237, 22), FontStyleBold, StringAlignmentCenter);
-	grass = new T_Graph(L"res\\images\\interface\\menu\\handbook\\sod3row.png");
+	//grass = new T_Graph(L"res\\images\\interface\\menu\\handbook\\sod3row.png");
 	HBITMAP hbitmp = grass->GetBmpHandle();
 	grass->PaintRegion(hbitmp, hdc, WIN_WIDTH * 3 / 5 + 27, (WIN_HEIGHT) / 5 - 16, 20, 20, 200, 145, 1);
 }
@@ -279,6 +279,26 @@ bool HandBook::LoadTxt(const char * filepath,vector<PZ> &pzs)
 				pz.tip = pz.tip + line_str;
 			}
 		}
+		if (line_str.find(L"<sunNum>") != -1) {
+			int pos = (int)(line_str.find(L"<sunNum>"));
+			if (pos > 0 && pos < (int)(line_str.length() - 1)) {
+				int next = (int)(line_str.find(L"</sunNum>"));
+				if (next > 0 && next < (int)(line_str.length() - 1)) {
+					line_str = line_str.substr(pos + 8, next - 9);
+				}
+				pz.sunNum = pz.sunNum + line_str;
+			}
+		}
+		if (line_str.find(L"<coolTime>") != -1) {
+			int pos = (int)(line_str.find(L"<coolTime>"));
+			if (pos > 0 && pos < (int)(line_str.length() - 1)) {
+				int next = (int)(line_str.find(L"</coolTime>"));
+				if (next > 0 && next < (int)(line_str.length() - 1)) {
+					line_str = line_str.substr(pos + 10, next - 11);
+				}
+				pz.coolTime = pz.coolTime + line_str;
+			}
+		}
 		if (line_str.find(L"<description>") != -1) {
 			int pos = (int)(line_str.find(L"<description>"));
 			if (pos > 0 && pos < (int)(line_str.length() - 1)) {
@@ -291,6 +311,7 @@ bool HandBook::LoadTxt(const char * filepath,vector<PZ> &pzs)
 		}
 		if (!pz.name.empty() && !pz.tip.empty() 
 			&& !pz.info.empty()) {
+			//if(pz == plants)
 			pz.smallPath = smallPath + currentZomId;
 			pz.bigPath = bigPath + currentZomId;
 			pz.count = i;
@@ -309,18 +330,24 @@ bool HandBook::LoadTxt(const char * filepath,vector<PZ> &pzs)
 
 int  HandBook::GetPZindex(int x, int y) {
 	int index = 0;
-	int rows = (y - 100) / (height  * ratio);
-	
-	int cols = (x - 70)/ (int)(width * ratio);
-	index = rows * 5 + cols;
-	if (index > count) {
+	if (y > (31 / 5 + 1)*height * ratio + 100 || x > 5 * width * ratio + 70) {
+		
 		index = 404;
+	}
+	else
+	{
+		int rows = (y - 100) / (height  * ratio);
+		int cols = (x - 70) / (int)(width * ratio);
+		index = rows * 5 + cols;
+		if (index > count) {
+			index = 404;
+		}
 	}
 	if (p_return.GetMenuIndex(x, y) >= 0) {
 		index = 101;
 	}
 	if (shut.GetMenuIndex(x, y) >= 0) {
-		index = 102;
+		index =  102;
 	}
 	return index;
 }
@@ -361,7 +388,6 @@ int HandBook::PZMouseClick(int x, int y)
 		}
 	}
 	return m_index;
-	//DrawFrameInfo
 }
 
 void HandBook::DrawPlantFrameInfo(HDC hdc,int index)
@@ -391,14 +417,53 @@ void HandBook::DrawPlantFrameInfo(HDC hdc,int index)
 	if (bigPath == L"") {
 		return;
 	}
+	info_frame->PaintImage(hdc, WIN_WIDTH * 3 / 5 - 25, (WIN_HEIGHT - info_frame->GetImageHeight()) / 2 + 20,
+		info_frame->GetImageWidth(), info_frame->GetImageHeight());
+	HBITMAP hbitmp = grass->GetBmpHandle();
+	grass->PaintRegion(hbitmp, hdc, WIN_WIDTH * 3 / 5 + 27, (WIN_HEIGHT) / 5 - 16, 20, 20, 200, 145, 1);
 	T_Graph* bigPlant = new T_Graph(bigPath);
 	bigPlant->PaintImage(hdc,WIN_WIDTH * 3 / 5 + 27 + 50,(WIN_HEIGHT) / 5 + 30);
 	RectF nameRect;
-	nameRect.X = WIN_WIDTH * 3 / 5 + 27 + 50;
-	nameRect.Y =(WIN_HEIGHT) / 5 + 140;
 	nameRect.Width = name.size() * 40;
 	nameRect.Height = 40;
+	nameRect.X = WIN_WIDTH * 3 / 5 - 25 +(info_frame->GetImageWidth() - nameRect.Width) / 2;
+	nameRect.Y =(WIN_HEIGHT) / 5 + 140;	
 	T_Graph::PaintText(hdc,nameRect,name,20,L"Œ¢»Ì—≈∫⁄",Color::Color(255, 203, 105),FontStyle::FontStyleRegular,StringAlignmentCenter);
+	RectF Rect;
+	int  n = 16; //√ø––œ‘ æµƒ◊÷ ˝
+	Rect.Width = n * 25;
+	Rect.Height = 20;
+	Rect.X = WIN_WIDTH * 3 / 5 - 25 + 20;
+	Rect.Y = (WIN_HEIGHT) / 5 + 185;
+	GraphPlus::PaintText(hdc, Rect, L"–°ºº«…£∫",10, L"Œ¢»Ì—≈∫⁄",
+		Color::Red, FontStyle::FontStyleRegular, StringAlignmentNear);
+	Rect.X = Rect.X + 30;
+	Rect.Y = (WIN_HEIGHT) / 5 + 205 ;
+	GraphPlus::PaintText(hdc, Rect, tip,10,L"Œ¢»Ì—≈∫⁄", 
+		Color::Black, FontStyle::FontStyleRegular, StringAlignmentNear,n);
+	if (tip.size() % n == 0)
+	{
+		Rect.Y = Rect.Y + 15 + (tip.size() / n) * 20;
+	}
+	else
+	{
+		Rect.Y = Rect.Y + 15 + (tip.size() / n + 1) * 20;
+	}
+	Rect.X = WIN_WIDTH * 3 / 5 - 25 + 20;
+	GraphPlus::PaintText(hdc, Rect, L"œÍœ∏√Ë ˆ£∫", 10, L"Œ¢»Ì—≈∫⁄",
+	Color::Red, FontStyle::FontStyleRegular, StringAlignmentNear);
+	Rect.X = Rect.X + 30;
+	Rect.Y = Rect.Y + 15 ;
+	GraphPlus::PaintText(hdc, Rect, info ,10, L"Œ¢»Ì—≈∫⁄",
+		Color::Black, FontStyle::FontStyleRegular, StringAlignmentNear, n);
+	Rect.X = Rect.X - 30;
+	Rect.Y = WIN_HEIGHT - 70;
+	GraphPlus::PaintText(hdc, Rect, L"ª®∑—: " + sunNum, 12, L"Œ¢»Ì—≈∫⁄",
+		Color::Black, FontStyle::FontStyleBold, StringAlignmentNear);
+	Rect.X = Rect.X + 150;
+	Rect.Y = Rect.Y ;
+	GraphPlus::PaintText(hdc, Rect, L"¿‰»¥: " + coolTime, 12, L"Œ¢»Ì—≈∫⁄",
+		Color::Black, FontStyle::FontStyleBold, StringAlignmentNear);
 }
 
 void HandBook::DrawZomFrameInfo(HDC hdc, int index)
@@ -417,8 +482,8 @@ void HandBook::DrawZomFrameInfo(HDC hdc, int index)
 			info = iter->info;
 			name = iter->name;
 			tip = iter->tip;
-			sunNum = iter->sunNum;
-			coolTime = iter->coolTime;
+			/*sunNum = iter->sunNum;
+			coolTime = iter->coolTime;*/
 			bigPath = iter->bigPath;
 			break;
 		}
@@ -427,12 +492,51 @@ void HandBook::DrawZomFrameInfo(HDC hdc, int index)
 	if (bigPath == L"") {
 		return;
 	}
+	info_frame->PaintImage(hdc, WIN_WIDTH * 3 / 5 - 25, (WIN_HEIGHT - info_frame->GetImageHeight()) / 2 + 20,
+		info_frame->GetImageWidth(), info_frame->GetImageHeight());
+	HBITMAP hbitmp = grass->GetBmpHandle();
+	grass->PaintRegion(hbitmp, hdc, WIN_WIDTH * 3 / 5 + 27, (WIN_HEIGHT) / 5 - 16, 20, 20, 200, 145, 1);
 	T_Graph* bigZom = new T_Graph(bigPath);
 	bigZom->PaintImage(hdc, WIN_WIDTH * 3 / 5 + 27 + 50, (WIN_HEIGHT) / 5 + 30);
 	RectF nameRect;
-	nameRect.X = WIN_WIDTH * 3 / 5 + 27 + 50;
-	nameRect.Y = (WIN_HEIGHT) / 5 + 140;
 	nameRect.Width = name.size() * 40;
 	nameRect.Height = 40;
+	nameRect.X = WIN_WIDTH * 3 / 5 - 25 + (info_frame->GetImageWidth() - nameRect.Width) / 2;
+	nameRect.Y = (WIN_HEIGHT) / 5 + 140;
 	T_Graph::PaintText(hdc, nameRect, name, 20, L"Œ¢»Ì—≈∫⁄", Color::Color(255, 203, 105), FontStyle::FontStyleRegular, StringAlignmentCenter);
+	RectF Rect;
+	int  n = 16; //√ø––œ‘ æµƒ◊÷ ˝
+	Rect.Width = n * 25;
+	Rect.Height = 20;
+	Rect.X = WIN_WIDTH * 3 / 5 - 25 + 20;
+	Rect.Y = (WIN_HEIGHT) / 5 + 185;
+	GraphPlus::PaintText(hdc, Rect, L"–°ºº«…£∫", 10, L"Œ¢»Ì—≈∫⁄",
+		Color::Red, FontStyle::FontStyleRegular, StringAlignmentNear);
+	Rect.X = Rect.X + 30;
+	Rect.Y = (WIN_HEIGHT) / 5 + 205;
+	GraphPlus::PaintText(hdc, Rect, tip, 10, L"Œ¢»Ì—≈∫⁄",
+		Color::Black, FontStyle::FontStyleRegular, StringAlignmentNear, n);
+	if (tip.size() % n == 0)
+	{
+		Rect.Y = Rect.Y + 15 + (tip.size() / n) * 20;
+	}
+	else
+	{
+		Rect.Y = Rect.Y + 15 + (tip.size() / n + 1) * 20;
+	}
+	Rect.X = WIN_WIDTH * 3 / 5 - 25 + 20;
+	GraphPlus::PaintText(hdc, Rect, L"œÍœ∏√Ë ˆ£∫", 10, L"Œ¢»Ì—≈∫⁄",
+		Color::Red, FontStyle::FontStyleRegular, StringAlignmentNear);
+	Rect.X = Rect.X + 30;
+	Rect.Y = Rect.Y + 15;
+	GraphPlus::PaintText(hdc, Rect, info, 10, L"Œ¢»Ì—≈∫⁄",
+		Color::Black, FontStyle::FontStyleRegular, StringAlignmentNear, n);
+	/*Rect.X = Rect.X - 30;
+	Rect.Y = WIN_HEIGHT - 70;
+	GraphPlus::PaintText(hdc, Rect, L"ª®∑—: " + sunNum, 12, L"Œ¢»Ì—≈∫⁄",
+		Color::Black, FontStyle::FontStyleBold, StringAlignmentNear);
+	Rect.X = Rect.X + 150;
+	Rect.Y = Rect.Y;
+	GraphPlus::PaintText(hdc, Rect, L"¿‰»¥: " + coolTime, 12, L"Œ¢»Ì—≈∫⁄",
+		Color::Black, FontStyle::FontStyleBold, StringAlignmentNear);*/
 }

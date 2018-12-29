@@ -3,6 +3,7 @@
 #include "TinyEngine\T_Menu.h"
 #include"TinyEngine\T_Engine.h"
 #include "BookMenu.h"
+#include"GraphPlus.h"
 #include <codecvt>
 typedef struct {
 	int count; //Ë³ÐòºÅ

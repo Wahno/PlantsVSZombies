@@ -1,4 +1,4 @@
-﻿count=17
+﻿count=10
 width=100
 height=60
 smallpath=res\images\interface\menu\handbook\Card\Zombies\
@@ -52,14 +52,4 @@ bigpath=res\images\interface\menu\handbook\Card\Zombies\
 	<name>海豚骑士僵尸</name>
 	<tip>海豚骑士僵尸善于利用你水池防御的弱点。</tip>
 	<description>那海豚其实也是个僵尸。</description>
-</layer>
-<layer id=Brains.png>
-	<name>小鬼僵尸</name>
-	<tip>小淘气们是一群小型僵尸，他们被伽刚特尔用来投掷进你的防御体系。</tip>
-	<description>小淘气虽然瘦小，却很结实。他精通僵尸柔道，僵尸空手道和僵尸关节技。另外，他还会吹口琴。</description>
-</layer>
-<layer id=JackinTheBoxZombie.png>
-	<name>小丑僵尸</name>
-	<tip>这种僵尸带着个会爆炸的潘多拉盒子。</tip>
-	<description>这种僵尸令人不寒而栗，不是因为他的冰冷身躯而是因为他的疯狂。</description>
 </layer>

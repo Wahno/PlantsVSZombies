@@ -1,6 +1,6 @@
 ﻿count=35
 width=100
-height=60
+height=58
 smallpath=res\images\interface\menu\handbook\Card\Plants\
 bigpath=res\images\interface\menu\handbook\Card\Plants\
 <layer id=GraveBuster.png>
@@ -16,7 +16,7 @@ bigpath=res\images\interface\menu\handbook\Card\Plants\
 	<sunNum>125</sunNum>
 	<coolTime>7.5秒</coolTime>
 	<description>杨桃：“嘿，哥们，有一天我去看牙医，他说我有四个牙洞。我一数，我就只有一颗牙齿！一颗牙齿长了四个牙洞？怎么会这样啊？”</description>
-</layer>
+</layer
 <layer id=Peashooter.png>
 	<name>豌豆射手</name>
 	<tip>豌豆射手，你的第一道防线。它们通过发射豌豆来攻击僵</tip>

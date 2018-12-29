@@ -84,6 +84,9 @@
     <ClCompile Include="BookMenu.cpp">
       <Filter>源文件\Menu\HandBook</Filter>
     </ClCompile>
+    <ClCompile Include="GraphPlus.cpp">
+      <Filter>源文件\Menu\HandBook</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TinyEngine\T_AI.h">
@@ -144,6 +147,9 @@
       <Filter>头文件\Menu\HandBook</Filter>
     </ClInclude>
     <ClInclude Include="HandBook.h">
+      <Filter>头文件\Menu\HandBook</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphPlus.h">
       <Filter>头文件\Menu\HandBook</Filter>
     </ClInclude>
   </ItemGroup>
