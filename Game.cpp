@@ -34,6 +34,10 @@ void PVZ_Game::GameLogic()
 			gameLevel.Init();
 		}
 	}
+	else if(GameState == GAME_RUN)
+	{
+		gameLevel.Logic();
+	}
 }
 
 void PVZ_Game::GameEnd()

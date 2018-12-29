@@ -13,6 +13,31 @@ void GameLevel::Init()
 	moveLength = (bg_img.GetImageWidth() - WIN_WIDTH) / (cutsceneFrame / 5);
 	cutsceneFlag = true;
 
+	int border = 10;	//边距
+	int cardHeight;
+	plantCard[0].card = new T_Graph(L"res\\images\\interface\\menu\\handbook\\Card\\Plants\\SunFlower.png");
+	plantCard[1].card = new T_Graph(L"res\\images\\interface\\menu\\handbook\\Card\\Plants\\Peashooter.png");
+	cardHeight = plantCard[0].card->GetImageHeight() / 2 * 0.8;
+
+	CARD_INFO info;
+	info.time = 300;
+	info.x = border;
+	info.y = border;
+	//向日葵
+	info.sunlight = 50;
+	plantCard[0].info = info;
+	//豌豆射手
+	info.time = 500;
+	info.y = border *2+ cardHeight;
+	info.sunlight = 100;
+	plantCard[1].info = info;
+
+	plantCard[0].nowTime = 0;
+	plantCard[1].nowTime = 0;
+	plantCard[0].state = false;
+	plantCard[1].state = false;
+	sunlight = 100;					//初始阳光值
+
 	progress_bar[0].LoadImageFile(L"res\\images\\interface\\gamelevel\\FlagMeterEmpty.png");
 	progress_bar[1].LoadImageFile(L"res\\images\\interface\\gamelevel\\FlagMeterFull.png"); 
 	progress_bar[2].LoadImageFile(L"res\\images\\interface\\gamelevel\\FlagMeterLevelProgress.png");
@@ -101,6 +126,41 @@ void GameLevel::DrawProgressBar(HDC hdc)
 	progress_bar[3].PaintImage(hdc, WinWidth * 3 / 4 + progress_bar[0].GetImageWidth() - progress_bar[3].GetImageWidth() - progress_bar_length*frameCount, WinHeight * 19 / 20 - 20, progress_bar[3].GetImageWidth(), progress_bar[3].GetImageHeight(), 255);
 }
 
+void GameLevel::DrawCard(HDC hdc)
+{
+	PAINTREGION_INFO info;
+	for (int i = 0; i < MAXPLANTNUM; i++)
+	{
+		info.destX = plantCard[i].info.x;
+		info.destY = plantCard[i].info.y;
+		info.srcX = 0;
+		info.srcY = plantCard[i].card->GetImageHeight() / 2;
+		info.regionWidth = plantCard[i].card->GetImageWidth();
+		info.regionHeight = plantCard[i].card->GetImageHeight() / 2;
+		plantCard[i].card->PaintRegion(plantCard[i].card->GetBmpHandle(), hdc, info.destX, info.destY, info.srcX, info.srcY, info.regionWidth, info.regionHeight, 0.8);
+		info.srcY = 0;
+		if (plantCard[i].state == false) 
+		{
+			info.regionHeight = plantCard[i].card->GetImageHeight() / 2 * plantCard[i].nowTime / plantCard[i].info.time;
+			if (info.regionHeight < 2) 
+			{
+				info.regionHeight = 2;
+			}
+			
+			if (plantCard[i].nowTime <= plantCard[i].info.time)
+			{
+				plantCard[i].nowTime++;
+				plantCard[i].card->PaintRegion(plantCard[i].card->GetBmpHandle(), hdc, info.destX, info.destY, info.srcX, info.srcY, info.regionWidth, info.regionHeight, 0.8);
+			}
+		}
+		else 
+		{
+			info.regionHeight = plantCard[i].card->GetImageHeight() / 2;
+			plantCard[i].card->PaintRegion(plantCard[i].card->GetBmpHandle(), hdc, info.destX, info.destY, info.srcX, info.srcY, info.regionWidth, info.regionHeight, 0.8);
+		}		
+	}
+}
+
 void GameLevel::Draw(HDC hdc)
 {	
 	if (frameCount < MaxFrameCount-1)
@@ -115,7 +175,31 @@ void GameLevel::Draw(HDC hdc)
 	{
 		//画背景
 		bg_img.PaintRegion(bg_img.GetBmpHandle(), hdc, 0, 0, 120, 0, WinWidth, WinHeight, 1);
+		//画植物卡
+		DrawCard(hdc);
+
 		//画进度条
 		DrawProgressBar(hdc);
+	}
+}
+
+void GameLevel::Logic()
+{
+	CardLogic();
+}
+
+void GameLevel::CardLogic()
+{
+	for (int i = 0; i < MAXPLANTNUM; i++)
+	{
+		if (plantCard[i].nowTime >= plantCard[i].info.time && sunlight >= plantCard[i].info.sunlight)
+		{
+			plantCard[i].state = true;
+			//plantCard[i].nowTime = 0;
+		}
+		else
+		{
+			plantCard[i].state = false;
+		}
 	}
 }
