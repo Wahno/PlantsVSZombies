@@ -3,12 +3,14 @@
 void GameLevel::Init()
 {
 	levelName = L"关卡 1 - 1";
-	bg_img.LoadImageFile(L"res\\images\\interface\\background1.jpg");
+	bg_img.LoadImageFile(L"res\\images\\interface\\background1unsodded_1.jpg");
 	shadow_img.LoadImageFile(L"res\\images\\interface\\plantshadow32.png");
-
+	Sunlight_img.LoadImageFile(L"res\\images\\interface\\SunBack.png");
+	
 	InitScene(0,0, bg_img.GetImageWidth(), bg_img.GetImageHeight(),WIN_WIDTH, WIN_HEIGHT);
 
 	sunlight = 100;	//初始阳光值
+	//植物
 	PlantInit();
 	//过场动画
 	CutsceneInit();
@@ -16,6 +18,8 @@ void GameLevel::Init()
 	CardInit();
 	//小推车
 	CarInit();
+	//僵尸
+	ZombiesInit();
 	//进度条
 	ProgressBarInit();
 	
@@ -34,9 +38,13 @@ void GameLevel::CutsceneInit()
 void GameLevel::PlantInit()
 {
 	plant[0] = new T_Graph(L"res\\images\\Plants\\SunFlower.png");
-	spritePlant[0] = new T_Graph(L"res\\images\\Plants\\SunFlower_18.png");
+	spritePlant[0] = new T_Sprite(L"res\\images\\Plants\\SunFlower_18_1.png",73,74);
 	plant[1] = new T_Graph(L"res\\images\\Plants\\Peashooter.png");
-	spritePlant[1] = new T_Graph(L"res\\images\\Plants\\Peashooter_13.png");
+	spritePlant[1] = new T_Sprite(L"res\\images\\Plants\\Peashooter_13.png",71,71);
+}
+
+void GameLevel::ZombiesInit()
+{
 }
 
 void GameLevel::ProgressBarInit()
@@ -79,11 +87,10 @@ void GameLevel::CardInit()
 void GameLevel::CarInit()
 {
 	wstring carImagePath = L"res\\images\\interface\\LawnCleaner.png";
-	int index = 2;//第一个推车在第几行
 	for (int i = 0; i < MAXCARNUM; i++)
 	{
 		car[i].car = new T_Graph(carImagePath);
-		car[i].row = index+i;
+		car[i].row = INDEXROW +i;
 		car[i].state = true;
 	}
 }
@@ -92,6 +99,23 @@ void GameLevel::AudioInit(AudioDX &ds)
 {
 	bg_buffer.LoadWave(ds,L"res\\audio\\UraniwaNi.wav");
 	cutscene_buffer.LoadWave(ds, L"res\\audio\\LookupattheSky.wav");
+}
+
+void GameLevel::DrawPlant(HDC hdc)
+{
+	for (int i = 0; i < plantVector.size(); i++)
+	{
+		plantVector.at(i).sprite->Initiate(plantVector.at(i).info);
+		plantVector.at(i).sprite->Draw(hdc);
+		if (trueFrame % 4 == 2)
+		{
+			plantVector.at(i).sprite->LoopFrame();
+		}	
+	}
+}
+
+void GameLevel::DrawZombies(HDC hdc)
+{
 }
 
 void GameLevel::DrawCutscene(HDC hdc)
@@ -219,6 +243,17 @@ void GameLevel::DrawCar(HDC hdc)
 	}
 }
 
+void GameLevel::DrawSunLight(HDC hdc)
+{
+	Sunlight_img.PaintImage(hdc, 100, 10, Sunlight_img.GetImageWidth(), Sunlight_img.GetImageHeight(), 255);
+	RectF infoRec;
+	infoRec.X = (float)125;
+	infoRec.Y = (float)15;
+	infoRec.Width = (float)100;
+	infoRec.Height = (float)30;
+	T_Graph::PaintText(hdc, infoRec, T_Util::int_to_wstring(sunlight), 20, L"黑体", Color::Black, FontStyleBold, StringAlignmentCenter);
+}
+
 void GameLevel::DrawClickPlant(HDC hdc, int x, int y)
 {
 	plant[pointPlant]->PaintImage(hdc, x-30, y-40, plant[pointPlant]->GetImageWidth(), plant[pointPlant]->GetImageHeight(),255);
@@ -226,6 +261,7 @@ void GameLevel::DrawClickPlant(HDC hdc, int x, int y)
 
 void GameLevel::Draw(HDC hdc)
 {	
+	trueFrame++;
 	if (frameCount < MaxFrameCount-1)
 	{
 		frameCount++;
@@ -238,22 +274,36 @@ void GameLevel::Draw(HDC hdc)
 	{
 		//画背景
 		bg_img.PaintRegion(bg_img.GetBmpHandle(), hdc, 0, 0, 120, 0, WinWidth, WinHeight, 1);
+		
 		DrawCar(hdc);
+		//画植物
+		DrawPlant(hdc);
+		//画僵尸
+		DrawZombies(hdc);
 		//画植物卡
 		DrawCard(hdc);
 		if (pointState)
 		{
+			//画点击后的植物图
 			DrawClickPlant(hdc, mousex, mousey);
 		}
+		//画阳光面板
+		DrawSunLight(hdc);
 		//画进度条
 		DrawProgressBar(hdc);
 	}
+
+	//测试线
 	TestDraw(hdc);
 }
 
 void GameLevel::Logic()
 {
 	CardLogic();
+	bulletLogic();
+	attackPlantLogic();
+	attackZombieLogic();
+	carLogic();
 }
 
 void GameLevel::CardLogic()
@@ -263,7 +313,6 @@ void GameLevel::CardLogic()
 		if (plantCard[i].nowTime >= plantCard[i].info.time && sunlight >= plantCard[i].info.sunlight)
 		{
 			plantCard[i].state = true;
-			//plantCard[i].nowTime = 0;
 		}
 		else
 		{
@@ -272,22 +321,40 @@ void GameLevel::CardLogic()
 	}
 }
 
+void GameLevel::carLogic()
+{
+}
+
+void GameLevel::attackPlantLogic()
+{
+}
+
+void GameLevel::attackZombieLogic()
+{
+}
+
+void GameLevel::bulletLogic()
+{
+}
+
 void GameLevel::MouseClick(int x, int y)
 {
 	if(!pointState)
 	{
 		int card = CardMouseClick(x, y);
-		if (card != -1)
+		if (card != -1&& plantCard[card].state==true&& sunlight>=plantCard[card].info.sunlight)
 		{
 			pointState = true;
 			pointPlant = card;
+			
 		}
 	}
 	else 
 	{
 		PlantMouseClick(x, y);
+		pointState = false;
 	}
-	
+	sunlightMouseClick(x,y);
 }
 
 int GameLevel::CardMouseClick(int x, int y)
@@ -301,7 +368,7 @@ int GameLevel::CardMouseClick(int x, int y)
 		rec.left = plantCard[i].info.x;
 		rec.top = plantCard[i].info.y;
 		rec.right = rec.left + plantCard[i].card->GetImageWidth()*0.8;
-		rec.bottom = rec.top + plantCard[i].card->GetImageHeight()*0.8;
+		rec.bottom = rec.top + plantCard[i].card->GetImageHeight()/2*0.8;
 		if (PtInRect(&rec, pt))
 		{
 			return i;
@@ -312,12 +379,45 @@ int GameLevel::CardMouseClick(int x, int y)
 
 void GameLevel::PlantMouseClick(int x, int y)
 {
+	if (x < CarXSpace + CarWidth || y < YSpace+ PlantHeight*INDEXROW ||x > CarXSpace + CarWidth+ PlantWidth*MAXCOLUMN || y>PlantHeight*MAXROW+YSpace+ PlantHeight*INDEXROW)
+	{
+		return;
+	}
 	PLANT_INFO tempPlant;
 	x = x - CarXSpace - CarWidth;
 	y = y - YSpace;
 	tempPlant.position.X = x / PlantWidth;
 	tempPlant.position.Y = y / PlantHeight;
-	tempPlant.sprite->SetImage(spritePlant[pointPlant]);
+	for(int i = 0; i < plantVector.size(); i++)
+	{
+		if (plantVector.at(i).position.X == tempPlant.position.X&&plantVector.at(i).position.Y == tempPlant.position.Y)
+		{
+			return;
+		}
+	}
+	tempPlant.sprite = spritePlant[pointPlant];
+	SPRITEINFO info;
+	info.Active = true;
+	info.Dead = false;
+	info.Dir = DIR_RIGHT;
+	info.Rotation = TRANS_NONE;
+	info.Ratio = 1.0f;
+	info.Level = 0;
+	info.Score = 0;
+	info.Speed = 0;
+	info.X = tempPlant.position.X*PlantWidth+ CarXSpace + CarWidth+5;
+	info.Y = tempPlant.position.Y*PlantHeight+ YSpace+10;
+	info.Alpha = 255;
+	info.Visible = true;
+	
+	tempPlant.info = info;
+	plantVector.push_back(tempPlant);
+	sunlight = sunlight - plantCard[pointPlant].info.sunlight;
+	plantCard[pointPlant].nowTime = 0;
+}
+
+void GameLevel::sunlightMouseClick(int x, int y)
+{
 }
 
 void GameLevel::MouseMove(int x, int y)

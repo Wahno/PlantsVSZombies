@@ -77,7 +77,8 @@ void PVZ_Game::GamePaint(HDC hdc)
 		}else if (handMenu.HandBookState >= 38 && handMenu.HandBookState <= 48) {
 			handMenu.DrawZomFrameInfo(hdc, handMenu.HandBookState - 38);
 			//handMenu.HandBookState = 50;
-		}else
+		}
+		else
 		{
 			handMenu.Draw(hdc);
 		}
