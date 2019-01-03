@@ -12,6 +12,7 @@ void GameLevel::Init()
 	sunlight = 300;	//初始阳光值
 	//植物
 	PlantInit();
+	BullentInit();
 	//过场动画
 	CutsceneInit();
 	//植物卡
@@ -109,7 +110,7 @@ void GameLevel::AudioInit(AudioDX &ds)
 	bg_buffer.LoadWave(ds,L"res\\audio\\UraniwaNi.wav");
 	cutscene_buffer.LoadWave(ds, L"res\\audio\\LookupattheSky.wav");
 }
-
+/*
 void GameLevel::BullentInit(PLANT_INFO  sp,int time,wstring filepath,HDC hdc)
 {
 	sp.sprite->SetEndTime(GetTickCount());
@@ -139,34 +140,32 @@ void GameLevel::BullentInit(PLANT_INFO  sp,int time,wstring filepath,HDC hdc)
 	}
 	
 }
+*/
+
+void GameLevel::BullentInit()
+{
+	bullet.LoadImageFile(L"res\\images\\Plants\\PeaBullet.png");
+	bulletHit.LoadImageFile(L"res\\images\\Plants\\PeaBulletHit.png");
+}
 
 void GameLevel::DrawBullet(HDC hdc)
 {
 	vector<BULLET_INFO>::iterator iter;
-	for (iter = bulletVector.begin(); iter != bulletVector.end();) {
-		if (iter->sprite->GetX() >= WIN_WIDTH) {
-			iter = bulletVector.erase(iter);
+	for (iter = bulletVector.begin(); iter != bulletVector.end(); iter++) 
+	{
+		if (iter->hit == false)
+		{
+			bullet.PaintImage(hdc, iter->position.X, iter->position.Y*PlantHeight+ YSpace+20, bullet.GetImageWidth(), bullet.GetImageHeight(),255);
 		}
-		if (iter->sprite->IsVisible() == false && iter->sprite->IsActive() == false) {
-			T_Graph * explosion = new T_Graph(L"res\\images\\Plants\\PeaBulletHit.png");
-			explosion->PaintImage(hdc,iter->sprite->GetX() + 75,iter->sprite->GetY()-15,explosion->GetImageWidth(),explosion->GetImageHeight(),255);
-			iter = bulletVector.erase(iter);
+		else
+		{
+			bulletHit.PaintImage(hdc, iter->position.X, iter->position.Y*PlantHeight + YSpace + 20, bulletHit.GetImageWidth(), bulletHit.GetImageHeight(),255);
 		}
-		if (iter == bulletVector.end()) {
-			break;
-		}
-		iter->sprite->Draw(hdc);
-		iter->sprite->Move(iter->sprite->GetSpeed(), 0);
-		iter->position = { iter->sprite->GetX()/100,iter->sprite->GetY()/81 };
-		iter++;
-		
-	}
-	
+	}	
 }
 
 void GameLevel::DrawPlant(HDC hdc)
 {
-
 	for (int i = 0; i < plantVector.size(); i++)
 	{
 		plantVector.at(i).sprite->Initiate(plantVector.at(i).info);
@@ -175,10 +174,6 @@ void GameLevel::DrawPlant(HDC hdc)
 		{
 			plantVector.at(i).sprite->LoopFrame();
 		}
-		if (plantVector.at(i).pointNum == 1) {
-			BullentInit(plantVector.at(i), 1400, L"res\\images\\Plants\\PeaBullet.png", hdc);
-		}
-		//DrawBullet(hdc);	
 	}
 }
 
@@ -201,11 +196,11 @@ void GameLevel::DrawZombies(HDC hdc)
 	{
 		if (frameCount == zombiesArray.at(i).frame) {
 			zombie_info.sprite = spriteZombie[zombiesArray.at(i).zombiesindex];
-			zombie_info.row = 3;
+			zombie_info.row = 2;
 			zombie_info.x = WIN_WIDTH;  //僵尸横坐标
 			zombie_info.count = 0;  
 			info.X = zombie_info.x;
-			info.Y = (zombie_info.row - 1) * 81 + 81 / 2; //僵尸纵坐标
+			info.Y = zombie_info.row * 81 + 81 / 2; //僵尸纵坐标
 			zombie_info.info = info;
 			zombiesVector.push_back(zombie_info);
 			zombiesVector.back().sprite->Initiate(info);
@@ -220,6 +215,7 @@ void GameLevel::DrawZombies(HDC hdc)
 			zombiesVector.at(i).sprite->SetPosition(WIN_WIDTH, zombiesVector.at(i).sprite->GetY());
 		}
 		zombiesVector.at(i).sprite->Draw(hdc);
+		zombiesVector.at(i).x = zombiesVector.at(i).sprite->GetX();
 		int speed = zombiesVector.at(i).sprite->GetSpeed();	
 		if (trueFrame % 7 == 6) {
 			zombiesVector.at(i).sprite->LoopFrame();
@@ -382,16 +378,17 @@ void GameLevel::Draw(HDC hdc)
 	}
 	else
 	{
+		bullet.PaintImage(hdc, 0, 0, bullet.GetImageWidth(), bullet.GetImageHeight());
 		//画背景
 		bg_img.PaintRegion(bg_img.GetBmpHandle(), hdc, 0, 0, 120, 0, WinWidth, WinHeight, 1);
-		
+		//小推车
 		DrawCar(hdc);
 		//画植物
 		DrawPlant(hdc);
-		//画子弹
-		DrawBullet(hdc);
 		//画僵尸
 		DrawZombies(hdc);
+		//画子弹
+		DrawBullet(hdc);
 		//画植物卡
 		DrawCard(hdc);
 		if (pointState)
@@ -445,27 +442,78 @@ void GameLevel::attackPlantLogic()
 
 void GameLevel::attackZombieLogic()
 {
+	bool zom[5];
+	
+	for (int i = 0; i < 5; i++)
+	{
+		zom[i] = false;		//先假设所有行都没有僵尸
+		
+	}
 	for (int i = 0; i < zombiesVector.size(); i++)
 	{
-		for (int j = 0; j < bulletVector.size(); j++)
+		zom[zombiesVector.at(i).row] = true;	//有僵尸置为真
+		
+	}
+	for (int i = 0; i < plantVector.size(); i++)
+	{
+		if (plantVector.at(i).pointNum == 1)//豌豆射手
 		{
-			if (zombiesVector.at(i).sprite->CollideWith(bulletVector.at(j).sprite)) {
-				bulletVector.at(j).sprite->SetVisible(false);
-				bulletVector.at(j).sprite->SetActive(false);
-				zombiesVector.at(i).count++;
-				if (zombiesVector.at(i).count == 1) {
-					zombiesVector.at(i).sprite->SetActive(false);
-				}
-				if (zombiesVector.at(i).count == 2) {
-					zombiesVector.at(i).sprite->SetDead(true);
+			if (zom[plantVector.at(i).position.Y] == true)//所在行有僵尸
+			{
+				if (trueFrame % 50 == 0)	//子弹发射间隔
+				{
+					BULLET_INFO info;
+					info.position.X = (plantVector.at(i).position.X+1) * PlantWidth + CarXSpace + CarWidth;//x坐标
+					info.position.Y = plantVector.at(i).position.Y;//第几行
+					bulletVector.push_back(info);
 				}
 			}
 		}
-	}
+		
+	}	
 }
 
 void GameLevel::bulletLogic()
 {
+	vector<BULLET_INFO>::iterator iter;
+	int firstzomX[5];
+	for (int i = 0; i < 5; i++)
+	{
+		firstzomX[i] = WIN_WIDTH + 1;	//初始化
+	}
+	for (int i = 0; i < zombiesVector.size(); i++)
+	{
+		if (zombiesVector.at(i).x < firstzomX[zombiesVector.at(i).row])
+		{
+			firstzomX[zombiesVector.at(i).row] = zombiesVector.at(i).x;//遍历出每行第一个
+		}
+	}
+	for (iter = bulletVector.begin(); iter != bulletVector.end(); iter++) 
+	{
+		
+		if (iter->position.X >= (firstzomX[iter->position.Y]+70))
+		{
+			//击中僵尸
+			iter->hit = true;
+			//减血
+
+		}
+		if (iter->hit == false)
+		{
+			iter->position.X += BULLET_LENGTH;
+		}
+		else
+		{
+			iter->frame--;
+			if (iter->frame <= 0)
+			{
+				iter = bulletVector.erase(iter);//删除子弹,有bug,重现方法：僵尸靠近植物时出现
+			}
+		}
+		if (iter->position.X >= WIN_WIDTH) {
+			iter = bulletVector.erase(iter);
+		}
+	}
 }
 
 void GameLevel::MouseClick(int x, int y)
