@@ -39,6 +39,7 @@ typedef struct
 	T_Sprite* sprite;	//植物精灵
 	Point position;		//所在行列
 	SPRITEINFO info;	//精灵信息
+	int pointNum;          //植物的标识
 }PLANT_INFO;
 
 typedef struct
@@ -50,12 +51,15 @@ typedef struct
 {
 	int row;			//在第几行
 	int x;				//x坐标
-	T_Sprite* sprite;	//植物精灵
+	T_Sprite* sprite;	//僵尸精灵
+	SPRITEINFO info;     ///精灵信息
+	int count;           //僵尸被击中次数
 }ZOMBIES_INFO;
 typedef struct
 {
-	T_Graph* img;		//子弹图
+	T_Sprite* sprite;		//子弹图
 	Point position;		//子弹位置，x->x坐标，y->第几行
+	int pointNum;       //子弹标识，与植物标识相等则画子弹
 }BULLET_INFO;
 class GameLevel : public T_Scene
 {
@@ -82,7 +86,11 @@ public:
 	void CardInit();				//初始化植物卡
 	void CarInit();					//初始化小推车
 	void AudioInit(AudioDX &dx);	//音频初始化
+	void BullentInit(PLANT_INFO sp, int time, wstring filepath, HDC hdc);
+	void BullentInit(PLANT_INFO  sp, int time,wstring filepath);
+	//void BullentInit();				//子弹初始化
 
+	void DrawBullet(HDC hdc);        //绘制子弹
 	void DrawPlant(HDC hdc);		//绘制植物
 	void DrawZombies(HDC hdc);		//绘制僵尸
 	void DrawCutscene(HDC hdc);		//绘制过场动画
@@ -99,6 +107,7 @@ public:
 	void attackPlantLogic();		//僵尸攻击植物，检测碰撞,造成伤害
 	void attackZombieLogic();		//植物攻击僵尸,生成子弹
 	void bulletLogic();				//检测碰撞，更新子弹位置，造成伤害
+
 
 	void MouseClick(int x,int y);		//鼠标响应
 	int CardMouseClick(int x, int y);	//鼠标上没有植物按到植物卡
@@ -136,7 +145,7 @@ private:
 
 	vector<ZOMBIES_INFO> zombiesVector;//僵尸容器
 	T_Sprite* spriteZombie[MAXZOMBIESNUM];//僵尸精灵图
-
+	vector<ZOMBIES_ARRAY> zombiesArray;   //僵尸数组
 
 	vector<POINT> sunlightVector;		//未收集的阳光
 	vector<BULLET_INFO> bulletVector;	//子弹容器
