@@ -54,14 +54,18 @@ typedef struct
 	T_Sprite* sprite;	//僵尸精灵
 	SPRITEINFO info;     ///精灵信息
 	int count;           //僵尸被击中次数
+	bool isChanged;         //是否改变图片
 }ZOMBIES_INFO;
 typedef struct
 {
-	//T_Graph* img;		//子弹图
+	ZOMBIES_INFO info; 
+	int	paintTimes;
+}ZOM_HEADER;
+typedef struct
+{
 	bool hit = false;			//子弹是否已经击中僵尸
 	Point position;		//子弹位置，x->x坐标，y->第几行
 	int frame = 10;		//子弹击中后播放帧数
-	//int pointNum;		//子弹标识，与植物标识相等则画子弹
 }BULLET_INFO;
 class GameLevel : public T_Scene
 {
@@ -90,8 +94,6 @@ public:
 	void CardInit();				//初始化植物卡
 	void CarInit();					//初始化小推车
 	void AudioInit(AudioDX &dx);	//音频初始化
-	//void BullentInit(PLANT_INFO sp, int time, wstring filepath, HDC hdc);
-	//void BullentInit(PLANT_INFO  sp, int time,wstring filepath);
 	void BullentInit();				//子弹初始化
 
 	void DrawBullet(HDC hdc);        //绘制子弹
@@ -151,6 +153,8 @@ private:
 	vector<ZOMBIES_INFO> zombiesVector;//僵尸容器
 	T_Sprite* spriteZombie[MAXZOMBIESNUM];//僵尸精灵图
 	vector<ZOMBIES_ARRAY> zombiesArray;   //僵尸数组
+	T_Sprite* attackedZombies[4];  //被打中的僵尸容器
+	vector<ZOM_HEADER> zoms_header;
 
 	vector<POINT> sunlightVector;		//未收集的阳光
 	vector<BULLET_INFO> bulletVector;	//子弹容器

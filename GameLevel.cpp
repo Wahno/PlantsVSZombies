@@ -46,7 +46,10 @@ void GameLevel::PlantInit()
 
 void GameLevel::ZombiesInit()
 {
-	
+	attackedZombies[0] = new T_Sprite(L"res\\images\\Zombies\\Zombie\\ZombieLostHead_18.png",166,144);
+	attackedZombies[1] = new T_Sprite(L"res\\images\\Zombies\\Zombie\\ZombieHead_12.png",150,186);
+	attackedZombies[2] = new T_Sprite(L"res\\images\\Zombies\\Zombie\\ZombieLostHeadAttack11.png",166,144);
+	attackedZombies[3] = new T_Sprite(L"res\\images\\Zombies\\Zombie\\ZombieDie_10.png",166,144);
 	spriteZombie[0] = new T_Sprite(L"res\\images\\Zombies\\Zombie\\Zombie0_18.png",166,144);
 	spriteZombie[1] = new T_Sprite(L"res\\images\\Zombies\\Zombie\\Zombie_22.png",166,144);
 	ZOMBIES_ARRAY zombies_array;
@@ -110,37 +113,6 @@ void GameLevel::AudioInit(AudioDX &ds)
 	bg_buffer.LoadWave(ds,L"res\\audio\\UraniwaNi.wav");
 	cutscene_buffer.LoadWave(ds, L"res\\audio\\LookupattheSky.wav");
 }
-/*
-void GameLevel::BullentInit(PLANT_INFO  sp,int time,wstring filepath,HDC hdc)
-{
-	sp.sprite->SetEndTime(GetTickCount());
-	if (sp.sprite->GetEndTime() - sp.sprite->GetStartTime() >= (DWORD)time)
-	{
-		sp.sprite->SetStartTime(sp.sprite->GetEndTime());
-		SPRITEINFO info;
-		info.Active = true;
-		info.Alpha = 255;
-		info.Dead = false;
-		info.Dir = DIR_RIGHT;
-		info.Level = 0;
-		info.Ratio = 1;
-		info.Rotation = TRANS_NONE;
-		info.Score = 0;
-		info.Speed = 13;
-		info.Visible = true;
-		BULLET_INFO bullet_info;
-		info.X = sp.info.X+ sp.sprite->GetWidth()-10;
-		info.Y = sp.info.Y;
-		bullet_info.position = { info.X/100,info.Y/81 };
-		bullet_info.sprite = new T_Sprite(filepath);
-		bullet_info.sprite->Initiate(info);
-		bullet_info.pointNum = sp.pointNum;
-		bulletVector.push_back(bullet_info);
-		//DrawBullet(hdc);
-	}
-	
-}
-*/
 
 void GameLevel::BullentInit()
 {
@@ -155,11 +127,11 @@ void GameLevel::DrawBullet(HDC hdc)
 	{
 		if (iter->hit == false)
 		{
-			bullet.PaintImage(hdc, iter->position.X, iter->position.Y*PlantHeight+ YSpace+20, bullet.GetImageWidth(), bullet.GetImageHeight(),255);
+			bullet.PaintImage(hdc, iter->position.X, iter->position.Y*PlantHeight+ YSpace+30, bullet.GetImageWidth(), bullet.GetImageHeight(),255);
 		}
 		else
 		{
-			bulletHit.PaintImage(hdc, iter->position.X, iter->position.Y*PlantHeight + YSpace + 20, bulletHit.GetImageWidth(), bulletHit.GetImageHeight(),255);
+			bulletHit.PaintImage(hdc, iter->position.X, iter->position.Y*PlantHeight + YSpace + 30, bulletHit.GetImageWidth(), bulletHit.GetImageHeight(),255);
 		}
 	}	
 }
@@ -199,6 +171,7 @@ void GameLevel::DrawZombies(HDC hdc)
 			zombie_info.row = 2;
 			zombie_info.x = WIN_WIDTH;  //僵尸横坐标
 			zombie_info.count = 0;  
+			zombie_info.isChanged = false;
 			info.X = zombie_info.x;
 			info.Y = zombie_info.row * 81 + 81 / 2; //僵尸纵坐标
 			zombie_info.info = info;
@@ -206,22 +179,66 @@ void GameLevel::DrawZombies(HDC hdc)
 			zombiesVector.back().sprite->Initiate(info);
 		}
 	}
-	for (int i = 0; i < zombiesVector.size(); i++)
+	vector<ZOMBIES_INFO>::iterator it;
+	for (it = zombiesVector.begin(); it != zombiesVector.end();)
 	{
-		if (zombiesVector.at(i).sprite->IsActive() == false && !zombiesVector.at(i).sprite->IsDead()) {
-			//T_Graph * fall = new T_Graph
+		if (it->count == 6) {
+			if (it->isChanged == false) {
+				it->info.X = it->sprite->GetX();
+				it->info.Y = it->sprite->GetY();
+				it->sprite = attackedZombies[3];
+				it->sprite->SetFrame(0);
+				it->sprite->Initiate(it->info);
+				ZOM_HEADER zom_header;
+				zom_header.info.info = it->info;
+				zom_header.info.info.Y = it->sprite->GetY() - 15;
+				zom_header.info.info.Speed = -5;
+				zom_header.info.count = it->count;
+				zom_header.info.row = it->row;
+				zom_header.info.x = it->x;
+				zom_header.paintTimes = 0;
+				zom_header.info.sprite = attackedZombies[1];
+				zom_header.info.sprite->Initiate(zom_header.info.info);
+				zoms_header.push_back(zom_header);
+				it->isChanged = true;
+			}
 		}
-		if (zombiesVector.at(i).sprite->GetX() <=  81) {
-			zombiesVector.at(i).sprite->SetPosition(WIN_WIDTH, zombiesVector.at(i).sprite->GetY());
+		if (it->count == 7) {
+			it = zombiesVector.erase(it);
+			if (it == zombiesVector.end()) {
+				break;
+			}
 		}
-		zombiesVector.at(i).sprite->Draw(hdc);
-		zombiesVector.at(i).x = zombiesVector.at(i).sprite->GetX();
-		int speed = zombiesVector.at(i).sprite->GetSpeed();	
-		if (trueFrame % 7 == 6) {
-			zombiesVector.at(i).sprite->LoopFrame();
-			zombiesVector.at(i).sprite->Move(-speed, 0);
+			it->sprite->Draw(hdc);
+			it->x = it->sprite->GetX();
+			int speed = it->sprite->GetSpeed();
+			if (trueFrame % 8 == 7) {
+				it->sprite->LoopFrame();
+				it->sprite->Move(-speed, 0);
+			}
+			it++;
+		
+	}
+	vector<ZOM_HEADER>::iterator iter;
+	for (iter = zoms_header.begin(); iter != zoms_header.end(); iter++) {
+		if (iter->paintTimes != 10) {
+			iter->info.sprite->Draw(hdc);
+			iter->info.x = iter->info.sprite->GetX();
+			int speed = iter->info.sprite->GetSpeed();
+			if (trueFrame % 6 == 5) {
+				iter->paintTimes ++;
+				iter->info.sprite->LoopFrame();
+				iter->info.sprite->Move(-speed, 0);
+			}
+		}
+		if (iter->info.count == 7) {
+			iter = zoms_header.erase(iter);
+		}
+		if (iter == zoms_header.end()) {
+			break;
 		}
 	}
+	
 }
 
 void GameLevel::DrawCutscene(HDC hdc)
@@ -468,6 +485,7 @@ void GameLevel::attackZombieLogic()
 					bulletVector.push_back(info);
 				}
 			}
+		
 		}
 		
 	}	
@@ -485,18 +503,16 @@ void GameLevel::bulletLogic()
 	{
 		if (zombiesVector.at(i).x < firstzomX[zombiesVector.at(i).row])
 		{
-			firstzomX[zombiesVector.at(i).row] = zombiesVector.at(i).x;//遍历出每行第一个
+			firstzomX[zombiesVector.at(i).row] = zombiesVector.at(i).x;//遍历出每行第一个僵尸的地址
 		}
 	}
 	for (iter = bulletVector.begin(); iter != bulletVector.end(); iter++) 
 	{
 		
-		if (iter->position.X >= (firstzomX[iter->position.Y]+70))
+		if (iter->position.X >= (firstzomX[iter->position.Y]+60))
 		{
 			//击中僵尸
 			iter->hit = true;
-			//减血
-
 		}
 		if (iter->hit == false)
 		{
@@ -507,11 +523,28 @@ void GameLevel::bulletLogic()
 			iter->frame--;
 			if (iter->frame <= 0)
 			{
-				iter = bulletVector.erase(iter);//删除子弹,有bug,重现方法：僵尸靠近植物时出现
+				for (int i = 0; i < zombiesVector.size(); i++)
+				{
+					if (zombiesVector.at(i).x == firstzomX[iter->position.Y]) //找到该行第一个僵尸
+					{
+						zombiesVector.at(i).count++;  //僵尸减血次数加1
+						break;
+					}
+				}
+				iter = bulletVector.erase(iter);
+			}
+			/*判断是否越界*/
+			if (iter == bulletVector.end()) {
+				break;
 			}
 		}
+		
 		if (iter->position.X >= WIN_WIDTH) {
 			iter = bulletVector.erase(iter);
+			/*判断是否越界*/
+			if (iter == bulletVector.end()) {
+				break;
+			}
 		}
 	}
 }
