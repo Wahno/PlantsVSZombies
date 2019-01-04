@@ -84,7 +84,7 @@ public:
 	static const int INDEXROW = 2;		//从第几行开始
 
 	static const int BULLET_LENGTH = 2;	//子弹步长
-
+	static int sequence[15];
 
 	void Init();					//初始化
 	void CutsceneInit();			//初始化过场动画

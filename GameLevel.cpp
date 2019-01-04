@@ -1,5 +1,5 @@
 #include "GameLevel.h"
-
+int GameLevel::sequence[15] = { 0,0,0,0,1,1,2,3,4,5,6,7,8,9,10 };
 void GameLevel::Init()
 {
 	levelName = L"¹Ø¿¨ 1 - 1";
@@ -184,11 +184,12 @@ void GameLevel::DrawZombies(HDC hdc)
 	{
 		if (it->count == 6) {
 			if (it->isChanged == false) {
+				//int sequence[15] = {0,0,0,0,1,1,2,3,4,5,6,7,8,9,10 };
 				it->info.X = it->sprite->GetX();
 				it->info.Y = it->sprite->GetY();
 				it->sprite = attackedZombies[3];
-				it->sprite->SetFrame(0);
 				it->sprite->Initiate(it->info);
+				it->sprite->SetSequence(sequence,15);
 				ZOM_HEADER zom_header;
 				zom_header.info.info = it->info;
 				zom_header.info.info.Y = it->sprite->GetY() - 15;
@@ -202,8 +203,9 @@ void GameLevel::DrawZombies(HDC hdc)
 				zoms_header.push_back(zom_header);
 				it->isChanged = true;
 			}
+			//it->sprite->SetFrame();
 		}
-		if (it->count == 7) {
+		if (it->count == 8) {
 			it = zombiesVector.erase(it);
 			if (it == zombiesVector.end()) {
 				break;
