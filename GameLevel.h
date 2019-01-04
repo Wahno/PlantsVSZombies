@@ -56,10 +56,9 @@ typedef struct
 	int count;           //僵尸被击中次数
 	bool isChanged;         //是否改变图片
 }ZOMBIES_INFO;
-typedef struct
-{
-	ZOMBIES_INFO info; 
-	int	paintTimes;
+typedef struct {
+	ZOMBIES_INFO zom_info;
+	int paintTimes;
 }ZOM_HEADER;
 typedef struct
 {
@@ -84,7 +83,8 @@ public:
 	static const int INDEXROW = 2;		//从第几行开始
 
 	static const int BULLET_LENGTH = 2;	//子弹步长
-	static int sequence[15];
+	static int bodySequ[15];
+	//static int headerSequ[20];
 
 	void Init();					//初始化
 	void CutsceneInit();			//初始化过场动画

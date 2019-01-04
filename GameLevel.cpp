@@ -1,5 +1,6 @@
 #include "GameLevel.h"
-int GameLevel::sequence[15] = { 0,0,0,0,1,1,2,3,4,5,6,7,8,9,10 };
+int GameLevel::bodySequ[15] = { 0,0,0,0,1,1,2,3,4,5,6,7,8,9,10 };
+//int GameLevel::headerSequ[20] = { 0,1,1,2,3,4,5,6,7,8,9,10,11,10,11,11,11,10,11,10};
 void GameLevel::Init()
 {
 	levelName = L"关卡 1 - 1";
@@ -182,28 +183,31 @@ void GameLevel::DrawZombies(HDC hdc)
 	vector<ZOMBIES_INFO>::iterator it;
 	for (it = zombiesVector.begin(); it != zombiesVector.end();)
 	{
-		if (it->count == 6) {
+		if (it->count == 6) { /*豌豆与僵尸碰撞6次之后*/
 			if (it->isChanged == false) {
 				//int sequence[15] = {0,0,0,0,1,1,2,3,4,5,6,7,8,9,10 };
 				it->info.X = it->sprite->GetX();
 				it->info.Y = it->sprite->GetY();
 				it->sprite = attackedZombies[3];
 				it->sprite->Initiate(it->info);
-				it->sprite->SetSequence(sequence,15);
-				ZOM_HEADER zom_header;
-				zom_header.info.info = it->info;
-				zom_header.info.info.Y = it->sprite->GetY() - 15;
-				zom_header.info.info.Speed = -5;
-				zom_header.info.count = it->count;
-				zom_header.info.row = it->row;
-				zom_header.info.x = it->x;
-				zom_header.paintTimes = 0;
-				zom_header.info.sprite = attackedZombies[1];
-				zom_header.info.sprite->Initiate(zom_header.info.info);
-				zoms_header.push_back(zom_header);
+				it->sprite->SetSequence(bodySequ,15);
+				it->sprite->SetFrame(0);
+				ZOMBIES_INFO zom_header;
+				zom_header.info = it->info;
+				zom_header.info.Y = it->sprite->GetY() - 15;
+				zom_header.info.Speed = -5;
+				zom_header.count = it->count;
+				zom_header.row = it->row;
+				zom_header.x = it->x;
+				zom_header.sprite = attackedZombies[1];
+				zom_header.sprite->Initiate(zom_header.info);
+				ZOM_HEADER header;
+				header.zom_info = zom_header;
+				header.paintTimes = 0;
+			//	zom_header.sprite->SetSequence(headerSequ,20);
+				zoms_header.push_back(header);
 				it->isChanged = true;
 			}
-			//it->sprite->SetFrame();
 		}
 		if (it->count == 8) {
 			it = zombiesVector.erase(it);
@@ -223,17 +227,18 @@ void GameLevel::DrawZombies(HDC hdc)
 	}
 	vector<ZOM_HEADER>::iterator iter;
 	for (iter = zoms_header.begin(); iter != zoms_header.end(); iter++) {
-		if (iter->paintTimes != 10) {
-			iter->info.sprite->Draw(hdc);
-			iter->info.x = iter->info.sprite->GetX();
-			int speed = iter->info.sprite->GetSpeed();
-			if (trueFrame % 6 == 5) {
-				iter->paintTimes ++;
-				iter->info.sprite->LoopFrame();
-				iter->info.sprite->Move(-speed, 0);
+		if (iter->paintTimes <= 11) {
+			iter->zom_info.sprite->Draw(hdc);
+			iter->zom_info.x = iter->zom_info.sprite->GetX();
+			int speed = iter->zom_info.sprite->GetSpeed();
+			if (trueFrame % 7 == 6) {
+				iter->paintTimes++;
+				iter->zom_info.sprite->LoopFrame();
+				iter->zom_info.sprite->Move(-speed, 0);
 			}
 		}
-		if (iter->info.count == 7) {
+		
+		if (iter->zom_info.count == 7) {
 			iter = zoms_header.erase(iter);
 		}
 		if (iter == zoms_header.end()) {
@@ -457,6 +462,7 @@ void GameLevel::carLogic()
 
 void GameLevel::attackPlantLogic()
 {
+
 }
 
 void GameLevel::attackZombieLogic()
