@@ -10,7 +10,7 @@ void GameLevel::Init()
 	Sun.LoadImageFile(L"res\\images\\interface\\Sun.gif");
 	InitScene(0,0, bg_img.GetImageWidth(), bg_img.GetImageHeight(),WIN_WIDTH, WIN_HEIGHT);
 
-	sunlight = 300;	//初始阳光值
+	sunlight = 100;	//初始阳光值
 	//植物
 	PlantInit();
 	BullentInit();
@@ -54,6 +54,10 @@ void GameLevel::ZombiesInit()
 	attackedZombies[4] = new T_Sprite(L"res\\images\\Zombies\\Zombie\\ZombieAttack_21.png", 166, 144);
 	spriteZombie[0] = new T_Sprite(L"res\\images\\Zombies\\Zombie\\Zombie0_18.png",166,144);
 	spriteZombie[1] = new T_Sprite(L"res\\images\\Zombies\\Zombie\\Zombie_22.png",166,144);
+	spriteZombie[2] = new T_Sprite(L"res\\images\\Zombies\\Zombie\\Zombie0_18.png", 166, 144);
+	spriteZombie[3] = new T_Sprite(L"res\\images\\Zombies\\Zombie\\Zombie_22.png", 166, 144);
+	spriteZombie[4] = new T_Sprite(L"res\\images\\Zombies\\Zombie\\Zombie0_18.png", 166, 144);
+	//spriteZombie[1] = new T_Sprite(L"res\\images\\Zombies\\Zombie\\Zombie_22.png", 166, 144);
 	ZOMBIES_ARRAY zombies_array;
 	for (int i = 0; i < MAXZOMBIESNUM; i++) {
 		zombies_array.zombiesindex = i;
@@ -188,7 +192,7 @@ void GameLevel::DrawZombies(HDC hdc)
 	{
 		if (it->count == 6) { /*豌豆与僵尸碰撞6次之后*/
 			if (it->isChanged == false) {
-				/*	if (it->sprite->IsActive() == false) {
+					if (it->sprite->IsActive() == false) {
 						it->info.X = it->sprite->GetX();
 						it->info.Y = it->sprite->GetY();
 						it->info.Speed = 0;
@@ -198,7 +202,7 @@ void GameLevel::DrawZombies(HDC hdc)
 						it->isChanged = true;
 					}
 					else
-					{*/
+					{
 						it->info.X = it->sprite->GetX();
 						it->info.Y = it->sprite->GetY();
 						it->sprite = attackedZombies[3];
@@ -219,7 +223,7 @@ void GameLevel::DrawZombies(HDC hdc)
 						header.paintTimes = 0;
 						zoms_header.push_back(header);
 						it->isChanged = true;
-				/*	}*/
+					}
 				}
 		}
 		if (it->count == 8) {
@@ -228,14 +232,14 @@ void GameLevel::DrawZombies(HDC hdc)
 				break;
 			}
 		}
-			it->sprite->Draw(hdc);
-			it->x = it->sprite->GetX();
-			int speed = it->sprite->GetSpeed();
-			if (trueFrame % 8 == 7) {
-				it->sprite->LoopFrame();
-				it->sprite->Move(-speed, 0);
-			}
-			it++;
+		it->sprite->Draw(hdc);
+		it->x = it->sprite->GetX();
+		int speed = it->sprite->GetSpeed();
+		if (trueFrame % 8 == 7) {
+			it->sprite->LoopFrame();
+			it->sprite->Move(-speed, 0);
+		}
+		it++;
 		
 	}
 	vector<ZOM_HEADER>::iterator iter;
@@ -402,17 +406,10 @@ void GameLevel::DrawCar(HDC hdc)
 
 void GameLevel::DrawSunLight(HDC hdc)
 {
-	int countSun = 0;
+	//产生阳光
 	for (int i = 0; i < plantVector.size(); i++) {
 		if (plantVector.at(i).pointNum == 0) {
-			countSun++;
-		}
-	}
-	//产生阳光	
-	if (frameCount >= 300) {
-		for (int i = 0; i < countSun; i++)
-		{
-			if (trueFrame % 500 == 0) {
+			if (trueFrame % 400 == 0) {
 				ProduceSunLight();
 			}
 		}
@@ -437,12 +434,13 @@ void GameLevel::ProduceSunLight()
 {
 	srand((unsigned int)time(NULL));
 	SUN_INFO sun;
-	int posX = rand() % WIN_WIDTH;
-	int posY = rand() % WIN_HEIGHT;
+	int posX = rand() % (WIN_WIDTH - Sun.GetImageWidth());
+	int posY = rand() % (WIN_HEIGHT - Sun.GetImageHeight());
 	POINT pt = { posX,posY};
 	sun.isPicked = false;
 	sun.pt = pt;
 	sunlightVector.push_back(sun);
+
 }
 
 void GameLevel::DrawClickPlant(HDC hdc, int x, int y)
@@ -495,7 +493,7 @@ void GameLevel::Logic()
 {
 	CardLogic();
 	bulletLogic();
-	attackPlantLogic();
+	//attackPlantLogic();
 	attackZombieLogic();
 	carLogic();
 }

@@ -71,13 +71,12 @@ typedef struct
 typedef struct {
 	bool isPicked;     ///是否被拾取
 	POINT pt;          //位置
-	//POINT nowPt;
 }SUN_INFO;
 class GameLevel : public T_Scene
 {
 public:
 	static const int MAXPLANTNUM = 2;	//最大植物种类数量
-	static const int MAXZOMBIESNUM = 2;	//最大僵尸种类数量
+	static const int MAXZOMBIESNUM = 5;	//最大僵尸种类数量
 	static const int MAXCARNUM = 1;		//最大推车数量
 	static const int CarXSpace = 50;	//推车x边距
 	static const int YSpace = 80;		//Y边距
