@@ -180,6 +180,7 @@ void GameLevel::DrawZombies(HDC hdc)
 			zombie_info.isChanged = false;
 			zombie_info.count = 0;  
 			zombie_info.isChanged = false;
+			zombie_info.typeNum = zombiesArray.at(i).zombiesindex;
 			info.X = zombie_info.x;
 			info.Y = (zombie_info.row) * PlantHeight ; //½©Ê¬×Ý×ø±ê
 			zombie_info.info = info;
@@ -190,54 +191,27 @@ void GameLevel::DrawZombies(HDC hdc)
 	vector<ZOMBIES_INFO>::iterator it;
 	for (it = zombiesVector.begin(); it != zombiesVector.end();)
 	{
-		if (it->count == 6) { /*Íã¶¹Óë½©Ê¬Åö×²6´ÎÖ®ºó*/
-			if (it->isChanged == false) {
-					/*if (it->sprite->IsActive() == false) {
-						it->info.X = it->sprite->GetX();
-						it->info.Y = it->sprite->GetY();
-						it->info.Speed = 0;
-						it->sprite = attackedZombies[2];
-						it->sprite->Initiate(it->info);
-						it->sprite->SetFrame(0);
-						ZOMBIES_INFO zom_header;
-						zom_header.info = it->info;
-						zom_header.info.Y = it->sprite->GetY() - 15;
-						zom_header.info.Speed = -5;
-						zom_header.count = it->count;
-						zom_header.row = it->row;
-						zom_header.x = it->x;
-						zom_header.sprite = attackedZombies[1];
-						zom_header.sprite->Initiate(zom_header.info);
-						ZOM_HEADER header;
-						header.zom_info = zom_header;
-						header.paintTimes = 0;
-						zoms_header.push_back(header);
-						it->isChanged = true;
-					}
-					else
-					{*/
-						it->info.X = it->sprite->GetX();
-						it->info.Y = it->sprite->GetY();
-						it->sprite = attackedZombies[3];
-						it->sprite->Initiate(it->info);
-						it->sprite->SetSequence(bodySequ, 15);
-						it->sprite->SetFrame(0);
-						ZOMBIES_INFO zom_header;
-						zom_header.info = it->info;
-						zom_header.info.Y = it->sprite->GetY() - 15;
-						zom_header.info.Speed = -5;
-						zom_header.count = it->count;
-						zom_header.row = it->row;
-						zom_header.x = it->x;
-						zom_header.sprite = attackedZombies[1];
-						zom_header.sprite->Initiate(zom_header.info);
-						ZOM_HEADER header;
-						header.zom_info = zom_header;
-						header.paintTimes = 0;
-						zoms_header.push_back(header);
-						it->isChanged = true;
-					/*}*/
-				}
+		if (it->count == 6 && it->isChanged == false) { /*Íã¶¹Óë½©Ê¬Åö×²6´ÎÖ®ºó*/
+			it->info.X = it->sprite->GetX();
+			it->info.Y = it->sprite->GetY();
+			it->sprite = attackedZombies[3];
+			it->sprite->Initiate(it->info);
+			it->sprite->SetSequence(bodySequ, 15);
+			it->sprite->SetFrame(0);
+			ZOMBIES_INFO zom_header;
+			zom_header.info = it->info;
+			zom_header.info.Y = it->sprite->GetY() - 15;
+			zom_header.info.Speed = -5;
+			zom_header.count = it->count;
+			zom_header.row = it->row;
+			zom_header.x = it->x;
+			zom_header.sprite = attackedZombies[1];
+			zom_header.sprite->Initiate(zom_header.info);
+			ZOM_HEADER header;
+			header.zom_info = zom_header;
+			header.paintTimes = 0;
+			zoms_header.push_back(header);
+			it->isChanged = true;
 		}
 		if (it->count == 8) {
 			it = zombiesVector.erase(it);
@@ -277,14 +251,6 @@ void GameLevel::DrawZombies(HDC hdc)
 			break;
 		}
 	}
-	for (int i = 0; i < eatPlantZomsVector.size(); i++)
-	{
-		eatPlantZomsVector.at(i).sprite->Draw(hdc);
-		if (trueFrame % 7 == 6) {
-			eatPlantZomsVector.at(i).sprite->LoopFrame();
-		}
-	}
-	
 }
 
 void GameLevel::DrawCutscene(HDC hdc)
@@ -582,7 +548,7 @@ void GameLevel::carLogic()
 					}
 					else
 					{
-						if (trueFrame % 100 == 0) {
+						if (trueFrame % 50 == 0) {
 							zombiesVector.at(j).count++;
 						}
 					}
@@ -638,64 +604,39 @@ void GameLevel::attackPlantLogic()
 								if (LinePlants[m][n] == iter->info.X)
 								{
 									it->sprite->SetSpeed(0);
-									it->sprite->SetVisible(false);
+									if (it->count == 6 && iter->attacked == true)
+									{
+										it->info.X = it->sprite->GetX();
+										it->info.Y = it->sprite->GetY();
+										it->sprite = attackedZombies[2];
+										it->sprite->Initiate(it->info);
+									}
 									if (iter->attacked == false)
 									{
-										ZOMBIES_INFO zom_info;
-										zom_info = *it;
-										zom_info.info.Visible = true;
-										zom_info.info.X = it->sprite->GetX();
-										zom_info.info.Y = it->sprite->GetY();
-										zom_info.sprite = attackedZombies[4];
-										zom_info.sprite->Initiate(zom_info.info);
-										eatPlantZomsVector.push_back(zom_info);
+										if (it->count < 6)
+										{
+											it->info.Speed = 0;
+											it->info.X = it->sprite->GetX();
+											it->info.Y = it->sprite->GetY();
+											it->sprite = attackedZombies[4];
+											it->sprite->Initiate(it->info);
+										}
 										iter->attacked = true;
 									}
 									iter->life--;
-									if (iter->life <= 0) {
+									if (iter->life <= 0)
+									{
 										iter = plantVector.erase(iter);
-										if (it->count < 6) {
-											it->sprite->SetSpeed(3);
-											it->sprite->SetVisible(true);
-											vector<ZOMBIES_INFO>::iterator eatPlant;
-											for (eatPlant = eatPlantZomsVector.begin(); eatPlant!= eatPlantZomsVector.end();)
-											{
-												if (eatPlant->x  == it->x) {
-													eatPlant = eatPlantZomsVector.erase(eatPlant);
-													if (eatPlant == eatPlantZomsVector.end()) {
-														break;
-													}
-												}
-												else
-												{
-													eatPlant++;
-												}
-											}
-										}
-										if (it->count == 6 && it->isChanged == false) {
-											it->info.X = it->sprite->GetX();
-											it->info.Y = it->sprite->GetY();
-											it->sprite = attackedZombies[3];
-											it->sprite->Initiate(it->info);
-											it->sprite->SetSequence(bodySequ, 15);
-											it->sprite->SetFrame(0);
-											ZOMBIES_INFO zom_header;
-											zom_header.info = it->info;
-											zom_header.info.Y = it->sprite->GetY() - 15;
-											zom_header.info.Speed = -5;
-											zom_header.count = it->count;
-											zom_header.row = it->row;
-											zom_header.x = it->x;
-											zom_header.sprite = attackedZombies[1];
-											zom_header.sprite->Initiate(zom_header.info);
-											ZOM_HEADER header;
-											header.zom_info = zom_header;
-											header.paintTimes = 0;
-											zoms_header.push_back(header);
-											it->isChanged = true;
-										}
 										if (iter == plantVector.end()) {
 											break;
+										}
+										if (it->count < 6)
+										{
+											it->sprite->SetSpeed(3);
+											it->info.Speed = 3;
+											it->sprite->SetVisible(true);
+											it->sprite = spriteZombie[it->typeNum];
+											it->sprite->Initiate(it->info);
 										}
 									}
 								}
