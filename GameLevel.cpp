@@ -181,7 +181,7 @@ void GameLevel::DrawZombies(HDC hdc)
 			zombie_info.count = 0;  
 			zombie_info.isChanged = false;
 			info.X = zombie_info.x;
-			info.Y = zombie_info.row * 81 + 81 / 2; //僵尸纵坐标
+			info.Y = (zombie_info.row) * PlantHeight ; //僵尸纵坐标
 			zombie_info.info = info;
 			zombiesVector.push_back(zombie_info);
 			zombiesVector.back().sprite->Initiate(info);
@@ -192,17 +192,30 @@ void GameLevel::DrawZombies(HDC hdc)
 	{
 		if (it->count == 6) { /*豌豆与僵尸碰撞6次之后*/
 			if (it->isChanged == false) {
-					if (it->sprite->IsActive() == false) {
+					/*if (it->sprite->IsActive() == false) {
 						it->info.X = it->sprite->GetX();
 						it->info.Y = it->sprite->GetY();
 						it->info.Speed = 0;
 						it->sprite = attackedZombies[2];
 						it->sprite->Initiate(it->info);
 						it->sprite->SetFrame(0);
+						ZOMBIES_INFO zom_header;
+						zom_header.info = it->info;
+						zom_header.info.Y = it->sprite->GetY() - 15;
+						zom_header.info.Speed = -5;
+						zom_header.count = it->count;
+						zom_header.row = it->row;
+						zom_header.x = it->x;
+						zom_header.sprite = attackedZombies[1];
+						zom_header.sprite->Initiate(zom_header.info);
+						ZOM_HEADER header;
+						header.zom_info = zom_header;
+						header.paintTimes = 0;
+						zoms_header.push_back(header);
 						it->isChanged = true;
 					}
 					else
-					{
+					{*/
 						it->info.X = it->sprite->GetX();
 						it->info.Y = it->sprite->GetY();
 						it->sprite = attackedZombies[3];
@@ -223,7 +236,7 @@ void GameLevel::DrawZombies(HDC hdc)
 						header.paintTimes = 0;
 						zoms_header.push_back(header);
 						it->isChanged = true;
-					}
+					/*}*/
 				}
 		}
 		if (it->count == 8) {
@@ -232,12 +245,14 @@ void GameLevel::DrawZombies(HDC hdc)
 				break;
 			}
 		}
-		it->sprite->Draw(hdc);
-		it->x = it->sprite->GetX();
-		int speed = it->sprite->GetSpeed();
-		if (trueFrame % 8 == 7) {
-			it->sprite->LoopFrame();
-			it->sprite->Move(-speed, 0);
+		if (it->sprite->IsVisible() == true) {
+			it->sprite->Draw(hdc);
+			it->x = it->sprite->GetX();
+			int speed = it->sprite->GetSpeed();
+			if (trueFrame % 8 == 7) {
+				it->sprite->LoopFrame();
+				it->sprite->Move(-speed, 0);
+			}
 		}
 		it++;
 		
@@ -260,6 +275,13 @@ void GameLevel::DrawZombies(HDC hdc)
 		}
 		if (iter == zoms_header.end()) {
 			break;
+		}
+	}
+	for (int i = 0; i < eatPlantZomsVector.size(); i++)
+	{
+		eatPlantZomsVector.at(i).sprite->Draw(hdc);
+		if (trueFrame % 7 == 6) {
+			eatPlantZomsVector.at(i).sprite->LoopFrame();
 		}
 	}
 	
@@ -493,7 +515,7 @@ void GameLevel::Logic()
 {
 	CardLogic();
 	bulletLogic();
-	//attackPlantLogic();
+	attackPlantLogic();
 	attackZombieLogic();
 	carLogic();
 }
@@ -574,61 +596,114 @@ void GameLevel::carLogic()
 
 void GameLevel::attackPlantLogic()
 {
-	int firstZomX[5];
-	int firstPlantX[5];
-	for (int i = 0; i < 5; i++)
+	int LineZoms[5][MAXZOMBIESNUM] = {WIN_WIDTH + 1};         //每行的僵尸位置
+	int LinePlants[5][9] = {0};  //每行的植物
+	for (int m = 0; m < 5; m++)
 	{
-		firstZomX[i] = WIN_WIDTH + 1;	//初始化
-		firstPlantX[i] = 0;
+		int n = 0;
+		for (int i = 0; i < zombiesVector.size(); i++) {
+			if (zombiesVector.at(i).row == m) {
+				LineZoms[m][n] = zombiesVector.at(i).x;
+				n++;
+			}
+		}
 	}
-	for (int i = 0; i < zombiesVector.size(); i++)
+	for (int m = 0; m < 5; m++)
 	{
-		if (zombiesVector.at(i).x < firstZomX[zombiesVector.at(i).row])
+		int n = 0;
+		for (int i = 0; i < plantVector.size(); i++) {
+			if (plantVector.at(i).position.Y == m) {
+				LinePlants[m][n] = plantVector.at(i).position.X * PlantWidth + CarWidth + CarXSpace + 5;
+				n++;
+			}
+		}
+	}
+	vector<ZOMBIES_INFO>::iterator it;
+	vector<PLANT_INFO>::iterator iter;
+	for (int m = 0; m < 5 ; m++)
+	{
+		for (int n = 0; n < 9; n++)
 		{
-			firstZomX[zombiesVector.at(i).row] = zombiesVector.at(i).x;//遍历出每行第一个僵尸的地址
-		}
-	}
-	for (int i = 0; i < plantVector.size(); i++) {
-		if (plantVector.at(i).position.X > firstPlantX[plantVector.at(i).position.Y]) {
-			firstPlantX[plantVector.at(i).position.Y] = plantVector.at(i).position.X;
-		}
-	}
-	vector<PLANT_INFO>::iterator it;
-	for (it = plantVector.begin(); it != plantVector.end();it++) {
-		//ZOMBIES_INFO zom_info ;
-		int index = 0;
-		if ((firstPlantX[it->position.Y] + 1) * PlantWidth + CarWidth + CarXSpace >= firstZomX[it->position.Y] + 100)
-		{	
-			if (it->frame == 0) {
-				for (int i = 0; i < zombiesVector.size(); i++)
+			for (int i = 0; i < MAXZOMBIESNUM; i++) 
+			{
+				if (abs(LineZoms[m][i]+ 70- LinePlants[m][n]) <= 30) 
 				{
-					if (zombiesVector.at(i).x == firstZomX[it->position.Y]) {
-						////zombiesVector.at(i).sprite->SetSpeed(0);
-						////assignStruct(&zom_info,zombiesVector.at(i));
-						//temp_zom = zombiesVector.at(i);
-						//////ZOMBIES_INFO zom_info;
-						zombiesVector.at(i).info.X = zombiesVector.at(i).sprite->GetX();
-						zombiesVector.at(i).info.Y = zombiesVector.at(i).sprite->GetY();
-						zombiesVector.at(i).info.Speed = 0;
-						zombiesVector.at(i).info.Active = false;
-						zombiesVector.at(i).sprite = attackedZombies[4];
-						zombiesVector.at(i).sprite->Initiate(zombiesVector.at(i).info);
-						index = i;
-						break;
+					for (it = zombiesVector.begin(); it != zombiesVector.end(); it++) 
+					{
+						if (LineZoms[m][i] == it->x)
+						{
+							it->sprite->SetSpeed(0);
+							for (iter = plantVector.begin(); iter != plantVector.end(); iter++)
+							{
+								if (LinePlants[m][n] == iter->info.X)
+								{
+									it->sprite->SetSpeed(0);
+									it->sprite->SetVisible(false);
+									if (iter->attacked == false)
+									{
+										ZOMBIES_INFO zom_info;
+										zom_info = *it;
+										zom_info.info.Visible = true;
+										zom_info.info.X = it->sprite->GetX();
+										zom_info.info.Y = it->sprite->GetY();
+										zom_info.sprite = attackedZombies[4];
+										zom_info.sprite->Initiate(zom_info.info);
+										eatPlantZomsVector.push_back(zom_info);
+										iter->attacked = true;
+									}
+									iter->life--;
+									if (iter->life <= 0) {
+										iter = plantVector.erase(iter);
+										if (it->count < 6) {
+											it->sprite->SetSpeed(3);
+											it->sprite->SetVisible(true);
+											vector<ZOMBIES_INFO>::iterator eatPlant;
+											for (eatPlant = eatPlantZomsVector.begin(); eatPlant!= eatPlantZomsVector.end();)
+											{
+												if (eatPlant->x  == it->x) {
+													eatPlant = eatPlantZomsVector.erase(eatPlant);
+													if (eatPlant == eatPlantZomsVector.end()) {
+														break;
+													}
+												}
+												else
+												{
+													eatPlant++;
+												}
+											}
+										}
+										if (it->count == 6 && it->isChanged == false) {
+											it->info.X = it->sprite->GetX();
+											it->info.Y = it->sprite->GetY();
+											it->sprite = attackedZombies[3];
+											it->sprite->Initiate(it->info);
+											it->sprite->SetSequence(bodySequ, 15);
+											it->sprite->SetFrame(0);
+											ZOMBIES_INFO zom_header;
+											zom_header.info = it->info;
+											zom_header.info.Y = it->sprite->GetY() - 15;
+											zom_header.info.Speed = -5;
+											zom_header.count = it->count;
+											zom_header.row = it->row;
+											zom_header.x = it->x;
+											zom_header.sprite = attackedZombies[1];
+											zom_header.sprite->Initiate(zom_header.info);
+											ZOM_HEADER header;
+											header.zom_info = zom_header;
+											header.paintTimes = 0;
+											zoms_header.push_back(header);
+											it->isChanged = true;
+										}
+										if (iter == plantVector.end()) {
+											break;
+										}
+									}
+								}
+							}
+							break;
+						}
 					}
 				}
-			}
-			it->frame++;
-			if (it->frame >= 100){ 
-				////assignStruct(&zombiesVector.at(index), zom_info);
-				//zombiesVector.at(index).sprite = temp_zom.sprite;
-				//zombiesVector.at(index).info = temp_zom.info;
-				//zombiesVector.at(index).sprite->Initiate(temp_zom.info);
-				it = plantVector.erase(it);
-				if (it == plantVector.end()) {
-					break;
-				}
-				it = plantVector.begin();
 			}
 		}
 	}
@@ -775,7 +850,7 @@ void GameLevel::PlantMouseClick(int x, int y)
 	PLANT_INFO tempPlant;
 	x = x - CarXSpace - CarWidth;
 	y = y - YSpace;
-	tempPlant.position.X = x / PlantWidth;
+	tempPlant.position.X = x / PlantWidth;  
 	tempPlant.position.Y = y / PlantHeight;
 	for(int i = 0; i < plantVector.size(); i++)
 	{
@@ -801,7 +876,8 @@ void GameLevel::PlantMouseClick(int x, int y)
 	info.Visible = true;
 	
 	tempPlant.info = info;
-	tempPlant.frame = 0;
+	tempPlant.life = 50;
+	tempPlant.attacked = false;
 	plantVector.push_back(tempPlant);
 	sunlight = sunlight - plantCard[pointPlant].info.sunlight;
 	plantCard[pointPlant].nowTime = 0;

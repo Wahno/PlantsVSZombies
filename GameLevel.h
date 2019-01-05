@@ -41,7 +41,8 @@ typedef struct
 	Point position;		//所在行列
 	SPRITEINFO info;	//精灵信息
 	int pointNum;       //植物的标识
-	int frame;           //植物被攻击之后，停留的帧数
+	int life = 60;     //植物被攻击之后，停留的帧数
+	bool attacked = false;  //是否被攻击
 }PLANT_INFO;
 
 typedef struct
@@ -84,7 +85,7 @@ public:
 	static const int PlantWidth = 81;	//植物宽度
 	static const int PlantHeight = 100;	//植物高度
 
-	static const int MAXROW = 1;		//最多5行
+	static const int MAXROW = 5;		//最多5行
 	static const int MAXCOLUMN = 9;		//最多9列
 	static const int INDEXROW = 2;		//从第几行开始
 
@@ -164,6 +165,8 @@ private:
 	vector<ZOMBIES_ARRAY> zombiesArray;   //僵尸数组
 	T_Sprite* attackedZombies[5];  //变化僵尸容器
 	vector<ZOM_HEADER> zoms_header;
+	vector<ZOMBIES_INFO> eatPlantZomsVector;  //吃植物的僵尸
+
 
 	vector<SUN_INFO> sunlightVector;		//未收集的阳光
 	vector<BULLET_INFO> bulletVector;	//子弹容器
