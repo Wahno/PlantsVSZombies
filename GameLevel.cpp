@@ -610,8 +610,9 @@ void GameLevel::attackPlantLogic()
 										it->info.Y = it->sprite->GetY();
 										it->sprite = attackedZombies[2];
 										it->sprite->Initiate(it->info);
+										iter->attacked == false;
 									}
-									if (iter->attacked == false)
+									if(iter->attacked == false)
 									{
 										if (it->count < 6)
 										{
@@ -620,16 +621,21 @@ void GameLevel::attackPlantLogic()
 											it->info.Y = it->sprite->GetY();
 											it->sprite = attackedZombies[4];
 											it->sprite->Initiate(it->info);
+											iter->attacked = true;
 										}
-										iter->attacked = true;
+										else
+										{
+											it->info.Speed = 0;
+											it->info.X = it->sprite->GetX();
+											it->info.Y = it->sprite->GetY();
+											it->sprite = attackedZombies[3];
+											it->sprite->Initiate(it->info);
+										}
 									}
 									iter->life--;
 									if (iter->life <= 0)
 									{
 										iter = plantVector.erase(iter);
-										if (iter == plantVector.end()) {
-											break;
-										}
 										if (it->count < 6)
 										{
 											it->sprite->SetSpeed(3);
@@ -637,6 +643,9 @@ void GameLevel::attackPlantLogic()
 											it->sprite->SetVisible(true);
 											it->sprite = spriteZombie[it->typeNum];
 											it->sprite->Initiate(it->info);
+										}
+										if (iter == plantVector.end()) {
+											break;
 										}
 									}
 								}
