@@ -397,7 +397,7 @@ void GameLevel::DrawSunLight(HDC hdc)
 	//ฒ๚ษ๚ั๔นโ
 	for (int i = 0; i < plantVector.size(); i++) {
 		if (plantVector.at(i).pointNum == 0) {
-			if (trueFrame % 400 == 0) {
+			if (trueFrame % (600 - i * 10) == 0) {
 				ProduceSunLight();
 			}
 		}
@@ -414,6 +414,13 @@ void GameLevel::DrawSunLight(HDC hdc)
 	{
 		if (iter->isPicked == false) {
 			Sun.PaintImage(hdc, iter->pt.x, iter->pt.y, Sun.GetImageWidth(), Sun.GetImageHeight(), 255);
+		}
+		else
+		{
+			iter = sunlightVector.erase(iter);
+			if (iter == sunlightVector.end()) {
+				break;
+			}
 		}
 	}
 }
@@ -845,8 +852,10 @@ void GameLevel::sunlightMouseClick(int x, int y)
 		rect.bottom = rect.top + Sun.GetImageHeight();
 		pt = { x,y };
 		if(PtInRect(&rect,pt)) {
-			it->isPicked = true;
-			sunlight = sunlight + 25;
+			if (it->isPicked == false) {
+				it->isPicked = true;
+				sunlight = sunlight + 25;
+			}
 		}
 	}
 }
