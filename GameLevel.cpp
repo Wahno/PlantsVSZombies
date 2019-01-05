@@ -7,7 +7,7 @@ void GameLevel::Init()
 	bg_img.LoadImageFile(L"res\\images\\interface\\background1unsodded_1.jpg");
 	shadow_img.LoadImageFile(L"res\\images\\interface\\plantshadow32.png");
 	Sunlight_img.LoadImageFile(L"res\\images\\interface\\SunBack.png");
-	
+	Sun.LoadImageFile(L"res\\images\\interface\\Sun.gif");
 	InitScene(0,0, bg_img.GetImageWidth(), bg_img.GetImageHeight(),WIN_WIDTH, WIN_HEIGHT);
 
 	sunlight = 300;	//初始阳光值
@@ -51,6 +51,7 @@ void GameLevel::ZombiesInit()
 	attackedZombies[1] = new T_Sprite(L"res\\images\\Zombies\\Zombie\\ZombieHead_12.png",150,186);
 	attackedZombies[2] = new T_Sprite(L"res\\images\\Zombies\\Zombie\\ZombieLostHeadAttack11.png",166,144);
 	attackedZombies[3] = new T_Sprite(L"res\\images\\Zombies\\Zombie\\ZombieDie_10.png",166,144);
+	attackedZombies[4] = new T_Sprite(L"res\\images\\Zombies\\Zombie\\ZombieAttack_21.png", 166, 144);
 	spriteZombie[0] = new T_Sprite(L"res\\images\\Zombies\\Zombie\\Zombie0_18.png",166,144);
 	spriteZombie[1] = new T_Sprite(L"res\\images\\Zombies\\Zombie\\Zombie_22.png",166,144);
 	ZOMBIES_ARRAY zombies_array;
@@ -106,6 +107,7 @@ void GameLevel::CarInit()
 		car[i].car = new T_Graph(carImagePath);
 		car[i].row = INDEXROW +i;
 		car[i].state = true;
+		car[i].x = CarXSpace;
 	}
 }
 
@@ -171,6 +173,7 @@ void GameLevel::DrawZombies(HDC hdc)
 			zombie_info.sprite = spriteZombie[zombiesArray.at(i).zombiesindex];
 			zombie_info.row = 2;
 			zombie_info.x = WIN_WIDTH;  //僵尸横坐标
+			zombie_info.isChanged = false;
 			zombie_info.count = 0;  
 			zombie_info.isChanged = false;
 			info.X = zombie_info.x;
@@ -185,29 +188,39 @@ void GameLevel::DrawZombies(HDC hdc)
 	{
 		if (it->count == 6) { /*豌豆与僵尸碰撞6次之后*/
 			if (it->isChanged == false) {
-				//int sequence[15] = {0,0,0,0,1,1,2,3,4,5,6,7,8,9,10 };
-				it->info.X = it->sprite->GetX();
-				it->info.Y = it->sprite->GetY();
-				it->sprite = attackedZombies[3];
-				it->sprite->Initiate(it->info);
-				it->sprite->SetSequence(bodySequ,15);
-				it->sprite->SetFrame(0);
-				ZOMBIES_INFO zom_header;
-				zom_header.info = it->info;
-				zom_header.info.Y = it->sprite->GetY() - 15;
-				zom_header.info.Speed = -5;
-				zom_header.count = it->count;
-				zom_header.row = it->row;
-				zom_header.x = it->x;
-				zom_header.sprite = attackedZombies[1];
-				zom_header.sprite->Initiate(zom_header.info);
-				ZOM_HEADER header;
-				header.zom_info = zom_header;
-				header.paintTimes = 0;
-			//	zom_header.sprite->SetSequence(headerSequ,20);
-				zoms_header.push_back(header);
-				it->isChanged = true;
-			}
+				/*	if (it->sprite->IsActive() == false) {
+						it->info.X = it->sprite->GetX();
+						it->info.Y = it->sprite->GetY();
+						it->info.Speed = 0;
+						it->sprite = attackedZombies[2];
+						it->sprite->Initiate(it->info);
+						it->sprite->SetFrame(0);
+						it->isChanged = true;
+					}
+					else
+					{*/
+						it->info.X = it->sprite->GetX();
+						it->info.Y = it->sprite->GetY();
+						it->sprite = attackedZombies[3];
+						it->sprite->Initiate(it->info);
+						it->sprite->SetSequence(bodySequ, 15);
+						it->sprite->SetFrame(0);
+						ZOMBIES_INFO zom_header;
+						zom_header.info = it->info;
+						zom_header.info.Y = it->sprite->GetY() - 15;
+						zom_header.info.Speed = -5;
+						zom_header.count = it->count;
+						zom_header.row = it->row;
+						zom_header.x = it->x;
+						zom_header.sprite = attackedZombies[1];
+						zom_header.sprite->Initiate(zom_header.info);
+						ZOM_HEADER header;
+						header.zom_info = zom_header;
+						header.paintTimes = 0;
+						zoms_header.push_back(header);
+						it->isChanged = true;
+				/*	}*/
+				}
 		}
 		if (it->count == 8) {
 			it = zombiesVector.erase(it);
@@ -227,7 +240,7 @@ void GameLevel::DrawZombies(HDC hdc)
 	}
 	vector<ZOM_HEADER>::iterator iter;
 	for (iter = zoms_header.begin(); iter != zoms_header.end(); iter++) {
-		if (iter->paintTimes <= 11) {
+		if (iter->paintTimes <= 10) {
 			iter->zom_info.sprite->Draw(hdc);
 			iter->zom_info.x = iter->zom_info.sprite->GetX();
 			int speed = iter->zom_info.sprite->GetSpeed();
@@ -366,15 +379,44 @@ void GameLevel::DrawCar(HDC hdc)
 {
 	for (int i = 0; i < MAXCARNUM; i++) 
 	{
+		if (car[i].car == NULL) {
+			continue;
+		}
 		if (car[i].state == true)
 		{
-			car[i].car->PaintImage(hdc, CarXSpace, car[i].row*PlantHeight + YSpace+20, car[i].car->GetImageWidth(), car[i].car->GetImageHeight(),255);
-		}	
+			car[i].car->PaintImage(hdc,CarXSpace, car[i].row*PlantHeight + YSpace+20, car[i].car->GetImageWidth(), car[i].car->GetImageHeight(),255);
+		}
+		else
+		{
+			if (car[i].x <= WIN_WIDTH) {
+				car[i].x += CAR_LENGTH;
+				car[i].car->PaintImage(hdc, car[i].x, car[i].row*PlantHeight + YSpace + 20, car[i].car->GetImageWidth(), car[i].car->GetImageHeight(), 255);
+			}
+			else
+			{
+				car[i].car = NULL;
+			}
+		}
 	}
 }
 
 void GameLevel::DrawSunLight(HDC hdc)
 {
+	int countSun = 0;
+	for (int i = 0; i < plantVector.size(); i++) {
+		if (plantVector.at(i).pointNum == 0) {
+			countSun++;
+		}
+	}
+	//产生阳光	
+	if (frameCount >= 300) {
+		for (int i = 0; i < countSun; i++)
+		{
+			if (trueFrame % 500 == 0) {
+				ProduceSunLight();
+			}
+		}
+	}
 	Sunlight_img.PaintImage(hdc, 100, 10, Sunlight_img.GetImageWidth(), Sunlight_img.GetImageHeight(), 255);
 	RectF infoRec;
 	infoRec.X = (float)125;
@@ -382,6 +424,25 @@ void GameLevel::DrawSunLight(HDC hdc)
 	infoRec.Width = (float)100;
 	infoRec.Height = (float)30;
 	T_Graph::PaintText(hdc, infoRec, T_Util::int_to_wstring(sunlight), 20, L"黑体", Color::Black, FontStyleBold, StringAlignmentCenter);
+	vector<SUN_INFO>::iterator iter;
+	for (iter = sunlightVector.begin(); iter != sunlightVector.end();iter ++)
+	{
+		if (iter->isPicked == false) {
+			Sun.PaintImage(hdc, iter->pt.x, iter->pt.y, Sun.GetImageWidth(), Sun.GetImageHeight(), 255);
+		}
+	}
+}
+
+void GameLevel::ProduceSunLight()
+{
+	srand((unsigned int)time(NULL));
+	SUN_INFO sun;
+	int posX = rand() % WIN_WIDTH;
+	int posY = rand() % WIN_HEIGHT;
+	POINT pt = { posX,posY};
+	sun.isPicked = false;
+	sun.pt = pt;
+	sunlightVector.push_back(sun);
 }
 
 void GameLevel::DrawClickPlant(HDC hdc, int x, int y)
@@ -456,13 +517,123 @@ void GameLevel::CardLogic()
 
 void GameLevel::carLogic()
 {
+	int firstZomX[5];
+	for (int i = 0; i < 5; i++)
+	{
+		firstZomX[i] = WIN_WIDTH + 1;	//初始化
+	}
+	for (int i = 0; i < zombiesVector.size(); i++)
+	{
+		if (zombiesVector.at(i).x < firstZomX[zombiesVector.at(i).row])
+		{
+			firstZomX[zombiesVector.at(i).row] = zombiesVector.at(i).x;//遍历出每行第一个僵尸的地址
+		}
+	}
+	for (int i = 0; i < MAXCARNUM; i++) {
+		if (CarXSpace + CarWidth >= firstZomX[car[i].row]+100) {
+			for (int j = 0; j < zombiesVector.size(); j++)
+			{
+				if ((firstZomX[car[i].row] == zombiesVector.at(j).x)) {
+					if (car[i].state == true)
+					{
+						zombiesVector.at(j).info.X = zombiesVector.at(j).sprite->GetX();
+						zombiesVector.at(j).info.Y = zombiesVector.at(j).sprite->GetY();
+						zombiesVector.at(j).sprite = attackedZombies[3];
+						zombiesVector.at(j).sprite->Initiate(zombiesVector.at(j).info);
+						zombiesVector.at(j).sprite->SetSequence(bodySequ, 15);
+						zombiesVector.at(j).sprite->SetFrame(0);
+						ZOMBIES_INFO zom_header;
+						zom_header.info = zombiesVector.at(j).info;
+						zom_header.info.Y = zombiesVector.at(j).sprite->GetY() - 15;
+						zom_header.info.Speed = -5;
+						zom_header.count = zombiesVector.at(j).count;
+						zom_header.row = zombiesVector.at(j).row;
+						zom_header.x = zombiesVector.at(j).x;
+						zom_header.sprite = attackedZombies[1];
+						zom_header.sprite->Initiate(zom_header.info);
+						ZOM_HEADER header;
+						header.zom_info = zom_header;
+						header.paintTimes = 0;
+						zoms_header.push_back(header);
+						zombiesVector.at(j).isChanged = true;
+						zombiesVector.at(j).count = 6;
+						car[i].state = false;
+						break;
+					}
+					else
+					{
+						if (trueFrame % 100 == 0) {
+							zombiesVector.at(j).count++;
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
 
 
 void GameLevel::attackPlantLogic()
 {
-
+	int firstZomX[5];
+	int firstPlantX[5];
+	for (int i = 0; i < 5; i++)
+	{
+		firstZomX[i] = WIN_WIDTH + 1;	//初始化
+		firstPlantX[i] = 0;
+	}
+	for (int i = 0; i < zombiesVector.size(); i++)
+	{
+		if (zombiesVector.at(i).x < firstZomX[zombiesVector.at(i).row])
+		{
+			firstZomX[zombiesVector.at(i).row] = zombiesVector.at(i).x;//遍历出每行第一个僵尸的地址
+		}
+	}
+	for (int i = 0; i < plantVector.size(); i++) {
+		if (plantVector.at(i).position.X > firstPlantX[plantVector.at(i).position.Y]) {
+			firstPlantX[plantVector.at(i).position.Y] = plantVector.at(i).position.X;
+		}
+	}
+	vector<PLANT_INFO>::iterator it;
+	for (it = plantVector.begin(); it != plantVector.end();it++) {
+		//ZOMBIES_INFO zom_info ;
+		int index = 0;
+		if ((firstPlantX[it->position.Y] + 1) * PlantWidth + CarWidth + CarXSpace >= firstZomX[it->position.Y] + 100)
+		{	
+			if (it->frame == 0) {
+				for (int i = 0; i < zombiesVector.size(); i++)
+				{
+					if (zombiesVector.at(i).x == firstZomX[it->position.Y]) {
+						////zombiesVector.at(i).sprite->SetSpeed(0);
+						////assignStruct(&zom_info,zombiesVector.at(i));
+						//temp_zom = zombiesVector.at(i);
+						//////ZOMBIES_INFO zom_info;
+						zombiesVector.at(i).info.X = zombiesVector.at(i).sprite->GetX();
+						zombiesVector.at(i).info.Y = zombiesVector.at(i).sprite->GetY();
+						zombiesVector.at(i).info.Speed = 0;
+						zombiesVector.at(i).info.Active = false;
+						zombiesVector.at(i).sprite = attackedZombies[4];
+						zombiesVector.at(i).sprite->Initiate(zombiesVector.at(i).info);
+						index = i;
+						break;
+					}
+				}
+			}
+			it->frame++;
+			if (it->frame >= 100){ 
+				////assignStruct(&zombiesVector.at(index), zom_info);
+				//zombiesVector.at(index).sprite = temp_zom.sprite;
+				//zombiesVector.at(index).info = temp_zom.info;
+				//zombiesVector.at(index).sprite->Initiate(temp_zom.info);
+				it = plantVector.erase(it);
+				if (it == plantVector.end()) {
+					break;
+				}
+				it = plantVector.begin();
+			}
+		}
+	}
 }
 
 void GameLevel::attackZombieLogic()
@@ -632,6 +803,7 @@ void GameLevel::PlantMouseClick(int x, int y)
 	info.Visible = true;
 	
 	tempPlant.info = info;
+	tempPlant.frame = 0;
 	plantVector.push_back(tempPlant);
 	sunlight = sunlight - plantCard[pointPlant].info.sunlight;
 	plantCard[pointPlant].nowTime = 0;
@@ -639,6 +811,20 @@ void GameLevel::PlantMouseClick(int x, int y)
 
 void GameLevel::sunlightMouseClick(int x, int y)
 {
+	RECT rect  ;
+	POINT pt;
+	vector<SUN_INFO>::iterator it;
+	for (it = sunlightVector.begin(); it != sunlightVector.end(); it++) {
+		rect.left = it->pt.x;
+		rect.top = it->pt.y;
+		rect.right = rect.left + Sun.GetImageWidth();
+		rect.bottom = rect.top + Sun.GetImageHeight();
+		pt = { x,y };
+		if(PtInRect(&rect,pt)) {
+			it->isPicked = true;
+			sunlight = sunlight + 25;
+		}
+	}
 }
 
 void GameLevel::MouseMove(int x, int y)

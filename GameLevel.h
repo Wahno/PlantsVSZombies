@@ -32,6 +32,7 @@ typedef struct
 {
 	T_Graph* car;
 	int row;			//第几行
+	int x;   //横坐标
 	bool state;			//状态 false->已经没有车了
 }CAR_INFO;
 typedef struct
@@ -40,6 +41,7 @@ typedef struct
 	Point position;		//所在行列
 	SPRITEINFO info;	//精灵信息
 	int pointNum;       //植物的标识
+	int frame;           //植物被攻击之后，停留的帧数
 }PLANT_INFO;
 
 typedef struct
@@ -66,6 +68,11 @@ typedef struct
 	Point position;		//子弹位置，x->x坐标，y->第几行
 	int frame = 10;		//子弹击中后播放帧数
 }BULLET_INFO;
+typedef struct {
+	bool isPicked;     ///是否被拾取
+	POINT pt;          //位置
+	//POINT nowPt;
+}SUN_INFO;
 class GameLevel : public T_Scene
 {
 public:
@@ -83,8 +90,9 @@ public:
 	static const int INDEXROW = 2;		//从第几行开始
 
 	static const int BULLET_LENGTH = 2;	//子弹步长
+	static const int CAR_LENGTH = 5;   //小车步长
+	static const int SUN_LENGTH = 10;  //阳光步长
 	static int bodySequ[15];
-	//static int headerSequ[20];
 
 	void Init();					//初始化
 	void CutsceneInit();			//初始化过场动画
@@ -104,6 +112,7 @@ public:
 	void DrawCard(HDC hdc);			//绘制植物卡
 	void DrawCar(HDC hdc);			//绘制小推车
 	void DrawSunLight(HDC hdc);		//绘制阳光
+	void ProduceSunLight();          //产生随机阳光
 	void DrawClickPlant(HDC hdc,int x,int y);
 	void Draw(HDC hdc);				//场景绘制
 
@@ -128,7 +137,7 @@ private:
 	wstring levelName;				//关卡名
 	T_Graph bg_img;					//背景图片
 	T_Graph shadow_img;				//阴影图片
-	
+	ZOMBIES_INFO temp_zom;
 
 	//过场动画部分
 	bool cutsceneFlag = false;		//过场动画标志
@@ -139,7 +148,8 @@ private:
 	int moveLength;					//过场动画移动步长
 
 	//游戏部分
-	T_Graph Sunlight_img;			//阳光图片
+	T_Graph Sunlight_img;			//阳光面板图片
+	T_Graph Sun;					//阳光图片
 	
 	bool pointState = false;		//指针状态,false->没有选中植物，true->选中植物但没种下
 
@@ -153,10 +163,10 @@ private:
 	vector<ZOMBIES_INFO> zombiesVector;//僵尸容器
 	T_Sprite* spriteZombie[MAXZOMBIESNUM];//僵尸精灵图
 	vector<ZOMBIES_ARRAY> zombiesArray;   //僵尸数组
-	T_Sprite* attackedZombies[4];  //被打中的僵尸容器
+	T_Sprite* attackedZombies[5];  //变化僵尸容器
 	vector<ZOM_HEADER> zoms_header;
 
-	vector<POINT> sunlightVector;		//未收集的阳光
+	vector<SUN_INFO> sunlightVector;		//未收集的阳光
 	vector<BULLET_INFO> bulletVector;	//子弹容器
 	T_Graph bullet;					//子弹图
 	T_Graph bulletHit;				//击中效果

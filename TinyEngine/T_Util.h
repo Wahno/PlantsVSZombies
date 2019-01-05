@@ -53,4 +53,5 @@ public:
 		OUT int& xRatio, OUT int& yRatio
 	);
 	static wchar_t * multiByteToWideChar(const string & pKey);
+
 };

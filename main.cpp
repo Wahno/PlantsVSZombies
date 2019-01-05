@@ -9,6 +9,6 @@ int WINAPI wWinMain(HINSTANCE h_Instance,
 
 	PVZ_Game* pGame = new PVZ_Game(h_Instance, WIN_CLASS, WinTitle, IDI_ICON_MAIN, IDI_ICON_MAIN, WIN_WIDTH, WIN_HEIGHT);
 	T_Engine::pEngine = pGame;
-	pGame->SetFrame(60);
+	pGame->SetFrame(70);
 	pGame->StartEngine();
 }
