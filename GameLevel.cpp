@@ -510,7 +510,7 @@ void GameLevel::Draw(HDC hdc)
 		//»­½ø¶ÈÌõ
 		DrawProgressBar(hdc);
 		if (winImage != NULL) {
-			winImage->PaintImage(hdc, WIN_WIDTH / 2 - winImage->GetImageWidth(),WIN_HEIGHT / 2 - winImage->GetImageHeight());
+			winImage->PaintImage(hdc, WIN_WIDTH / 2 - winImage->GetImageWidth(),WIN_HEIGHT / 2 - winImage->GetImageHeight(), winImage->GetImageWidth(), winImage->GetImageHeight(),255);
 		}
 	}
 
