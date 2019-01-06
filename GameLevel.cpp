@@ -67,13 +67,13 @@ void GameLevel::ZombiesInit()
 	for (int i = MAXZOMBIESNUM / 3; i < MAXZOMBIESNUM * 2 / 3; i++)
 	{
 		zombies_array.zombiesindex = i;
-		zombies_array.frame = (2 * MAXZOMBIESNUM / 3 + 1)* 200 + (i - MAXZOMBIESNUM / 3) * 100;
+		zombies_array.frame = (2 * MAXZOMBIESNUM / 3 + 1)*300 + (i - MAXZOMBIESNUM / 3) * 500;
 		zombiesArray.push_back(zombies_array);
 	}
 	for (int i = MAXZOMBIESNUM * 2/ 3; i < MAXZOMBIESNUM ; i++)
 	{ 
 		zombies_array.zombiesindex = i;
-		zombies_array.frame = (2 * MAXZOMBIESNUM / 3 + 1) * 200 + ( MAXZOMBIESNUM / 3) * 100 + 500;
+		zombies_array.frame = (2 * MAXZOMBIESNUM / 3 + 1) * 300 + ( MAXZOMBIESNUM / 3) * 500 + 600 + i * 150;
 		zombiesArray.push_back(zombies_array);
 	}
 }
@@ -136,6 +136,7 @@ void GameLevel::AudioInit(AudioDX &ds)
 	click_buffer.LoadWave(ds, L"res\\audio\\buttonclick.wav");
 	bulletZom_buffer.LoadWave(ds,L"res\\audio\\grassstep.wav");
 	clickSun_buffer.LoadWave(ds,L"res\\audio\\points.wav");
+	zomEnter_buffer.LoadWave(ds,L"res\\audio\\groan4.wav");
 }
 
 void GameLevel::BullentInit()
@@ -203,6 +204,7 @@ void GameLevel::DrawZombies(HDC hdc)
 			zombie_info.info = info;
 			zombiesVector.push_back(zombie_info);
 			zombiesVector.back().sprite->Initiate(info);
+			zomEnter_buffer.Play(false);
 		}
 	}
 	vector<ZOMBIES_INFO>::iterator it;

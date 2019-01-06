@@ -193,7 +193,8 @@ private:
 	AudioDXBuffer eatPlant_buffer;   //吃植物的音乐
 	AudioDXBuffer click_buffer;  //点击
 	AudioDXBuffer bulletZom_buffer;  //子弹攻击植物的
-	AudioDXBuffer clickSun_buffer;
+	AudioDXBuffer clickSun_buffer; //点击阳光
+	AudioDXBuffer zomEnter_buffer;  //僵尸入场音乐
 
 
 };
