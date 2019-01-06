@@ -91,8 +91,7 @@ public:
 	static const int INDEXROW = 2;		//从第几行开始
 
 	static const int BULLET_LENGTH = 2;	//子弹步长
-	static const int CAR_LENGTH = 5;   //小车步长
-	static const int SUN_LENGTH = 10;  //阳光步长
+	static const int CAR_LENGTH = 20;   //小车步长
 	static int bodySequ[15];
 
 	void Init();					//初始化
@@ -181,7 +180,7 @@ private:
 
 	int sunlight = 0;				//阳光数
 
-	CAR_INFO car[MAXCARNUM];		//小推车
+	CAR_INFO car[MAXROW];		//小推车
 	
 	int frameCount = 0;				//帧计数器
 	int trueFrame = 0;				//画了多少帧

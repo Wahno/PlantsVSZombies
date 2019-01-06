@@ -106,10 +106,10 @@ void GameLevel::CardInit()
 void GameLevel::CarInit()
 {
 	wstring carImagePath = L"res\\images\\interface\\LawnCleaner.png";
-	for (int i = 0; i < MAXCARNUM; i++)
+	for (int i = 0; i < MAXROW; i++)
 	{
 		car[i].car = new T_Graph(carImagePath);
-		car[i].row = INDEXROW +i;
+		car[i].row = i;
 		car[i].state = true;
 		car[i].x = CarXSpace;
 	}
@@ -369,27 +369,27 @@ void GameLevel::DrawCard(HDC hdc)
 
 void GameLevel::DrawCar(HDC hdc)
 {
-	for (int i = 0; i < MAXCARNUM; i++) 
-	{
-		if (car[i].car == NULL) {
+		int i = 2;
+	
+		/*if (car[i].car == NULL) {
 			continue;
-		}
+		}*/
 		if (car[i].state == true)
 		{
-			car[i].car->PaintImage(hdc,CarXSpace, car[i].row*PlantHeight + YSpace+20, car[i].car->GetImageWidth(), car[i].car->GetImageHeight(),255);
+			car[i].car->PaintImage(hdc,CarXSpace, (car[i].row)*PlantHeight + YSpace+20, car[i].car->GetImageWidth(), car[i].car->GetImageHeight(),255);
 		}
 		else
 		{
 			if (car[i].x <= WIN_WIDTH) {
 				car[i].x += CAR_LENGTH;
-				car[i].car->PaintImage(hdc, car[i].x, car[i].row*PlantHeight + YSpace + 20, car[i].car->GetImageWidth(), car[i].car->GetImageHeight(), 255);
+				car[i].car->PaintImage(hdc, car[i].x, (car[i].row)*PlantHeight + YSpace + 20, car[i].car->GetImageWidth(), car[i].car->GetImageHeight(), 255);
 			}
 			else
 			{
 				car[i].car = NULL;
 			}
 		}
-	}
+	
 }
 
 void GameLevel::DrawSunLight(HDC hdc)
@@ -510,58 +510,60 @@ void GameLevel::CardLogic()
 
 void GameLevel::carLogic()
 {
-	int firstZomX[5];
-	for (int i = 0; i < 5; i++)
+	int LineZoms[5][MAXZOMBIESNUM];         //每行的僵尸位置
+	for (int i = 0; i < 5; i++) //初始化
 	{
-		firstZomX[i] = WIN_WIDTH + 1;	//初始化
-	}
-	for (int i = 0; i < zombiesVector.size(); i++)
-	{
-		if (zombiesVector.at(i).x < firstZomX[zombiesVector.at(i).row])
+		for (int j = 0; j < MAXZOMBIESNUM; j++)
 		{
-			firstZomX[zombiesVector.at(i).row] = zombiesVector.at(i).x;//遍历出每行第一个僵尸的地址
+			LineZoms[i][j] = WIN_WIDTH + 1;
 		}
 	}
-	for (int i = 0; i < MAXCARNUM; i++) {
-		if (CarXSpace + CarWidth >= firstZomX[car[i].row]+100) {
-			for (int j = 0; j < zombiesVector.size(); j++)
+	for (int m = 0; m < 5; m++)
+	{
+		int n = 0;
+		for (int i = 0; i < zombiesVector.size(); i++) 
+		{
+			if (zombiesVector.at(i).row == m) 
 			{
-				if ((firstZomX[car[i].row] == zombiesVector.at(j).x)) {
-					if (car[i].state == true)
+				if (LineZoms[m][0] >= zombiesVector.at(i).x)  //将每行僵尸坐标最小的存在第一个
+				{
+					LineZoms[m][n] = LineZoms[m][0];
+					LineZoms[m][0] = zombiesVector.at(i).x;
+
+				}
+				else
+				{
+					LineZoms[m][n] = zombiesVector.at(i).x;
+				}
+				n++;
+			}
+		}
+	}
+	vector<ZOMBIES_INFO>::iterator iter;
+	for (int m = 0; m < 5; m++)
+	{
+		if (CarXSpace + CarWidth >= LineZoms[m][0] +70)
+		{
+			if (car[m].state == true) 
+			{
+				for ( iter = zombiesVector.begin(); iter != zombiesVector.end();)
+				{
+					if (car[m].row == iter->row)
 					{
-						zombiesVector.at(j).info.X = zombiesVector.at(j).sprite->GetX();
-						zombiesVector.at(j).info.Y = zombiesVector.at(j).sprite->GetY();
-						zombiesVector.at(j).sprite = attackedZombies[3];
-						zombiesVector.at(j).sprite->Initiate(zombiesVector.at(j).info);
-						zombiesVector.at(j).sprite->SetSequence(bodySequ, 15);
-						zombiesVector.at(j).sprite->SetFrame(0);
-						ZOMBIES_INFO zom_header;
-						zom_header.info = zombiesVector.at(j).info;
-						zom_header.info.Y = zombiesVector.at(j).sprite->GetY() - 15;
-						zom_header.info.Speed = -5;
-						zom_header.count = zombiesVector.at(j).count;
-						zom_header.row = zombiesVector.at(j).row;
-						zom_header.x = zombiesVector.at(j).x;
-						zom_header.sprite = attackedZombies[1];
-						zom_header.sprite->Initiate(zom_header.info);
-						ZOM_HEADER header;
-						header.zom_info = zom_header;
-						header.paintTimes = 0;
-						zoms_header.push_back(header);
-						zombiesVector.at(j).isChanged = true;
-						zombiesVector.at(j).count = 6;
-						car[i].state = false;
-						break;
+						iter = zombiesVector.erase(iter);
+						if (iter == zombiesVector.end()) {
+							break;
+						}
 					}
 					else
 					{
-						if (trueFrame % 50 == 0) {
-							zombiesVector.at(j).count++;
-						}
+						iter++;
 					}
 				}
+				car[m].state = false;
 			}
 		}
+			
 	}
 }
 
