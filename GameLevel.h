@@ -167,7 +167,7 @@ private:
 	vector<ZOMBIES_ARRAY> zombiesArray;   //僵尸数组
 	T_Sprite* attackedZombies[5];  //变化僵尸容器
 	vector<ZOM_HEADER> zoms_header;
-	vector<ZOMBIES_INFO> eatPlantZomsVector;  //吃植物的僵尸
+
 
 
 	vector<SUN_INFO> sunlightVector;		//未收集的阳光

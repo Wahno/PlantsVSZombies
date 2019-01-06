@@ -73,10 +73,8 @@ void PVZ_Game::GamePaint(HDC hdc)
 			handMenu.HandBookState = 38;
 		}else if (handMenu.HandBookState >= 2 && handMenu.HandBookState <= 37) {
 			handMenu.DrawPlantFrameInfo(hdc, handMenu.HandBookState - 2);
-			//handMenu.HandBookState = 50;
 		}else if (handMenu.HandBookState >= 38 && handMenu.HandBookState <= 48) {
 			handMenu.DrawZomFrameInfo(hdc, handMenu.HandBookState - 38);
-			//handMenu.HandBookState = 50;
 		}
 		else
 		{

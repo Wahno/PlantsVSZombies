@@ -686,15 +686,6 @@ void GameLevel::attackPlantLogic()
 										if (iter == plantVector.end()) {
 											break;
 										}
-										if (it->count > 6 && it->isChanged == true)
-										{
-											/*it = zombiesVector.erase(it);
-											if (it == zombiesVector.end()) {
-											break;
-											}*/
-											it->count++;
-											
-										}
 									}
 									break;
 								}
@@ -923,4 +914,27 @@ void GameLevel::TestDraw(HDC hdc)
 	{
 		T_Graph::PaintBlank(hdc, 0, 80+100*i, WinWidth, 1, Color::Black, 255);//第一行Y80,行间距100
 	}
+}
+
+void GameLevel::ClearGameLevel()
+{
+	delete[]plant; 
+	delete[]spritePlant;
+	delete[] spriteZombie;
+	delete[] attackedZombies;
+	delete[] plantCard;
+	//清空容器
+	 plantVector.clear();			plantVector.swap(vector<PLANT_INFO>());
+	zombiesVector.clear();			zombiesVector.swap(vector<ZOMBIES_INFO>());
+	zombiesArray.clear();			zombiesArray.swap(vector<ZOMBIES_ARRAY>());
+	zoms_header.clear();			zoms_header.swap(vector<ZOM_HEADER>());
+	
+	 bg_buffer.Release();		//背景音乐
+	 cutscene_buffer.Release();	//过场动画音乐
+	 car_buffer.Release();        //小车移动
+	 eatPlant_buffer.Release();   //吃植物的音乐
+	 click_buffer.Release();  //点击
+	 bulletZom_buffer.Release();  //子弹攻击植物的
+	 clickSun_buffer.Release(); //点击阳光
+	 zomEnter_buffer.Release();  //僵尸入场音乐
 }
