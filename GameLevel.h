@@ -59,6 +59,7 @@ typedef struct
 	int count;           //僵尸被击中次数
 	bool isChanged;         //是否改变图片
 	int typeNum; 
+	int frame = 110;   //死掉之后存在的帧数
 }ZOMBIES_INFO;
 typedef struct {
 	ZOMBIES_INFO zom_info;

@@ -59,21 +59,24 @@ void GameLevel::ZombiesInit()
 	spriteZombie[4] = new T_Sprite(L"res\\images\\Zombies\\Zombie\\Zombie0_18.png", 166, 144);
 	//spriteZombie[1] = new T_Sprite(L"res\\images\\Zombies\\Zombie\\Zombie_22.png", 166, 144);
 	ZOMBIES_ARRAY zombies_array;
-	for (int i = 0; i < MAXZOMBIESNUM / 3; i++) {
+	zombies_array.zombiesindex = 0;
+	zombies_array.frame = 1000;
+	zombiesArray.push_back(zombies_array);
+	for (int i = 1; i < MAXZOMBIESNUM / 3; i++) {
 		zombies_array.zombiesindex = i;
-		zombies_array.frame = (2 * i + 1) * 300;
+		zombies_array.frame = 1000+(2 * i + 1) * 300;
 		zombiesArray.push_back(zombies_array);
 	}
 	for (int i = MAXZOMBIESNUM / 3; i < MAXZOMBIESNUM * 2 / 3; i++)
 	{
 		zombies_array.zombiesindex = i;
-		zombies_array.frame = (2 * MAXZOMBIESNUM / 3 + 1)*300 + (i - MAXZOMBIESNUM / 3) * 500;
+		zombies_array.frame = 1000+(2 * MAXZOMBIESNUM / 3 + 1)*300 + (i - MAXZOMBIESNUM / 3) * 500;
 		zombiesArray.push_back(zombies_array);
 	}
 	for (int i = MAXZOMBIESNUM * 2/ 3; i < MAXZOMBIESNUM ; i++)
 	{ 
 		zombies_array.zombiesindex = i;
-		zombies_array.frame = (2 * MAXZOMBIESNUM / 3 + 1) * 300 + ( MAXZOMBIESNUM / 3) * 500 + 600 + i * 150;
+		zombies_array.frame = 1000+(2 * MAXZOMBIESNUM / 3 + 1) * 300 + ( MAXZOMBIESNUM / 3) * 500 + 600 + i * 150;
 		zombiesArray.push_back(zombies_array);
 	}
 }
@@ -202,6 +205,7 @@ void GameLevel::DrawZombies(HDC hdc)
 			info.X = zombie_info.x;
 			info.Y = (zombie_info.row) * PlantHeight ; //僵尸纵坐标
 			zombie_info.info = info;
+			zombie_info.frame = 110;
 			zombiesVector.push_back(zombie_info);
 			zombiesVector.back().sprite->Initiate(info);
 			zomEnter_buffer.Play(false);
@@ -232,7 +236,10 @@ void GameLevel::DrawZombies(HDC hdc)
 			zoms_header.push_back(header);
 			it->isChanged = true;
 		}
-		if (it->count == 8) {
+		if (it->count >= 6 && it->frame > 0) {
+			it->frame--;
+		}
+		if (it->frame <= 0) {
 			it = zombiesVector.erase(it);
 			if (it == zombiesVector.end()) {
 				break;
@@ -262,8 +269,8 @@ void GameLevel::DrawZombies(HDC hdc)
 				iter->zom_info.sprite->Move(-speed, 0);
 			}
 		}
-		
-		if (iter->zom_info.count == 7) {
+		else
+		{
 			iter = zoms_header.erase(iter);
 		}
 		if (iter == zoms_header.end()) {
@@ -633,11 +640,8 @@ void GameLevel::attackPlantLogic()
 							{
 								if (LinePlants[m][n] == iter->info.X)
 								{
-									if (it->count == 6 && it->isChanged == true && iter->attacked == false) {
-										break;  //子弹打中6次，图片
-									}
 									it->sprite->SetSpeed(0);
-									if (it->count == 6 && iter->attacked == true && it->isChanged == false)
+									if (it->count >= 6 && iter->attacked == true && it->isChanged == false)
 									{
 										it->info.X = it->sprite->GetX();
 										it->info.Y = it->sprite->GetY();
@@ -681,6 +685,15 @@ void GameLevel::attackPlantLogic()
 										}
 										if (iter == plantVector.end()) {
 											break;
+										}
+										if (it->count > 6 && it->isChanged == true)
+										{
+											/*it = zombiesVector.erase(it);
+											if (it == zombiesVector.end()) {
+											break;
+											}*/
+											it->count++;
+											
 										}
 									}
 									break;
