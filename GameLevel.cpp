@@ -509,9 +509,9 @@ void GameLevel::Draw(HDC hdc)
 		DrawSunLight(hdc);
 		//画进度条
 		DrawProgressBar(hdc);
-		if (winImage != NULL) {
+		/*if (winImage != NULL) {
 			winImage->PaintImage(hdc, WIN_WIDTH / 2 - winImage->GetImageWidth(),WIN_HEIGHT / 2 - winImage->GetImageHeight(), winImage->GetImageWidth(), winImage->GetImageHeight(),255);
-		}
+		}*/
 	}
 
 	//测试线
