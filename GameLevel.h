@@ -91,7 +91,7 @@ public:
 	static const int INDEXROW = 2;		//从第几行开始
 
 	static const int BULLET_LENGTH = 2;	//子弹步长
-	static const int CAR_LENGTH = 20;   //小车步长
+	static const int CAR_LENGTH = 10;   //小车步长
 	static int bodySequ[15];
 
 	void Init();					//初始化
@@ -131,6 +131,7 @@ public:
 	void MouseMove(int x,int y);		//鼠标移动事件
 
 	void TestDraw(HDC hdc);			//测试
+	void ClearGameLevel();
 private:
 	int mousex;
 	int mousey;
@@ -188,6 +189,9 @@ private:
 
 	AudioDXBuffer bg_buffer;		//背景音乐
 	AudioDXBuffer cutscene_buffer;	//过场动画音乐
-
+	AudioDXBuffer car_buffer;        //小车移动
+	AudioDXBuffer eatPlant_buffer;   //吃植物的音乐
+	AudioDXBuffer click_buffer;  //点击阳光
+	AudioDXBuffer bulletZom_buffer;  //子弹攻击植物的
 
 };

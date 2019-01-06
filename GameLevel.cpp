@@ -119,6 +119,10 @@ void GameLevel::AudioInit(AudioDX &ds)
 {
 	bg_buffer.LoadWave(ds,L"res\\audio\\UraniwaNi.wav");
 	cutscene_buffer.LoadWave(ds, L"res\\audio\\LookupattheSky.wav");
+	car_buffer.LoadWave(ds, L"res\\audio\\lawnmower.wav");
+	eatPlant_buffer.LoadWave(ds, L"res\\audio\\chomp.wav");
+	click_buffer.LoadWave(ds, L"res\\audio\\buttonclick.wav");
+	bulletZom_buffer.LoadWave(ds,L"res\\audio\\grassstep.wav");
 }
 
 void GameLevel::BullentInit()
@@ -382,7 +386,9 @@ void GameLevel::DrawCar(HDC hdc)
 		{
 			if (car[i].x <= WIN_WIDTH) {
 				car[i].x += CAR_LENGTH;
+				car_buffer.Play(false);
 				car[i].car->PaintImage(hdc, car[i].x, (car[i].row)*PlantHeight + YSpace + 20, car[i].car->GetImageWidth(), car[i].car->GetImageHeight(), 255);
+				
 			}
 			else
 			{
@@ -613,6 +619,7 @@ void GameLevel::attackPlantLogic()
 								if (LinePlants[m][n] == iter->info.X)
 								{
 									it->sprite->SetSpeed(0);
+									eatPlant_buffer.Play(true);
 									if (it->count == 6 && iter->attacked == true)
 									{
 										it->info.X = it->sprite->GetX();
@@ -644,6 +651,7 @@ void GameLevel::attackPlantLogic()
 									iter->life--;
 									if (iter->life <= 0)
 									{
+										eatPlant_buffer.Stop();
 										iter = plantVector.erase(iter);
 										if (it->count < 6)
 										{
@@ -724,6 +732,7 @@ void GameLevel::bulletLogic()
 		{
 			//»÷ÖÐ½©Ê¬
 			iter->hit = true;
+			bulletZom_buffer.Play(false);
 		}
 		if (iter->hit == false)
 		{
@@ -818,6 +827,7 @@ void GameLevel::PlantMouseClick(int x, int y)
 			return;
 		}
 	}
+	click_buffer.Play(false);
 	tempPlant.sprite = spritePlant[pointPlant];
 	tempPlant.pointNum = pointPlant;
 	SPRITEINFO info;
@@ -857,6 +867,7 @@ void GameLevel::sunlightMouseClick(int x, int y)
 			if (it->isPicked == false) {
 				it->isPicked = true;
 				sunlight = sunlight + 25;
+				click_buffer.Play(false);
 			}
 		}
 	}
