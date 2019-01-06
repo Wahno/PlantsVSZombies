@@ -61,6 +61,7 @@ void PVZ_Game::GamePaint(HDC hdc)
 	if (GameState == GAME_RUN) 
 	{
 		gameLevel.Draw(hdc);
+		gameLevelMenu.Draw(hdc);
 	}
 	if (GameState == GAME_HANDBOOK) {
 		if (handMenu.HandBookState == BOOK_SUN) {
@@ -251,14 +252,49 @@ void PVZ_Game::GameMouseAction(int x, int y, int Action)
 	{
 		if (Action == MOUSE_MOVE)
 		{
-			gameLevel.MouseMove(x,y);
+			gameLevel.MouseMove(x, y);
+
 		}
 		else if (Action == MOUSE_LCLICK)
 		{
-			gameLevel.MouseClick(x,y);
+			gameLevel.MouseClick(x, y);
+			int	index = gameLevelMenu.MouseClick(x, y);
+			if (index >= 0)
+			{
+				switch (index)
+				{
+				case 0:
+					GameState = GAME_PAUSE;
+					break;
+				case 1:
+					GameState = GAME_SETTING;
+					break;
+				default:
+					break;
+				}
+			}
 		}
-
 	}
+	else if (GameState == GAME_PAUSE) {
+		if (Action == MOUSE_LCLICK) {
+			int	index = gameLevelMenu.MouseClick(x, y);
+			if (index >= 0)
+			{
+				switch (index)
+				{
+				case 0:
+					GameState = GAME_RUN;
+					break;
+					/*case 1:
+					GameState = GAME_SETTING;
+					break;*/
+				default:
+					break;
+				}
+			}
+		}
+	}
+
 	
 }
 

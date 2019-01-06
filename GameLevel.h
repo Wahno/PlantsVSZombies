@@ -91,10 +91,11 @@ public:
 	static const int MAXCOLUMN = 9;		//最多9列
 	static const int INDEXROW = 2;		//从第几行开始
 
-	static const int BULLET_LENGTH = 2;	//子弹步长
+	static const int BULLET_LENGTH = 8;	//子弹步长
 	static const int CAR_LENGTH = 10;   //小车步长
+	static const int BULLETATTACKETIMES = 12;  //子弹打击次数
 	static int bodySequ[15];
-
+	int ZOMENTER_MAXFRAME;
 	void Init();					//初始化
 	void CutsceneInit();			//初始化过场动画
 	void PlantInit();				//初始化植物
@@ -130,6 +131,9 @@ public:
 	void PlantMouseClick(int x, int y);	//种植植物
 	void sunlightMouseClick(int x, int y);//收集阳光
 	void MouseMove(int x,int y);		//鼠标移动事件
+
+	void GameWin();    //赢得游戏
+	void GameLose();    //失败
 
 	void TestDraw(HDC hdc);			//测试
 	void ClearGameLevel();
@@ -167,7 +171,9 @@ private:
 	vector<ZOMBIES_ARRAY> zombiesArray;   //僵尸数组
 	T_Sprite* attackedZombies[5];  //变化僵尸容器
 	vector<ZOM_HEADER> zoms_header;
-
+	
+	T_Graph * winImage;  //赢得游戏
+	T_Graph * loseImage;// 输掉游戏
 
 
 	vector<SUN_INFO> sunlightVector;		//未收集的阳光

@@ -87,6 +87,9 @@
     <ClCompile Include="GraphPlus.cpp">
       <Filter>源文件\Menu\HandBook</Filter>
     </ClCompile>
+    <ClCompile Include="GameLevelMenu.cpp">
+      <Filter>源文件\Menu</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TinyEngine\T_AI.h">
@@ -151,6 +154,9 @@
     </ClInclude>
     <ClInclude Include="GraphPlus.h">
       <Filter>头文件\Menu\HandBook</Filter>
+    </ClInclude>
+    <ClInclude Include="GameLevelMenu.h">
+      <Filter>头文件\Menu</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

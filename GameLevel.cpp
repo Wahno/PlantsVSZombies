@@ -79,6 +79,7 @@ void GameLevel::ZombiesInit()
 		zombies_array.frame = 1000+(2 * MAXZOMBIESNUM / 3 + 1) * 300 + ( MAXZOMBIESNUM / 3) * 500 + 600 + i * 150;
 		zombiesArray.push_back(zombies_array);
 	}
+	ZOMENTER_MAXFRAME = zombiesArray.at(MAXZOMBIESNUM - 1).frame;
 }
 
 void GameLevel::ProgressBarInit()
@@ -155,11 +156,11 @@ void GameLevel::DrawBullet(HDC hdc)
 	{
 		if (iter->hit == false)
 		{
-			bullet.PaintImage(hdc, iter->position.X, iter->position.Y*PlantHeight+ YSpace+30, bullet.GetImageWidth(), bullet.GetImageHeight(),255);
+			bullet.PaintImage(hdc, iter->position.X, iter->position.Y*PlantHeight+ YSpace + 15, bullet.GetImageWidth(), bullet.GetImageHeight(),255);
 		}
 		else
 		{
-			bulletHit.PaintImage(hdc, iter->position.X, iter->position.Y*PlantHeight + YSpace + 30, bulletHit.GetImageWidth(), bulletHit.GetImageHeight(),255);
+			bulletHit.PaintImage(hdc, iter->position.X, iter->position.Y*PlantHeight + YSpace + 15, bulletHit.GetImageWidth(), bulletHit.GetImageHeight(),255);
 		}
 	}	
 }
@@ -203,7 +204,7 @@ void GameLevel::DrawZombies(HDC hdc)
 			zombie_info.isChanged = false;
 			zombie_info.typeNum = zombiesArray.at(i).zombiesindex;
 			info.X = zombie_info.x;
-			info.Y = (zombie_info.row) * PlantHeight ; //½©Ê¬×Ý×ø±ê
+			info.Y = (zombie_info.row) * PlantHeight + 10 ; //½©Ê¬×Ý×ø±ê
 			zombie_info.info = info;
 			zombie_info.frame = 110;
 			zombiesVector.push_back(zombie_info);
@@ -214,7 +215,7 @@ void GameLevel::DrawZombies(HDC hdc)
 	vector<ZOMBIES_INFO>::iterator it;
 	for (it = zombiesVector.begin(); it != zombiesVector.end();)
 	{
-		if (it->count == 6 && it->isChanged == false) { /*Íã¶¹Óë½©Ê¬Åö×²6´ÎÖ®ºó*/
+		if (it->count == BULLETATTACKETIMES && it->isChanged == false) { /*Íã¶¹Óë½©Ê¬Åö×²6´ÎÖ®ºó*/
 			it->info.X = it->sprite->GetX();
 			it->info.Y = it->sprite->GetY();
 			it->sprite = attackedZombies[3];
@@ -224,19 +225,21 @@ void GameLevel::DrawZombies(HDC hdc)
 			ZOMBIES_INFO zom_header;
 			zom_header.info = it->info;
 			zom_header.info.Y = it->sprite->GetY() - 15;
+			zom_header.info.X = it->sprite->GetX() + 50;
 			zom_header.info.Speed = -5;
 			zom_header.count = it->count;
 			zom_header.row = it->row;
 			zom_header.x = it->x;
 			zom_header.sprite = attackedZombies[1];
 			zom_header.sprite->Initiate(zom_header.info);
+			zom_header.sprite->SetFrame(0);
 			ZOM_HEADER header;
 			header.zom_info = zom_header;
 			header.paintTimes = 0;
 			zoms_header.push_back(header);
 			it->isChanged = true;
 		}
-		if (it->count >= 6 && it->frame > 0) {
+		if (it->count >= BULLETATTACKETIMES && it->frame > 0) {
 			it->frame--;
 		}
 		if (it->frame <= 0) {
@@ -506,10 +509,13 @@ void GameLevel::Draw(HDC hdc)
 		DrawSunLight(hdc);
 		//»­½ø¶ÈÌõ
 		DrawProgressBar(hdc);
+		if (winImage != NULL) {
+			winImage->PaintImage(hdc, WIN_WIDTH / 2 - winImage->GetImageWidth(),WIN_HEIGHT / 2 - winImage->GetImageHeight());
+		}
 	}
 
 	//²âÊÔÏß
-	TestDraw(hdc);
+	//TestDraw(hdc);
 }
 
 void GameLevel::Logic()
@@ -641,7 +647,7 @@ void GameLevel::attackPlantLogic()
 								if (LinePlants[m][n] == iter->info.X)
 								{
 									it->sprite->SetSpeed(0);
-									if (it->count >= 6 && iter->attacked == true && it->isChanged == false)
+									if (it->count >= BULLETATTACKETIMES && iter->attacked == true && it->isChanged == false)
 									{
 										it->info.X = it->sprite->GetX();
 										it->info.Y = it->sprite->GetY();
@@ -651,7 +657,7 @@ void GameLevel::attackPlantLogic()
 									}
 									if(iter->attacked == false)
 									{
-										if (it->count < 6)
+										if (it->count < BULLETATTACKETIMES)
 										{
 											it->info.Speed = 0;
 											it->info.X = it->sprite->GetX();
@@ -675,7 +681,7 @@ void GameLevel::attackPlantLogic()
 									{
 										eatPlant_buffer.Stop();
 										iter = plantVector.erase(iter);
-										if (it->count < 6)
+										if (it->count < BULLETATTACKETIMES)
 										{
 											it->sprite->SetSpeed(3);
 											it->info.Speed = 3;
@@ -901,6 +907,21 @@ void GameLevel::MouseMove(int x, int y)
 {
 	mousex = x;
 	mousey = y;
+}
+
+void GameLevel::GameWin()
+{
+	if (frameCount <= MaxFrameCount && frameCount > MAXZOMBIESNUM ) {
+		if (zombiesVector.empty()) {
+			winImage->LoadImageFile(L"res\\images\\interface\\trophy.png");
+		
+		}
+	}
+}
+
+void GameLevel::GameLose()
+{
+	
 }
 
 void GameLevel::TestDraw(HDC hdc)

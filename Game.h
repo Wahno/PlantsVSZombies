@@ -8,6 +8,7 @@
 #include "ChoiceMenu.h"
 #include "GameLevel.h"
 #include "HandBook.h"
+#include"GameLevelMenu.h"
 
 class PVZ_Game: public T_Engine 
 {
@@ -33,6 +34,8 @@ private:
 	ChoiceMenu choiceMenu;
 	ChoiceMenu returnMenu;
 	HandBook handMenu;
+	GameLevelMenu gameLevelMenu;
+	 
 
 	GameLevel gameLevel;
 
