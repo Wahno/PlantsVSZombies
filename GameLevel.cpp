@@ -59,9 +59,21 @@ void GameLevel::ZombiesInit()
 	spriteZombie[4] = new T_Sprite(L"res\\images\\Zombies\\Zombie\\Zombie0_18.png", 166, 144);
 	//spriteZombie[1] = new T_Sprite(L"res\\images\\Zombies\\Zombie\\Zombie_22.png", 166, 144);
 	ZOMBIES_ARRAY zombies_array;
-	for (int i = 0; i < MAXZOMBIESNUM; i++) {
+	for (int i = 0; i < MAXZOMBIESNUM / 3; i++) {
 		zombies_array.zombiesindex = i;
-		zombies_array.frame = (2 * i + 1) * 200;
+		zombies_array.frame = (2 * i + 1) * 300;
+		zombiesArray.push_back(zombies_array);
+	}
+	for (int i = MAXZOMBIESNUM / 3; i < MAXZOMBIESNUM * 2 / 3; i++)
+	{
+		zombies_array.zombiesindex = i;
+		zombies_array.frame = (2 * MAXZOMBIESNUM / 3 + 1)* 200 + (i - MAXZOMBIESNUM / 3) * 100;
+		zombiesArray.push_back(zombies_array);
+	}
+	for (int i = MAXZOMBIESNUM * 2/ 3; i < MAXZOMBIESNUM ; i++)
+	{ 
+		zombies_array.zombiesindex = i;
+		zombies_array.frame = (2 * MAXZOMBIESNUM / 3 + 1) * 200 + ( MAXZOMBIESNUM / 3) * 100 + 500;
 		zombiesArray.push_back(zombies_array);
 	}
 }
@@ -123,6 +135,7 @@ void GameLevel::AudioInit(AudioDX &ds)
 	eatPlant_buffer.LoadWave(ds, L"res\\audio\\chomp.wav");
 	click_buffer.LoadWave(ds, L"res\\audio\\buttonclick.wav");
 	bulletZom_buffer.LoadWave(ds,L"res\\audio\\grassstep.wav");
+	clickSun_buffer.LoadWave(ds,L"res\\audio\\points.wav");
 }
 
 void GameLevel::BullentInit()
@@ -611,20 +624,22 @@ void GameLevel::attackPlantLogic()
 				{
 					for (it = zombiesVector.begin(); it != zombiesVector.end(); it++) 
 					{
-						if (LineZoms[m][i] == it->x)
+						if (abs(LineZoms[m][i] - it->x) <= 30 )
 						{
 							it->sprite->SetSpeed(0);
 							for (iter = plantVector.begin(); iter != plantVector.end(); iter++)
 							{
 								if (LinePlants[m][n] == iter->info.X)
 								{
+									if (it->count == 6 && it->isChanged == true && iter->attacked == false) {
+										break;  //子弹打中6次，图片
+									}
 									it->sprite->SetSpeed(0);
-									eatPlant_buffer.Play(true);
-									if (it->count == 6 && iter->attacked == true)
+									if (it->count == 6 && iter->attacked == true && it->isChanged == false)
 									{
 										it->info.X = it->sprite->GetX();
 										it->info.Y = it->sprite->GetY();
-										it->sprite = attackedZombies[2];
+										it->sprite = attackedZombies[2]; //掉头还不忘记吃的僵尸
 										it->sprite->Initiate(it->info);
 										iter->attacked == false;
 									}
@@ -644,10 +659,11 @@ void GameLevel::attackPlantLogic()
 											it->info.Speed = 0;
 											it->info.X = it->sprite->GetX();
 											it->info.Y = it->sprite->GetY();
-											it->sprite = attackedZombies[3];
+											it->sprite = attackedZombies[2];
 											it->sprite->Initiate(it->info);
 										}
 									}
+									eatPlant_buffer.Play(false);
 									iter->life--;
 									if (iter->life <= 0)
 									{
@@ -665,7 +681,9 @@ void GameLevel::attackPlantLogic()
 											break;
 										}
 									}
+									break;
 								}
+								
 							}
 							break;
 						}
@@ -867,7 +885,7 @@ void GameLevel::sunlightMouseClick(int x, int y)
 			if (it->isPicked == false) {
 				it->isPicked = true;
 				sunlight = sunlight + 25;
-				click_buffer.Play(false);
+				clickSun_buffer.Play(false);
 			}
 		}
 	}

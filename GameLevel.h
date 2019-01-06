@@ -191,7 +191,9 @@ private:
 	AudioDXBuffer cutscene_buffer;	//过场动画音乐
 	AudioDXBuffer car_buffer;        //小车移动
 	AudioDXBuffer eatPlant_buffer;   //吃植物的音乐
-	AudioDXBuffer click_buffer;  //点击阳光
+	AudioDXBuffer click_buffer;  //点击
 	AudioDXBuffer bulletZom_buffer;  //子弹攻击植物的
+	AudioDXBuffer clickSun_buffer;
+
 
 };
