@@ -10,6 +10,7 @@
 #include "HandBook.h"
 #include "GameLevelMenu.h"
 #include "GameLevel2.h"
+#include "GameLevel3.h"
 
 class PVZ_Game: public T_Engine 
 {
@@ -40,6 +41,7 @@ private:
 
 	GameLevel gameLevel;
 	GameLevel2  gameLevel2;
+	GameLevel3 gameLevel3;
 
 	void MenuInit();
 	void AudioInit();

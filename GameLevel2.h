@@ -26,17 +26,14 @@ public:
 	int CardMouseClick(int x, int y);
 	void MouseClick(int x, int y);
 
-private:
+
 	static const int MAXPLANTNUM = 5;	//最大植物种类数量
 	static const int MAXCARNUM = 3;		//最大推车数量
 	static const int MAXZOMBIESNUM = 15;	//最大僵尸数量
 	static const int INDEXROW = 1;		//从第几行开始
+protected:
+
 	T_Sprite* CherryBomb;
 	T_Sprite* WallNutAte;
-//
-//	CARD plantCard[MAXPLANTNUM];	//植物卡
-//	T_Graph* plant[MAXPLANTNUM];	//静态植物图
-//	T_Sprite* spritePlant[MAXPLANTNUM];//植物精灵图
-////	T_Sprite* spriteZombie[MAXZOMBIESNUM];//僵尸精灵图
 };
 

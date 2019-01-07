@@ -96,7 +96,7 @@ public:
 
 	static const int BULLET_LENGTH = 8;	//子弹步长
 	static const int CAR_LENGTH = 10;   //小车步长
-	static const int BULLETATTACKETIMES = 12;  //子弹打击次数
+	static const int BULLETATTACKETIMES = 30;  //子弹打击次数
 	static int bodySequ[15];
 	int ZOMENTER_MAXFRAME;
 	void Init();					//初始化

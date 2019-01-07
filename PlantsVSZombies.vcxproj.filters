@@ -93,6 +93,9 @@
     <ClCompile Include="GameLevel2.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="GameLevel3.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TinyEngine\T_AI.h">
@@ -162,6 +165,9 @@
       <Filter>头文件\Menu</Filter>
     </ClInclude>
     <ClInclude Include="GameLevel2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GameLevel3.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

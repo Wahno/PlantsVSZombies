@@ -109,19 +109,19 @@ void GameLevel2::ZomArrayInit()
 	zombies_array.frame = 1000;
 	zombiesArray.push_back(zombies_array);
 	for (int i = 1; i < MAXZOMBIESNUM / 3; i++) {
-		zombies_array.zombiesindex = i ;
+		zombies_array.zombiesindex = i % MAXZOMBIEARRAYSUN;
 		zombies_array.frame = 1000 + (2 * i + 1) * 300;
 		zombiesArray.push_back(zombies_array);
 	}
 	for (int i = MAXZOMBIESNUM / 3; i < MAXZOMBIESNUM * 2 / 3; i++)
 	{
-		zombies_array.zombiesindex = i;
+		zombies_array.zombiesindex = i % MAXZOMBIEARRAYSUN;
 		zombies_array.frame = 1000 + (2 * MAXZOMBIESNUM / 3 + 1) * 300 + (i - MAXZOMBIESNUM / 3) * 500;
 		zombiesArray.push_back(zombies_array);
 	}
 	for (int i = MAXZOMBIESNUM * 2 / 3; i < MAXZOMBIESNUM; i++)
 	{
-		zombies_array.zombiesindex = i;
+		zombies_array.zombiesindex = i % MAXZOMBIEARRAYSUN;
 		zombies_array.frame = 1000 + (2 * MAXZOMBIESNUM / 3 + 1) * 300 + (MAXZOMBIESNUM / 3) * 500 + 600 + i * 150;
 		zombiesArray.push_back(zombies_array);
 	}
@@ -581,14 +581,10 @@ void GameLevel2::attackPlantLogic()
 										}
 										iter->attacked = true;
 									}
-									
 									iter->life--;
 									if (iter->life <= 0)
 									{
 										eatPlant_buffer.Stop();
-										/*if (iter->pointNum == 2) {
-
-										}*/
 										iter = plantVector.erase(iter);
 										if (it->count < BULLETATTACKETIMES)
 										{
@@ -604,7 +600,6 @@ void GameLevel2::attackPlantLogic()
 									}
 									break;
 								}
-
 							}
 							break;
 						}
