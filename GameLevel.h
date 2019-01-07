@@ -172,8 +172,10 @@ private:
 	T_Sprite* attackedZombies[5];  //变化僵尸容器
 	vector<ZOM_HEADER> zoms_header;
 	
-	T_Graph * winImage;  //赢得游戏
-	T_Graph * loseImage;// 输掉游戏
+	T_Graph  winImage;  //赢得游戏
+	T_Graph  loseImage;// 输掉游戏
+
+	int gameFlag = 1; // 为1表示游戏运行中，为2表示游戏赢，为0表示失败
 
 
 	vector<SUN_INFO> sunlightVector;		//未收集的阳光

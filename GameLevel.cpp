@@ -9,7 +9,9 @@ void GameLevel::Init()
 	Sunlight_img.LoadImageFile(L"res\\images\\interface\\SunBack.png");
 	Sun.LoadImageFile(L"res\\images\\interface\\Sun.gif");
 	InitScene(0,0, bg_img.GetImageWidth(), bg_img.GetImageHeight(),WIN_WIDTH, WIN_HEIGHT);
-
+	winImage.LoadImageFile(L"res\\images\\interface\\trophy.png");
+	loseImage.LoadImageFile(L"res\\images\\interface\\ZombiesWon.png");
+	gameFlag = 1; // 游戏运行中
 	sunlight = 100;	//初始阳光值
 	//植物
 	PlantInit();
@@ -487,7 +489,6 @@ void GameLevel::Draw(HDC hdc)
 	}
 	else
 	{
-		bullet.PaintImage(hdc, 0, 0, bullet.GetImageWidth(), bullet.GetImageHeight());
 		//画背景
 		bg_img.PaintRegion(bg_img.GetBmpHandle(), hdc, 0, 0, 120, 0, WinWidth, WinHeight, 1);
 		//小推车
@@ -509,9 +510,13 @@ void GameLevel::Draw(HDC hdc)
 		DrawSunLight(hdc);
 		//画进度条
 		DrawProgressBar(hdc);
-		/*if (winImage != NULL) {
-			winImage->PaintImage(hdc, WIN_WIDTH / 2 - winImage->GetImageWidth(),WIN_HEIGHT / 2 - winImage->GetImageHeight(), winImage->GetImageWidth(), winImage->GetImageHeight(),255);
-		}*/
+		if (gameFlag == 2) {
+			winImage.PaintImage(hdc,(WIN_WIDTH - winImage.GetImageWidth()) / 2,(WIN_HEIGHT - winImage.GetImageHeight()) / 2,winImage.GetImageWidth(),winImage.GetImageHeight(),255);
+		}
+		if (gameFlag == 0)
+		{
+			loseImage.PaintImage(hdc, (WIN_WIDTH - loseImage.GetImageWidth()) / 2, (WIN_HEIGHT - loseImage.GetImageHeight()) / 2, loseImage.GetImageWidth(), loseImage.GetImageHeight(), 255);
+		}
 	}
 
 	//测试线
@@ -525,6 +530,9 @@ void GameLevel::Logic()
 	attackPlantLogic();
 	attackZombieLogic();
 	carLogic();
+	GameWin();
+	GameLose();
+	
 }
 
 void GameLevel::CardLogic()
@@ -911,9 +919,9 @@ void GameLevel::MouseMove(int x, int y)
 
 void GameLevel::GameWin()
 {
-	if (frameCount <= MaxFrameCount && frameCount > MAXZOMBIESNUM ) {
+	if (frameCount <= MaxFrameCount && frameCount >= ZOMENTER_MAXFRAME) {
 		if (zombiesVector.empty()) {
-			winImage->LoadImageFile(L"res\\images\\interface\\trophy.png");
+			gameFlag = 2; //赢得游戏
 		
 		}
 	}
@@ -921,7 +929,13 @@ void GameLevel::GameWin()
 
 void GameLevel::GameLose()
 {
-	
+	for (int i = 0; i < zombiesVector.size(); i++)
+	{
+		if (zombiesVector.at(i).x <= CarXSpace) {
+			gameFlag = 0; //游戏失败
+			break;
+		}
+	}
 }
 
 void GameLevel::TestDraw(HDC hdc)

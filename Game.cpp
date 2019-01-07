@@ -61,7 +61,7 @@ void PVZ_Game::GamePaint(HDC hdc)
 	if (GameState == GAME_RUN) 
 	{
 		gameLevel.Draw(hdc);
-		gameLevelMenu.Draw(hdc);
+		//gameLevelMenu.Draw(hdc);
 	}
 	if (GameState == GAME_HANDBOOK) {
 		if (handMenu.HandBookState == BOOK_SUN) {

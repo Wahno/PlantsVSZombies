@@ -1,6 +1,5 @@
 #pragma once
-//#include <gdiplus.h>
-#include"TinyEngine\T_Graph.h"
+#include"TinyEngine\\T_Graph.h"
 typedef struct {
 	POINT pt;
 	T_Graph buttonImg;
