@@ -31,12 +31,14 @@ void PVZ_Game::GameLogic()
 			GameState = GAME_RUN;
 			mainMenu.flickerFlag = false;
 			mainMenu.FrameCount = 0;
-			gameLevel.Init();
+			//gameLevel.Init();
+			gameLevel2.Init();
 		}
 	}
 	else if(GameState == GAME_RUN)
 	{
-		gameLevel.Logic();
+		//gameLevel.Logic();
+		gameLevel2.Logic();
 	}
 }
 
@@ -60,7 +62,8 @@ void PVZ_Game::GamePaint(HDC hdc)
 	}
 	if (GameState == GAME_RUN) 
 	{
-		gameLevel.Draw(hdc);
+		//gameLevel.Draw(hdc);
+		gameLevel2.Draw(hdc);
 		//gameLevelMenu.Draw(hdc);
 	}
 	if (GameState == GAME_HANDBOOK) {
@@ -252,12 +255,14 @@ void PVZ_Game::GameMouseAction(int x, int y, int Action)
 	{
 		if (Action == MOUSE_MOVE)
 		{
-			gameLevel.MouseMove(x, y);
+			//gameLevel.MouseMove(x, y);
+			gameLevel2.MouseMove(x,y);
 
 		}
 		else if (Action == MOUSE_LCLICK)
 		{
-			gameLevel.MouseClick(x, y);
+			//gameLevel.MouseClick(x, y);
+			gameLevel2.MouseClick(x,y);
 			int	index = gameLevelMenu.MouseClick(x, y);
 			if (index >= 0)
 			{
@@ -312,7 +317,8 @@ void PVZ_Game::AudioInit()
 	if (!ds.CreateDS(m_hWnd))return;
 	mainMenu.AudioInit(ds);
 	helpMenu.AudioInit(ds);
-	gameLevel.AudioInit(ds);
+	//gameLevel.AudioInit(ds);
+	gameLevel2.AudioInit(ds);
 }
 
 

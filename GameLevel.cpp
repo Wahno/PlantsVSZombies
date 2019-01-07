@@ -3,6 +3,7 @@ int GameLevel::bodySequ[15] = { 0,0,0,0,1,1,2,3,4,5,6,7,8,9,10 };
 //int GameLevel::headerSequ[20] = { 0,1,1,2,3,4,5,6,7,8,9,10,11,10,11,11,11,10,11,10};
 void GameLevel::Init()
 {
+	srand((unsigned int)time(NULL));
 	levelName = L"关卡 1 - 1";
 	bg_img.LoadImageFile(L"res\\images\\interface\\background1unsodded_1.jpg");
 	shadow_img.LoadImageFile(L"res\\images\\interface\\plantshadow32.png");
@@ -15,6 +16,7 @@ void GameLevel::Init()
 	sunlight = 100;	//初始阳光值
 	//植物
 	PlantInit();
+	ZomArrayInit();
 	BullentInit();
 	//过场动画
 	CutsceneInit();
@@ -46,7 +48,31 @@ void GameLevel::PlantInit()
 	plant[1] = new T_Graph(L"res\\images\\Plants\\Peashooter.png");
 	spritePlant[1] = new T_Sprite(L"res\\images\\Plants\\Peashooter_13.png",71,71);
 }
+void GameLevel::ZomArrayInit() {
+	ZOMBIES_ARRAY zombies_array;
+	zombies_array.zombiesindex = 0;
+	zombies_array.frame = 1000;
+	zombiesArray.push_back(zombies_array);
+	for (int i = 1; i < MAXZOMBIESNUM / 3; i++) {
+		zombies_array.zombiesindex = i;
+		zombies_array.frame = 1000 + (2 * i + 1) * 300;
+		zombiesArray.push_back(zombies_array);
+	}
+	for (int i = MAXZOMBIESNUM / 3; i < MAXZOMBIESNUM * 2 / 3; i++)
+	{
+		zombies_array.zombiesindex = i;
+		zombies_array.frame = 1000 + (2 * MAXZOMBIESNUM / 3 + 1) * 300 + (i - MAXZOMBIESNUM / 3) * 500;
+		zombiesArray.push_back(zombies_array);
+	}
+	for (int i = MAXZOMBIESNUM * 2 / 3; i < MAXZOMBIESNUM; i++)
+	{
+		zombies_array.zombiesindex = i;
+		zombies_array.frame = 1000 + (2 * MAXZOMBIESNUM / 3 + 1) * 300 + (MAXZOMBIESNUM / 3) * 500 + 600 + i * 150;
+		zombiesArray.push_back(zombies_array);
+	}
+	ZOMENTER_MAXFRAME = zombiesArray.at(MAXZOMBIESNUM - 1).frame;
 
+}
 void GameLevel::ZombiesInit()
 {
 	attackedZombies[0] = new T_Sprite(L"res\\images\\Zombies\\Zombie\\ZombieLostHead_18.png",166,144);
@@ -54,34 +80,15 @@ void GameLevel::ZombiesInit()
 	attackedZombies[2] = new T_Sprite(L"res\\images\\Zombies\\Zombie\\ZombieLostHeadAttack11.png",166,144);
 	attackedZombies[3] = new T_Sprite(L"res\\images\\Zombies\\Zombie\\ZombieDie_10.png",166,144);
 	attackedZombies[4] = new T_Sprite(L"res\\images\\Zombies\\Zombie\\ZombieAttack_21.png", 166, 144);
+	attackedZombies[5] = new T_Sprite(L"res\\images\\Zombies\\Zombie\\BoomDie_20.png",166,144);
+
 	spriteZombie[0] = new T_Sprite(L"res\\images\\Zombies\\Zombie\\Zombie0_18.png",166,144);
 	spriteZombie[1] = new T_Sprite(L"res\\images\\Zombies\\Zombie\\Zombie_22.png",166,144);
 	spriteZombie[2] = new T_Sprite(L"res\\images\\Zombies\\Zombie\\Zombie0_18.png", 166, 144);
 	spriteZombie[3] = new T_Sprite(L"res\\images\\Zombies\\Zombie\\Zombie_22.png", 166, 144);
 	spriteZombie[4] = new T_Sprite(L"res\\images\\Zombies\\Zombie\\Zombie0_18.png", 166, 144);
 	//spriteZombie[1] = new T_Sprite(L"res\\images\\Zombies\\Zombie\\Zombie_22.png", 166, 144);
-	ZOMBIES_ARRAY zombies_array;
-	zombies_array.zombiesindex = 0;
-	zombies_array.frame = 1000;
-	zombiesArray.push_back(zombies_array);
-	for (int i = 1; i < MAXZOMBIESNUM / 3; i++) {
-		zombies_array.zombiesindex = i;
-		zombies_array.frame = 1000+(2 * i + 1) * 300;
-		zombiesArray.push_back(zombies_array);
-	}
-	for (int i = MAXZOMBIESNUM / 3; i < MAXZOMBIESNUM * 2 / 3; i++)
-	{
-		zombies_array.zombiesindex = i;
-		zombies_array.frame = 1000+(2 * MAXZOMBIESNUM / 3 + 1)*300 + (i - MAXZOMBIESNUM / 3) * 500;
-		zombiesArray.push_back(zombies_array);
-	}
-	for (int i = MAXZOMBIESNUM * 2/ 3; i < MAXZOMBIESNUM ; i++)
-	{ 
-		zombies_array.zombiesindex = i;
-		zombies_array.frame = 1000+(2 * MAXZOMBIESNUM / 3 + 1) * 300 + ( MAXZOMBIESNUM / 3) * 500 + 600 + i * 150;
-		zombiesArray.push_back(zombies_array);
-	}
-	ZOMENTER_MAXFRAME = zombiesArray.at(MAXZOMBIESNUM - 1).frame;
+	
 }
 
 void GameLevel::ProgressBarInit()
@@ -179,9 +186,7 @@ void GameLevel::DrawPlant(HDC hdc)
 		}
 	}
 }
-
-void GameLevel::DrawZombies(HDC hdc)
-{
+void GameLevel::AddZombies() {
 	SPRITEINFO info;
 	info.Active = true;
 	info.Dead = false;
@@ -202,11 +207,11 @@ void GameLevel::DrawZombies(HDC hdc)
 			zombie_info.row = 2;
 			zombie_info.x = WIN_WIDTH;  //僵尸横坐标
 			zombie_info.isChanged = false;
-			zombie_info.count = 0;  
+			zombie_info.count = 0;
 			zombie_info.isChanged = false;
 			zombie_info.typeNum = zombiesArray.at(i).zombiesindex;
 			info.X = zombie_info.x;
-			info.Y = (zombie_info.row) * PlantHeight + 10 ; //僵尸纵坐标
+			info.Y = (zombie_info.row) * PlantHeight + 10; //僵尸纵坐标
 			zombie_info.info = info;
 			zombie_info.frame = 110;
 			zombiesVector.push_back(zombie_info);
@@ -214,6 +219,9 @@ void GameLevel::DrawZombies(HDC hdc)
 			zomEnter_buffer.Play(false);
 		}
 	}
+}
+void GameLevel::DrawZombies(HDC hdc)
+{
 	vector<ZOMBIES_INFO>::iterator it;
 	for (it = zombiesVector.begin(); it != zombiesVector.end();)
 	{
@@ -460,7 +468,6 @@ void GameLevel::DrawSunLight(HDC hdc)
 
 void GameLevel::ProduceSunLight()
 {
-	srand((unsigned int)time(NULL));
 	SUN_INFO sun;
 	int posX = rand() % (WIN_WIDTH - Sun.GetImageWidth());
 	int posY = rand() % (WIN_HEIGHT - Sun.GetImageHeight());
@@ -525,6 +532,7 @@ void GameLevel::Draw(HDC hdc)
 
 void GameLevel::Logic()
 {
+	AddZombies();
 	CardLogic();
 	bulletLogic();
 	attackPlantLogic();
@@ -737,12 +745,12 @@ void GameLevel::attackZombieLogic()
 				if (trueFrame % 50 == 0)	//子弹发射间隔
 				{
 					BULLET_INFO info;
+					info.pointNum = 1;
 					info.position.X = (plantVector.at(i).position.X+1) * PlantWidth + CarXSpace + CarWidth;//x坐标
 					info.position.Y = plantVector.at(i).position.Y;//第几行
 					bulletVector.push_back(info);
 				}
 			}
-		
 		}
 		
 	}	

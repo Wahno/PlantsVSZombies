@@ -70,6 +70,7 @@ typedef struct
 	bool hit = false;			//子弹是否已经击中僵尸
 	Point position;		//子弹位置，x->x坐标，y->第几行
 	int frame = 10;		//子弹击中后播放帧数
+	int pointNum;
 }BULLET_INFO;
 typedef struct {
 	bool isPicked;     ///是否被拾取
@@ -79,7 +80,9 @@ class GameLevel : public T_Scene
 {
 public:
 	static const int MAXPLANTNUM = 2;	//最大植物种类数量
-	static const int MAXZOMBIESNUM = 5;	//最大僵尸种类数量
+	static const int MAXARRAYNUM = 10;  //数组最大长度
+	static const int MAXZOMBIESNUM = 20;	//最大僵尸数量
+	static const int MAXZOMBIEARRAYSUN = 5; //最大僵尸种数
 	static const int MAXCARNUM = 1;		//最大推车数量
 	static const int CarXSpace = 50;	//推车x边距
 	static const int YSpace = 80;		//Y边距
@@ -99,6 +102,7 @@ public:
 	void Init();					//初始化
 	void CutsceneInit();			//初始化过场动画
 	void PlantInit();				//初始化植物
+	void ZomArrayInit();            //初始僵尸数组
 	void ZombiesInit();				//初始化僵尸
 	void ProgressBarInit();			//初始化进度条
 	void CardInit();				//初始化植物卡
@@ -108,6 +112,7 @@ public:
 
 	void DrawBullet(HDC hdc);        //绘制子弹
 	void DrawPlant(HDC hdc);		//绘制植物
+	void AddZombies();               //按照帧数添加植物
 	void DrawZombies(HDC hdc);		//绘制僵尸
 	void DrawCutscene(HDC hdc);		//绘制过场动画
 	void DrawProgressBar(HDC hdc);	//绘制进度条
@@ -137,7 +142,7 @@ public:
 
 	void TestDraw(HDC hdc);			//测试
 	void ClearGameLevel();
-private:
+protected:
 	int mousex;
 	int mousey;
 	wstring levelName;				//关卡名
@@ -162,14 +167,10 @@ private:
 	Point PlantPosition;			//没种下但选中时植物位置
 
 	vector<PLANT_INFO> plantVector;	//植物容器
-	CARD plantCard[MAXPLANTNUM];	//植物卡
-	T_Graph* plant[MAXPLANTNUM];	//静态植物图
-	T_Sprite* spritePlant[MAXPLANTNUM];//植物精灵图
 
 	vector<ZOMBIES_INFO> zombiesVector;//僵尸容器
-	T_Sprite* spriteZombie[MAXZOMBIESNUM];//僵尸精灵图
 	vector<ZOMBIES_ARRAY> zombiesArray;   //僵尸数组
-	T_Sprite* attackedZombies[5];  //变化僵尸容器
+	T_Sprite* attackedZombies[10];  //变化僵尸容器
 	vector<ZOM_HEADER> zoms_header;
 	
 	T_Graph  winImage;  //赢得游戏
@@ -205,5 +206,10 @@ private:
 	AudioDXBuffer clickSun_buffer; //点击阳光
 	AudioDXBuffer zomEnter_buffer;  //僵尸入场音乐
 
+	
 
+	CARD plantCard[MAXARRAYNUM];	//植物卡
+	T_Graph* plant[MAXARRAYNUM];	//静态植物图
+	T_Sprite* spritePlant[MAXARRAYNUM];//植物精灵图
+	T_Sprite* spriteZombie[MAXZOMBIEARRAYSUN];//僵尸精灵图
 };
