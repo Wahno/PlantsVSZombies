@@ -14,7 +14,7 @@ GameLevel3::~GameLevel3()
 void GameLevel3::Init()
 {
 	srand((unsigned int)time(NULL));
-	levelName = L"¹Ø¿¨ 1 - 2";
+	levelName = L"¹Ø¿¨ 1 - 3";
 	bg_img.LoadImageFile(L"res\\images\\interface\\background1.jpg");
 	shadow_img.LoadImageFile(L"res\\images\\interface\\plantshadow32.png");
 	Sunlight_img.LoadImageFile(L"res\\images\\interface\\SunBack.png");
@@ -88,12 +88,12 @@ void GameLevel3::AddZombies() {
 	for (int i = 0; i < zombiesArray.size(); i++)
 	{
 		if (frameCount == zombiesArray.at(i).frame) {
-			zombie_info.sprite = spriteZombie[zombiesArray.at(i).zombiesindex];
+			zombie_info.sprite = spriteZombie[zombiesArray.at(i).zombiesindex % 5];
 			zombie_info.row = INDEXROW + rand() % 4;
 			zombie_info.x = WIN_WIDTH;  //½©Ê¬ºá×ø±ê
 			zombie_info.count = 0;
 			zombie_info.isChanged = false;
-			zombie_info.typeNum = zombiesArray.at(i).zombiesindex;
+			zombie_info.typeNum = zombiesArray.at(i).zombiesindex % 5;
 			info.X = zombie_info.x;
 			info.Y = (zombie_info.row) * PlantHeight + 10; //½©Ê¬×Ý×ø±ê
 			zombie_info.info = info;

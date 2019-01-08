@@ -63,12 +63,12 @@ void GameLevel2::AddZombies() {
 	for (int i = 0; i < zombiesArray.size(); i++)
 	{
 		if (frameCount == zombiesArray.at(i).frame) {
-			zombie_info.sprite = spriteZombie[zombiesArray.at(i).zombiesindex];
+			zombie_info.sprite = spriteZombie[zombiesArray.at(i).zombiesindex % 5];
 			zombie_info.row = INDEXROW + rand() % 3;
 			zombie_info.x = WIN_WIDTH;  //½©Ê¬ºá×ø±ê
 			zombie_info.count = 0;
 			zombie_info.isChanged = false;
-			zombie_info.typeNum = zombiesArray.at(i).zombiesindex;
+			zombie_info.typeNum = zombiesArray.at(i).zombiesindex % 5;
 			info.X = zombie_info.x;
 			info.Y = (zombie_info.row) * PlantHeight + 10; //½©Ê¬×Ý×ø±ê
 			zombie_info.info = info;

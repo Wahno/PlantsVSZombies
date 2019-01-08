@@ -210,13 +210,13 @@ void GameLevel::AddZombies() {
 	for (int i = 0; i < zombiesArray.size(); i++)
 	{
 		if (frameCount == zombiesArray.at(i).frame) {
-			zombie_info.sprite = spriteZombie[zombiesArray.at(i).zombiesindex];
+			zombie_info.sprite = spriteZombie[zombiesArray.at(i).zombiesindex%5];
 			zombie_info.row = 2;
 			zombie_info.x = WIN_WIDTH;  //½©Ê¬ºá×ø±ê
 			zombie_info.isChanged = false;
 			zombie_info.count = 0;
 			zombie_info.isChanged = false;
-			zombie_info.typeNum = zombiesArray.at(i).zombiesindex;
+			zombie_info.typeNum = zombiesArray.at(i).zombiesindex % 5;
 			info.X = zombie_info.x;
 			info.Y = (zombie_info.row) * PlantHeight + 10; //½©Ê¬×Ý×ø±ê
 			zombie_info.info = info;
@@ -934,10 +934,10 @@ void GameLevel::MouseMove(int x, int y)
 
 void GameLevel::GameWin()
 {
-	if (frameCount <= MaxFrameCount && frameCount >= ZOMENTER_MAXFRAME) {
+	if (trueFrame >= MaxFrameCount) {
 		if (zombiesVector.empty()) {
 			gameFlag = 2; //Ó®µÃÓÎÏ·
-			
+	
 		}
 	}
 }
@@ -968,13 +968,13 @@ void GameLevel::TestDraw(HDC hdc)
 
 void GameLevel::ClearGameLevel()
 {
-	delete[]plant; 
-	delete[]spritePlant;
-	delete[] spriteZombie;
-	delete[] attackedZombies;
-	delete[] plantCard;
+	memset(plant, 0, MAXARRAYNUM);
+	memset(spritePlant, 0, MAXARRAYNUM);
+	memset(spriteZombie, 0, MAXZOMBIEARRAYSUN);
+	memset(attackedZombies, 0, 10);
+	memset(plantCard, 0, MAXARRAYNUM);
 	//Çå¿ÕÈÝÆ÷
-	 plantVector.clear();			plantVector.swap(vector<PLANT_INFO>());
+	plantVector.clear();			plantVector.swap(vector<PLANT_INFO>());
 	zombiesVector.clear();			zombiesVector.swap(vector<ZOMBIES_INFO>());
 	zombiesArray.clear();			zombiesArray.swap(vector<ZOMBIES_ARRAY>());
 	zoms_header.clear();			zoms_header.swap(vector<ZOM_HEADER>());
@@ -987,4 +987,5 @@ void GameLevel::ClearGameLevel()
 	 bulletZom_buffer.Release();  //×Óµ¯¹¥»÷Ö²ÎïµÄ
 	 clickSun_buffer.Release(); //µã»÷Ñô¹â
 	 zomEnter_buffer.Release();  //½©Ê¬Èë³¡ÒôÀÖ
+	 
 }

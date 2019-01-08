@@ -19,9 +19,7 @@ public:
 		WORD Icon = NULL, WORD SmIcon = NULL,
 		int iWidth = WIN_WIDTH, int iHeight = WIN_HEIGHT);
 	~PVZ_Game();
-	static bool levlechange;
-	int level = 1;
-	static void setLevelChange() { levlechange = true; };
+	
 	void GameInit();
 	void GameLogic();
 	void GameEnd();
@@ -39,7 +37,9 @@ private:
 	ChoiceMenu returnMenu;
 	HandBook handMenu;
 	GameLevelMenu gameLevelMenu;
-	 
+	
+	bool levlechange;
+	int level = 1;
 
 	GameLevel gameLevel;
 	GameLevel2  gameLevel2;

@@ -1,6 +1,5 @@
 #include "Game.h"
 
-bool PVZ_Game::levlechange = false;
 PVZ_Game::PVZ_Game(HINSTANCE hInstance, LPCTSTR szWindowClass, LPCTSTR szTitle, 
 	WORD Icon, WORD SmIcon, int iWidth, int iHeight) :T_Engine(hInstance,
 		szWindowClass, szTitle, Icon, SmIcon, iWidth, iHeight)
@@ -34,6 +33,7 @@ void PVZ_Game::GameLogic()
 			mainMenu.FrameCount = 0;
 			levlechange = false;
 			gameLevel.Init();
+			
 			//gameLevel2.Init();
 			//gameLevel3.Init();
 		}
@@ -45,10 +45,14 @@ void PVZ_Game::GameLogic()
 			level++;
 			if (level == 2)
 			{
+				gameLevel.ClearGameLevel();
+				gameLevel2.AudioInit(ds);
 				gameLevel2.Init();
 			}
 			else if (level == 3)
 			{
+				gameLevel2.ClearGameLevel();
+				gameLevel3.AudioInit(ds);
 				gameLevel3.Init();
 			}
 		}
@@ -374,18 +378,6 @@ void PVZ_Game::AudioInit()
 	if (!ds.CreateDS(m_hWnd))return;
 	mainMenu.AudioInit(ds);
 	helpMenu.AudioInit(ds);
-	if (level == 1)
-	{
-		gameLevel.AudioInit(ds);
-	}
-	else if (level == 2)
-	{
-		gameLevel2.AudioInit(ds);
-	}
-	else if (level == 3)
-	{
-		gameLevel3.AudioInit(ds);
-	}
+	gameLevel.AudioInit(ds);
 }
-
 
