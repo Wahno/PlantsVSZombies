@@ -194,6 +194,28 @@ void GameLevel2::CardInit()
 
 }
 
+void GameLevel2::DrawPlant(HDC hdc)
+{
+	bool loop[MAXPLANTNUM];
+	for (int i = 0; i < MAXPLANTNUM; i++)
+	{
+		loop[i] = false;
+	}
+	for (int i = 0; i < plantVector.size(); i++)
+	{
+		plantVector.at(i).sprite->Initiate(plantVector.at(i).info);
+		plantVector.at(i).sprite->Draw(hdc);
+		if (trueFrame % 4 == 2)
+		{
+			if (loop[plantVector.at(i).pointNum] == false)
+			{
+				plantVector.at(i).sprite->LoopFrame();
+				loop[plantVector.at(i).pointNum] = true;
+			}
+		}
+	}
+}
+
 void GameLevel2::DrawCar(HDC hdc)
 {
 	for (int i = 1; i < 4; i++)

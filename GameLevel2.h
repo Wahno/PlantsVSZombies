@@ -13,6 +13,7 @@ public:
 	void BullentInit();
 	void PlantInit();
 	void CardInit();
+	void DrawPlant(HDC hdc);		//ªÊ÷∆÷≤ŒÔ
 	void DrawCar(HDC hdc);
 	void DrawCard(HDC hdc);
 	void DrawBullet(HDC hdc);

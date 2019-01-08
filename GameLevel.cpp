@@ -183,15 +183,25 @@ void GameLevel::DrawBullet(HDC hdc)
 
 void GameLevel::DrawPlant(HDC hdc)
 {
+	bool loop[MAXPLANTNUM];
+	for (int i = 0; i < MAXPLANTNUM; i++)
+	{
+		loop[i] = false;
+	}
 	for (int i = 0; i < plantVector.size(); i++)
 	{
 		plantVector.at(i).sprite->Initiate(plantVector.at(i).info);
 		plantVector.at(i).sprite->Draw(hdc);
 		if (trueFrame % 4 == 2)
 		{
-			plantVector.at(i).sprite->LoopFrame();
+			if (loop[plantVector.at(i).pointNum] == false)
+			{
+				plantVector.at(i).sprite->LoopFrame();
+				loop[plantVector.at(i).pointNum] = true;
+			}	
 		}
 	}
+	
 }
 void GameLevel::AddZombies() {
 	SPRITEINFO info;
