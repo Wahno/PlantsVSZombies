@@ -96,9 +96,11 @@ public:
 
 	static const int BULLET_LENGTH = 8;	//子弹步长
 	static const int CAR_LENGTH = 10;   //小车步长
-	static const int BULLETATTACKETIMES = 30;  //子弹打击次数
+	static const int BULLETATTACKETIMES = 15;  //子弹打击次数
 	static int bodySequ[15];
 	int ZOMENTER_MAXFRAME;
+	bool getGameFlag();
+	
 	void Init();					//初始化
 	void CutsceneInit();			//初始化过场动画
 	void PlantInit();				//初始化植物

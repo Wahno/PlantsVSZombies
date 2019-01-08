@@ -1,5 +1,6 @@
 #include "Game.h"
 
+bool PVZ_Game::levlechange = false;
 PVZ_Game::PVZ_Game(HINSTANCE hInstance, LPCTSTR szWindowClass, LPCTSTR szTitle, 
 	WORD Icon, WORD SmIcon, int iWidth, int iHeight) :T_Engine(hInstance,
 		szWindowClass, szTitle, Icon, SmIcon, iWidth, iHeight)
@@ -31,16 +32,41 @@ void PVZ_Game::GameLogic()
 			GameState = GAME_RUN;
 			mainMenu.flickerFlag = false;
 			mainMenu.FrameCount = 0;
-			//gameLevel.Init();
+			levlechange = false;
+			gameLevel.Init();
 			//gameLevel2.Init();
-			gameLevel3.Init();
+			//gameLevel3.Init();
 		}
 	}
 	else if(GameState == GAME_RUN)
 	{
-		//gameLevel.Logic();
-		gameLevel3.Logic();
-		//gameLevel2.Logic();
+		if (levlechange)
+		{
+			level++;
+			if (level == 2)
+			{
+				gameLevel2.Init();
+			}
+			else if (level == 3)
+			{
+				gameLevel3.Init();
+			}
+		}
+		if (level == 1)
+		{
+			gameLevel.Logic();
+			levlechange = gameLevel.getGameFlag();
+		}
+		else if (level == 2)
+		{
+			gameLevel2.Logic();
+			levlechange = gameLevel2.getGameFlag();
+		}
+		else if (level == 3)
+		{
+			gameLevel3.Logic();
+			levlechange = gameLevel3.getGameFlag();
+		}
 	}
 }
 
@@ -64,10 +90,18 @@ void PVZ_Game::GamePaint(HDC hdc)
 	}
 	if (GameState == GAME_RUN) 
 	{
-		//gameLevel.Draw(hdc);
-		//gameLevel2.Draw(hdc);
-		gameLevel3.Draw(hdc);
-		//gameLevelMenu.Draw(hdc);
+		if (level == 1)
+		{
+			gameLevel.Draw(hdc);
+		}
+		else if (level == 2)
+		{
+			gameLevel2.Draw(hdc);
+		}
+		else if (level == 3)
+		{
+			gameLevel3.Draw(hdc);
+		}
 	}
 	if (GameState == GAME_HANDBOOK) {
 		if (handMenu.HandBookState == BOOK_SUN) {
@@ -258,16 +292,34 @@ void PVZ_Game::GameMouseAction(int x, int y, int Action)
 	{
 		if (Action == MOUSE_MOVE)
 		{
-			//gameLevel.MouseMove(x, y);
-			//gameLevel2.MouseMove(x,y);
-			gameLevel3.MouseMove(x, y);
-
+			if (level == 1)
+			{
+				gameLevel.MouseMove(x, y);
+			}
+			else if (level == 2)
+			{
+				gameLevel2.MouseMove(x, y);
+			}
+			else if (level == 3)
+			{
+				gameLevel3.MouseMove(x, y);
+			}
+			
 		}
 		else if (Action == MOUSE_LCLICK)
 		{
-			//gameLevel.MouseClick(x, y);
-			/*gameLevel2.MouseClick(x,y);*/
-			gameLevel3.MouseClick(x, y);
+			if (level == 1)
+			{
+				gameLevel.MouseClick(x, y);
+			}
+			else if (level == 2)
+			{
+				gameLevel2.MouseClick(x, y);
+			}
+			else if (level == 3)
+			{
+				gameLevel3.MouseClick(x, y);
+			}		
 			int	index = gameLevelMenu.MouseClick(x, y);
 			if (index >= 0)
 			{
@@ -322,9 +374,18 @@ void PVZ_Game::AudioInit()
 	if (!ds.CreateDS(m_hWnd))return;
 	mainMenu.AudioInit(ds);
 	helpMenu.AudioInit(ds);
-	//gameLevel.AudioInit(ds);
-	//gameLevel2.AudioInit(ds);
-	gameLevel3.AudioInit(ds);
+	if (level == 1)
+	{
+		gameLevel.AudioInit(ds);
+	}
+	else if (level == 2)
+	{
+		gameLevel2.AudioInit(ds);
+	}
+	else if (level == 3)
+	{
+		gameLevel3.AudioInit(ds);
+	}
 }
 
 

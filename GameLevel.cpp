@@ -1,5 +1,12 @@
 #include "GameLevel.h"
 int GameLevel::bodySequ[15] = { 0,0,0,0,1,1,2,3,4,5,6,7,8,9,10 };
+bool GameLevel::getGameFlag()
+{
+	if (gameFlag == 2)
+		return true;
+	else
+		return false;
+}
 //int GameLevel::headerSequ[20] = { 0,1,1,2,3,4,5,6,7,8,9,10,11,10,11,11,11,10,11,10};
 void GameLevel::Init()
 {
@@ -930,7 +937,7 @@ void GameLevel::GameWin()
 	if (frameCount <= MaxFrameCount && frameCount >= ZOMENTER_MAXFRAME) {
 		if (zombiesVector.empty()) {
 			gameFlag = 2; //”Æµ√”Œœ∑
-		
+			
 		}
 	}
 }
