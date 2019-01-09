@@ -41,7 +41,7 @@ typedef struct
 	Point position;		//所在行列
 	SPRITEINFO info;	//精灵信息
 	int pointNum;       //植物的标识
-	int life = 200;     //植物被攻击之后，停留的帧数
+	int life = 300;     //植物被攻击之后，停留的帧数
 	bool attacked = false;  //是否被攻击
 }PLANT_INFO;
 

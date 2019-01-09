@@ -908,7 +908,7 @@ void GameLevel::PlantMouseClick(int x, int y)
 	info.Visible = true;
 	
 	tempPlant.info = info;
-	tempPlant.life = 50;
+	tempPlant.life = 200;
 	tempPlant.attacked = false;
 	plantVector.push_back(tempPlant);
 	sunlight = sunlight - plantCard[pointPlant].info.sunlight;
